@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 800px; height: 500px; overflow: hidden; background: #f5f0e8; }
+
+  .canvas {
+    width: 800px; height: 500px;
+    background: #f5f0e8;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* paper texture */
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  /* outer frame */
+  .frame-outer {
+    position: absolute;
+    inset: 24px;
+    border: 2px solid #8a6e30;
+  }
+
+  /* inner frame */
+  .frame-inner {
+    position: absolute;
+    inset: 32px;
+    border: 1px solid #c4a44a;
+  }
+
+  /* corner ornaments */
+  .corner-tl, .corner-tr, .corner-bl, .corner-br {
+    position: absolute;
+    width: 16px; height: 16px;
+  }
+  .corner-tl { top: 28px; left: 28px; border-top: 2px solid #c4a44a; border-left: 2px solid #c4a44a; }
+  .corner-tr { top: 28px; right: 28px; border-top: 2px solid #c4a44a; border-right: 2px solid #c4a44a; }
+  .corner-bl { bottom: 28px; left: 28px; border-bottom: 2px solid #c4a44a; border-left: 2px solid #c4a44a; }
+  .corner-br { bottom: 28px; right: 28px; border-bottom: 2px solid #c4a44a; border-right: 2px solid #c4a44a; }
+
+  /* content */
+  .content {
+    position: relative;
+    text-align: center;
+    padding: 20px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .pre-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: #8a6e30;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .title-line {
+    width: 120px; height: 1px;
+    background: linear-gradient(90deg, transparent, #8a6e30, transparent);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: #2a1f0a;
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+
+  .ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: #8a6e30;
+    margin-bottom: 20px;
+    letter-spacing: 0.3em;
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 300;
+    color: #5a4a20;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .divider-line {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, #c4a44a, transparent);
+    margin-bottom: 20px;
+  }
+
+  .author {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: #3a2a0a;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: #8a6e30;
+    letter-spacing: 0.15em;
+  }
+
+  /* teal accent top */
+  .teal-line {
+    position: absolute;
+    top: 40px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,150,150,0.3), transparent);
+  }
+
+  .teal-line-bottom {
+    position: absolute;
+    bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,150,150,0.3), transparent);
+  }
+
+  .bottom-tag {
+    position: absolute;
+    bottom: 10px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.3em;
+    color: #b4a060;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="frame-outer"></div>
+  <div class="frame-inner"></div>
+  <div class="corner-tl"></div>
+  <div class="corner-tr"></div>
+  <div class="corner-bl"></div>
+  <div class="corner-br"></div>
+  <div class="teal-line"></div>
+  <div class="teal-line-bottom"></div>
+
+  <div class="content">
+    <div class="pre-title">SOVRA-FCL-MHCE-v2.5</div>
+    <div class="title-line"></div>
+    <h1>The Unified Cognitive<br>Equation Field</h1>
+    <div class="ornament">✦</div>
+    <div class="subtitle">A 17-component literary and mathematical framework.<br>Copyright filed March 6, 2026.</div>
+    <div class="divider-line"></div>
+    <div class="author">Samuel Paul Peacock</div>
+    <div class="date">Jackson, Tennessee &nbsp;·&nbsp; March 2026</div>
+  </div>
+
+  <div class="bottom-tag">SOVRA-FCL-MHCE-v2.5 &nbsp;::&nbsp; DS4-KES-109 &nbsp;::&nbsp; NFIE Compliant</div>
+</div>
+</body>
+</html>

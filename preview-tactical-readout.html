@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 800px; height: 500px; overflow: hidden; background: #050202; }
+
+  .canvas {
+    width: 800px; height: 500px;
+    background: #050202;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* scanlines */
+  .scanlines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* pulsing border */
+  .border-pulse {
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(200,20,20,0.5);
+    box-shadow: 0 0 20px rgba(200,20,20,0.15), inset 0 0 20px rgba(200,20,20,0.05);
+    pointer-events: none;
+    z-index: 1;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { border-color: rgba(200,20,20,0.3); box-shadow: 0 0 10px rgba(200,20,20,0.1); }
+    50% { border-color: rgba(220,30,30,0.7); box-shadow: 0 0 30px rgba(200,20,20,0.25), inset 0 0 30px rgba(200,20,20,0.08); }
+  }
+
+  /* top alert bar */
+  .alert-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 36px;
+    background: #8b0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    z-index: 3;
+  }
+
+  .alert-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.5em;
+    color: #ffaaaa;
+    text-transform: uppercase;
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .alert-dot {
+    width: 6px; height: 6px;
+    background: #ff4444;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ff4444;
+    animation: blink 0.8s step-end infinite;
+  }
+
+  /* grid overlay */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(200,20,20,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,20,20,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* main content */
+  .content {
+    position: absolute;
+    top: 36px; left: 0; right: 0; bottom: 36px;
+    display: flex;
+    padding: 32px 48px;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .system-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: #8b0000;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #ff3333;
+    line-height: 1.1;
+    text-shadow: 0 0 20px rgba(255,50,50,0.4);
+  }
+
+  .sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #5a2020;
+    text-transform: uppercase;
+  }
+
+  .status-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #4a2020;
+    text-transform: uppercase;
+  }
+
+  .status-indicator {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .status-indicator.red { background: #cc2222; box-shadow: 0 0 6px #cc2222; }
+  .status-indicator.amber { background: #cc8822; box-shadow: 0 0 6px #cc8822; }
+  .status-indicator.dim { background: #3a2020; }
+
+  .right {
+    width: 280px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .readout-box {
+    background: #0a0202;
+    border: 1px solid #2a0808;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .readout-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: #5a1010;
+    text-transform: uppercase;
+    border-bottom: 1px solid #1a0808;
+    padding-bottom: 6px;
+  }
+
+  .readout-value {
+    font-family: 'Orbitron', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: #cc2222;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(200,30,30,0.3);
+  }
+
+  .readout-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: #3a1010;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* bottom bar */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 36px;
+    background: #0a0202;
+    border-top: 1px solid #2a0808;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    justify-content: space-between;
+    z-index: 3;
+  }
+
+  .bottom-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: #3a1010;
+    text-transform: uppercase;
+  }
+
+  .bottom-tag.right {
+    color: #8b0000;
+    animation: blink 2s step-end infinite;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="scanlines"></div>
+  <div class="border-pulse"></div>
+  <div class="grid"></div>
+
+  <div class="alert-bar">
+    <div class="alert-dot"></div>
+    <div class="alert-text">Signal Red — Corridor Active</div>
+    <div class="alert-dot"></div>
+    <div class="alert-text">SOVRA-FCL-MHCE-v2.5</div>
+    <div class="alert-dot"></div>
+  </div>
+
+  <div class="content">
+    <div class="left">
+      <div class="system-tag">Observing &nbsp;::&nbsp; SOVRA-FCL-MHCE-v2.5</div>
+      <h1>TACTICAL<br>READOUT<br>v2</h1>
+      <div class="sub">Foxtrot-Chimera-Lambda</div>
+      <div class="status-rows">
+        <div class="status-row">
+          <div class="status-indicator red"></div>
+          Corridor Status — Active
+        </div>
+        <div class="status-row">
+          <div class="status-indicator red"></div>
+          NFIE Constraint — Engaged
+        </div>
+        <div class="status-row">
+          <div class="status-indicator amber"></div>
+          Observation Mode — Running
+        </div>
+        <div class="status-row">
+          <div class="status-indicator dim"></div>
+          Wall Contact — None Detected
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="readout-box">
+        <div class="readout-label">System Designation</div>
+        <div class="readout-value">DS4</div>
+        <div class="readout-sub">KES-109 &nbsp;::&nbsp; Operational</div>
+      </div>
+      <div class="readout-box">
+        <div class="readout-label">Alert Level</div>
+        <div class="readout-value">RED</div>
+        <div class="readout-sub">Pulsing &nbsp;::&nbsp; Scanline Active</div>
+      </div>
+      <div class="readout-box">
+        <div class="readout-label">PCE Region</div>
+        <div class="readout-value" style="font-size:14px; letter-spacing:0.05em;">P ∪ W ∪ B</div>
+        <div class="readout-sub">Corridor / Wobble / Wall</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">SOVRA-FCL-MHCE-v2.5 &nbsp;::&nbsp; DS4-KES-109 &nbsp;::&nbsp; Foxtrot-Chimera-Lambda</span>
+    <span class="bottom-tag right">⬤ Signal Red</span>
+  </div>
+</div>
+</body>
+</html>

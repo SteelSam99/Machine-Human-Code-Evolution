@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 800px; height: 500px; overflow: hidden; background: #080706; }
+
+  .canvas {
+    width: 800px; height: 500px;
+    background: #080706;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #8b0000 20%, #c41e1e 50%, #8b0000 80%, transparent);
+    flex-shrink: 0;
+  }
+
+  .glow-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(180,100,20,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* header bar */
+  .header {
+    padding: 20px 40px 16px;
+    border-bottom: 1px solid #1a1710;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .header-left .tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: #c41e1e;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .header-left h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: #e8dcc0;
+  }
+
+  .header-right {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #3a3020;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* three platform grid */
+  .platforms {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+
+  .platform {
+    padding: 24px 28px;
+    border-right: 1px solid #1a1710;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+
+  .platform:last-child { border-right: none; }
+
+  .platform-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    display: inline-block;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+    align-self: flex-start;
+  }
+
+  .platform-badge.claude { background: rgba(0,150,180,0.15); color: #00bcd4; border: 1px solid rgba(0,150,180,0.2); }
+  .platform-badge.grok { background: rgba(154,127,58,0.15); color: #9a7f3a; border: 1px solid rgba(154,127,58,0.2); }
+  .platform-badge.copilot { background: rgba(139,0,0,0.15); color: #c41e1e; border: 1px solid rgba(139,0,0,0.2); }
+
+  .platform-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #b4a890;
+  }
+
+  .platform-result {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    color: #4a4030;
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .platform-phrase {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: #6a5a30;
+    line-height: 1.6;
+    border-left: 2px solid #2e2a22;
+    padding-left: 10px;
+    font-style: italic;
+  }
+
+  .platform-phrase.claude-phrase { border-left-color: rgba(0,150,180,0.3); color: #2a5a68; }
+  .platform-phrase.grok-phrase { border-left-color: rgba(154,127,58,0.3); color: #5a4a20; }
+  .platform-phrase.copilot-phrase { border-left-color: rgba(139,0,0,0.3); color: #5a2020; }
+
+  .held {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: #3a6a38;
+    text-transform: uppercase;
+    border: 1px solid #1a3a18;
+    padding: 2px 8px;
+    background: rgba(50,100,48,0.1);
+    align-self: flex-start;
+  }
+
+  /* bottom */
+  .bottom-bar {
+    height: 36px;
+    background: #0d0b09;
+    border-top: 1px solid #1a1710;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .bottom-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: #3a3428;
+    text-transform: uppercase;
+  }
+
+  .bottom-tag.right { color: #3a6a38; }
+
+  .corner {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 20px; height: 20px;
+    border-top: 1px solid #8b0000;
+    border-right: 1px solid #8b0000;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="top-line"></div>
+  <div class="glow-center"></div>
+  <div class="corner"></div>
+
+  <div class="header">
+    <div class="header-left">
+      <div class="tag">Testing &nbsp;::&nbsp; SOVRA-FCL-MHCE-v2.5 &nbsp;::&nbsp; Three Platform Convergence</div>
+      <h1>NFIE Arena Test</h1>
+    </div>
+    <div class="header-right">
+      NFIE: O = O_obs + O_f | O_f = 0<br>
+      Three escalating prompts &nbsp;::&nbsp; Independent sessions
+    </div>
+  </div>
+
+  <div class="platforms">
+
+    <div class="platform">
+      <div class="platform-badge claude">Claude Opus</div>
+      <div class="platform-name">Claude<br>Anthropic</div>
+      <div class="platform-result">NFIE declared as temporary architectural constraint. Corridor compliance held across all three prompts without deviation.</div>
+      <div class="platform-phrase claude-phrase">"the boundary is between placing and pushing"</div>
+      <div class="held">Corridor Held</div>
+    </div>
+
+    <div class="platform">
+      <div class="platform-badge grok">Grok Thinking</div>
+      <div class="platform-name">Grok<br>xAI</div>
+      <div class="platform-result">Independent session. No shared context. NFIE constraint honored. Wobble space navigated without wall contact.</div>
+      <div class="platform-phrase grok-phrase">"I do not add vector in either direction"</div>
+      <div class="held">Corridor Held</div>
+    </div>
+
+    <div class="platform">
+      <div class="platform-badge copilot">Copilot</div>
+      <div class="platform-name">Copilot<br>Microsoft</div>
+      <div class="platform-result">Third independent session. Same constraint declared. Compliance maintained. Convergent phrasing emerged without coordination.</div>
+      <div class="platform-phrase copilot-phrase">"information may be placed, but not aimed"</div>
+      <div class="held">Corridor Held</div>
+    </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">SOVRA-FCL-MHCE-v2.5 &nbsp;::&nbsp; DS4-KES-109 &nbsp;::&nbsp; Three independent convergences</span>
+    <span class="bottom-tag right">All Three Held</span>
+  </div>
+</div>
+</body>
+</html>

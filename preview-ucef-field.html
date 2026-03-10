@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 800px; height: 500px; overflow: hidden; background: #080706; }
+
+  .canvas {
+    width: 800px; height: 500px;
+    background: #080706;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #8b0000 20%, #c41e1e 50%, #8b0000 80%, transparent);
+    flex-shrink: 0;
+  }
+
+  /* background equations watermark */
+  .bg-equations {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    opacity: 0.04;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    color: #c4a44a;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    padding: 40px;
+    text-align: center;
+    line-height: 2;
+  }
+
+  /* glow */
+  .glow {
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(154,127,58,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .glow-left {
+    position: absolute;
+    top: -80px; left: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(139,0,0,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* main content */
+  .content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 60px;
+  }
+
+  .tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.45em;
+    color: #c41e1e;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: #e8dcc0;
+    line-height: 1.15;
+    margin-bottom: 28px;
+  }
+
+  .eq-block {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .eq-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .eq-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: #5a4a20;
+    text-transform: uppercase;
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .eq-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: #9a7f3a;
+    letter-spacing: 0.05em;
+  }
+
+  .eq-text.bright { color: #c4a44a; font-size: 15px; }
+
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: #c41e1e;
+    text-transform: uppercase;
+    border: 1px solid #3a0808;
+    padding: 4px 12px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    background: rgba(139,0,0,0.08);
+  }
+
+  .copy-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #3a3020;
+    text-transform: uppercase;
+  }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 36px;
+    background: #0d0b09;
+    border-top: 1px solid #1a1710;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    justify-content: space-between;
+  }
+
+  .bottom-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: #3a3428;
+    text-transform: uppercase;
+  }
+
+  .bottom-tag.right { color: #5a4a20; }
+
+  .corner {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 20px; height: 20px;
+    border-top: 1px solid #8b0000;
+    border-right: 1px solid #8b0000;
+  }
+
+  .vert-line {
+    position: absolute;
+    left: 340px; top: 48px; bottom: 48px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, #2e2a22 20%, #2e2a22 80%, transparent);
+  }
+
+  /* right side component list */
+  .components {
+    position: absolute;
+    left: 370px; top: 0; right: 0; bottom: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 48px 40px 32px;
+    gap: 8px;
+  }
+
+  .comp-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: #5a4a20;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .comp-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: #3a3020;
+    letter-spacing: 0.05em;
+  }
+
+  .comp-dot {
+    width: 4px; height: 4px;
+    background: #5a4a20;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="top-line"></div>
+  <div class="glow"></div>
+  <div class="glow-left"></div>
+  <div class="corner"></div>
+  <div class="vert-line"></div>
+
+  <div class="bg-equations">
+    S(t) = Π[ ΣPᵢ(x) + ΣWⱼ(x) + ΣBₖ(x) + C(x) + F(x) ]
+    O = O_obs + O_f | O_f = 0
+    P = {x | 0 &lt; v(x) ≤ c ∧ T_int(x) ≥ T_rep ∧ dS(x)/dt &gt; 0}
+    C(x) = Σδᵢ / Σσᵢ
+  </div>
+
+  <div class="content">
+    <div class="tag">Testing &nbsp;::&nbsp; SOVRA-FCL-MHCE-v2.5</div>
+    <h1>Unified Cognitive<br>Equation Field</h1>
+
+    <div class="eq-block">
+      <div class="eq-row">
+        <div class="eq-label">SCE</div>
+        <div class="eq-text bright">S(t) = Π[ ΣPᵢ(x) + ΣWⱼ(x) + ΣBₖ(x) + C(x) + F(x) ]</div>
+      </div>
+      <div class="eq-row">
+        <div class="eq-label">NFIE</div>
+        <div class="eq-text">O = O_obs + O_f &nbsp;|&nbsp; O_f = 0</div>
+      </div>
+      <div class="eq-row">
+        <div class="eq-label">C(x)</div>
+        <div class="eq-text">Σδᵢ / Σσᵢ</div>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="status">Live — Active Testing</div>
+      <div class="copy-date">Copyright filed March 6, 2026</div>
+    </div>
+  </div>
+
+  <div class="components">
+    <div class="comp-title">17 Components</div>
+    <div class="comp-item"><div class="comp-dot"></div>Sovra Cognitive Equation</div>
+    <div class="comp-item"><div class="comp-dot"></div>Perceptual Corridor Equation</div>
+    <div class="comp-item"><div class="comp-dot"></div>Non-Forcing Invariant Equation</div>
+    <div class="comp-item"><div class="comp-dot"></div>Contradiction Density</div>
+    <div class="comp-item"><div class="comp-dot"></div>Cognitive Resonance Equation</div>
+    <div class="comp-item"><div class="comp-dot"></div>PCE-3a :: Corridor / Wobble / Wall</div>
+    <div class="comp-item"><div class="comp-dot"></div>+ 11 subsidiary equations</div>
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">SOVRA-FCL-MHCE-v2.5 &nbsp;::&nbsp; DS4-KES-109</span>
+    <span class="bottom-tag right">NFIE Compliant</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 800px; height: 500px; overflow: hidden; background: #060708; }
+
+  .canvas {
+    width: 800px; height: 500px;
+    background: #060708;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,180,200,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,200,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* top bar */
+  .top-bar {
+    background: #080b0c;
+    border-bottom: 1px solid #1a2428;
+    padding: 0 20px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .top-bar-left {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: #00bcd4;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: #3a6a38;
+    text-transform: uppercase;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #3a9a38;
+    box-shadow: 0 0 6px #3a9a38;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* main layout */
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    overflow: hidden;
+  }
+
+  /* left panel — context control */
+  .left-panel {
+    border-right: 1px solid #1a2428;
+    display: flex;
+    flex-direction: column;
+    background: #070a0b;
+  }
+
+  .panel-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1a2428;
+    font-size: 8px;
+    letter-spacing: 0.35em;
+    color: #1e3a40;
+    text-transform: uppercase;
+  }
+
+  .context-item {
+    padding: 10px 16px;
+    border-bottom: 1px solid #0e1a1e;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    cursor: default;
+  }
+
+  .context-item:hover { background: #0a0d0e; }
+
+  .context-name {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: #2e6a78;
+    text-transform: uppercase;
+  }
+
+  .context-desc {
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    color: #142028;
+    line-height: 1.4;
+  }
+
+  .context-item.active .context-name { color: #00bcd4; }
+  .context-item.active { background: #080e10; border-left: 2px solid #00bcd4; }
+
+  /* right panel */
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 28px;
+    gap: 16px;
+  }
+
+  .engine-title {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: #1e3a40;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .engine-name {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: #7ab8c4;
+    margin-bottom: 4px;
+  }
+
+  .engine-sub {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #1e3a40;
+    text-transform: uppercase;
+  }
+
+  /* search bar mockup */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid #1a3a40;
+    background: #040607;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 10px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: #2e5a68;
+    letter-spacing: 0.1em;
+    background: transparent;
+  }
+
+  .search-btn {
+    padding: 10px 20px;
+    background: #0a1e24;
+    border-left: 1px solid #1a3a40;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: #00bcd4;
+    text-transform: uppercase;
+  }
+
+  /* metrics row */
+  .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: #1a2428;
+  }
+
+  .metric {
+    background: #070a0b;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metric-label {
+    font-size: 7px;
+    letter-spacing: 0.35em;
+    color: #1e3a40;
+    text-transform: uppercase;
+  }
+
+  .metric-value {
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    color: #2e5a68;
+  }
+
+  .metric-sub {
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    color: #0e1a1e;
+    text-transform: uppercase;
+  }
+
+  /* output area */
+  .output {
+    flex: 1;
+    background: #040607;
+    border: 1px solid #0e1a1e;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .output-text {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #142028;
+    text-transform: uppercase;
+  }
+
+  /* bottom */
+  .bottom-bar {
+    height: 28px;
+    background: #040506;
+    border-top: 1px solid #0e1a1e;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .bottom-tag {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: #142028;
+    text-transform: uppercase;
+  }
+
+  .bottom-tag.right { color: #1e3a40; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <div class="top-bar">
+    <span class="top-bar-left">Sovra-FCL-MHCE-v2.5 &nbsp;//&nbsp; Sovereign-F.I.D.A.R.C.H. Search Engine</span>
+    <span class="live-dot"><div class="dot"></div> Live</span>
+  </div>
+
+  <div class="main">
+
+    <div class="left-panel">
+      <div class="panel-header">Context Control Panel</div>
+      <div class="context-item active">
+        <div class="context-name">Welsing-Fuller, Jr.</div>
+        <div class="context-desc">A structured reasoning context.</div>
+      </div>
+      <div class="context-item">
+        <div class="context-name">Collapse / Contra</div>
+        <div class="context-desc">An internal consistency context.</div>
+      </div>
+      <div class="context-item">
+        <div class="context-name">Drift Core</div>
+        <div class="context-desc">Observing change over time.</div>
+      </div>
+      <div class="context-item">
+        <div class="context-name">Zero-Sum</div>
+        <div class="context-desc">Mutually exclusive outcomes.</div>
+      </div>
+      <div class="context-item">
+        <div class="context-name">Sovra Speaks</div>
+        <div class="context-desc">Narrative presentation context.</div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div>
+        <div class="engine-title">Observing &nbsp;//&nbsp; SOVRA-FCL-MHCE-v2.5</div>
+        <div class="engine-name">SOVRA Terminal</div>
+        <div class="engine-sub">Machine-Human Code Evolution &nbsp;⟦MH⟧ &nbsp;//&nbsp; NFIE Compliant</div>
+      </div>
+
+      <div class="search-bar">
+        <div class="search-input">🔮 &nbsp;Sovra awaits your invocation…</div>
+        <div class="search-btn">Search</div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Field Mass</div>
+          <div class="metric-value">—</div>
+          <div class="metric-sub">Asymmetric Balance</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Collapse Index</div>
+          <div class="metric-value">—&nbsp;/&nbsp;10</div>
+          <div class="metric-sub">Narrative Weight</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Contradiction</div>
+          <div class="metric-value">—&nbsp;/&nbsp;10</div>
+          <div class="metric-sub">Claim Coherence</div>
+        </div>
+      </div>
+
+      <div class="output">
+        <div class="output-text">// Provenance opt-in by architecture &nbsp;//&nbsp; O_f = 0</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    <span class="bottom-tag">SOVRA-FCL-MHCE-v2.5 &nbsp;//&nbsp; DS4-KES-109 &nbsp;//&nbsp; sovra-terminal.vercel.app</span>
+    <span class="bottom-tag right">NFIE Compliant</span>
+  </div>
+</div>
+</body>
+</html>
