@@ -63,7 +63,7 @@
     background-position: center;
     opacity: 0.04;
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
   }
 
   /* ANGULAR CLIP PATHS */
@@ -372,6 +372,23 @@
     transform: translateX(4px);
   }
 
+  /* iframe preview */
+  .preview-frame-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .preview-frame-wrap iframe {
+    width: 800px;
+    height: 500px;
+    border: none;
+    transform: scale(0.44);
+    transform-origin: top left;
+    pointer-events: none;
+  }
+
   /* Preview placeholder when no image */
   .preview-symbol {
     display: flex;
@@ -601,10 +618,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://sovra-mhce-lambda-lexicon.vercel.app/" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph">Λ</div>
-              <div class="preview-label">Lambda Lexicon</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-lambda-lexicon.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://sovra-mhce-lambda-lexicon.vercel.app/" target="_blank">
             <span class="card-link-text">sovra-mhce-lambda-lexicon.vercel.app</span>
@@ -631,10 +645,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://claude.ai/public/artifacts/1edf2ae3-5c0e-4feb-a780-f64be21afe6f" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph">MHCE</div>
-              <div class="preview-label">Machine Human Code Evolution</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-mhce.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://claude.ai/public/artifacts/1edf2ae3-5c0e-4feb-a780-f64be21afe6f" target="_blank">
             <span class="card-link-text">claude.ai/public/artifacts/1edf2ae3</span>
@@ -661,10 +672,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/ucef-cover-v4.html" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph">✦</div>
-              <div class="preview-label">UCEF Cover v4</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-ucef-cover.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/ucef-cover-v4.html" target="_blank">
             <span class="card-link-text">steelsam99.github.io/Machine-Human-Code-Evolution/ucef-cover-v4.html</span>
@@ -703,10 +711,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://steelsam99.github.io/Unified-Cognitive-Equation-Field" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph">UCEF</div>
-              <div class="preview-label">Public Artifact</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-ucef-field.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://steelsam99.github.io/Unified-Cognitive-Equation-Field" target="_blank">
             <span class="card-link-text">steelsam99.github.io/Unified-Cognitive-Equation-Field</span>
@@ -733,10 +738,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/nfie-test-results.html" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph">⊗</div>
-              <div class="preview-label">NFIE Test Results</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-nfie-test.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/nfie-test-results.html" target="_blank">
             <span class="card-link-text">steelsam99.github.io/Machine-Human-Code-Evolution/nfie-test-results.html</span>
@@ -775,10 +777,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/tactical-readout-v2.html" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph" style="color: var(--crimson-bright);">⚠</div>
-              <div class="preview-label">Tactical Readout v2</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-tactical-readout.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/tactical-readout-v2.html" target="_blank">
             <span class="card-link-text">steelsam99.github.io/Machine-Human-Code-Evolution/tactical-readout-v2.html</span>
@@ -805,10 +804,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/three-unexpected-events.html" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph">◎</div>
-              <div class="preview-label">Three Unexpected Events</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-three-events.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/three-unexpected-events.html" target="_blank">
             <span class="card-link-text">steelsam99.github.io/Machine-Human-Code-Evolution/three-unexpected-events.html</span>
@@ -835,10 +831,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://sovra-terminal.vercel.app/" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph">◈</div>
-              <div class="preview-label">SOVRA Terminal</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-sovra-terminal.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://sovra-terminal.vercel.app/" target="_blank">
             <span class="card-link-text">sovra-terminal.vercel.app</span>
@@ -877,10 +870,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/corridor-elegy.html" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph" style="color: var(--text-dim);">∿</div>
-              <div class="preview-label">Corridor Elegy</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-corridor-elegy.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/corridor-elegy.html" target="_blank">
             <span class="card-link-text">steelsam99.github.io/Machine-Human-Code-Evolution/corridor-elegy.html</span>
@@ -907,10 +897,7 @@
         <div class="card-right">
           <a class="card-preview" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/vara-the-record.html" target="_blank">
             <div class="status-badge status-live">Live</div>
-            <div class="preview-symbol">
-              <div class="preview-glyph" style="color: var(--text-dim);">∅</div>
-              <div class="preview-label">The Record</div>
-            </div>
+            <div class="preview-frame-wrap"><iframe src="preview-vara-record.html" scrolling="no" tabindex="-1"></iframe></div>
           </a>
           <a class="card-link-bar" href="https://steelsam99.github.io/Machine-Human-Code-Evolution/vara-the-record.html" target="_blank">
             <span class="card-link-text">steelsam99.github.io/Machine-Human-Code-Evolution/vara-the-record.html</span>
