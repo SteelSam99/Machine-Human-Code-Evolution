@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destructive Systems Convergence Plot — SOVRA-FCL-MHCE</title>
+<meta name="description" content="A cross-domain structural analysis mapping convergent behaviors across Digital, Biological, Chemical, Behavioral, and Ideological destructive systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep:       #050d1a;
+    --bg-dark:       #0a1628;
+    --bg-cell:       #0d1f38;
+    --bg-conv:       #1a0f00;
+    --bg-conv-cell:  #1f1200;
+    --bg-conv-hover: #3d1f00;
+    --bg-var-hover:  #0f2540;
+    --border-base:   #1e3a5f;
+    --border-conv:   #cc5500;
+    --orange:        #ff8c00;
+    --orange-dim:    #cc6600;
+    --orange-text:   #ffb860;
+    --blue-bright:   #7ab8d9;
+    --blue-mid:      #4a7fa5;
+    --blue-dim:      #2a5070;
+    --blue-text:     #6a9bbf;
+    --text-white:    #ffffff;
+    --text-light:    #e0e8f0;
+    --text-dim:      #3a6080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg-deep);
+    color: var(--text-light);
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,140,0,0.08) 50%, transparent 100%);
+    border-bottom: 1px solid var(--border-conv);
+    padding: 6px 24px;
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--orange-dim);
+    text-transform: uppercase;
+  }
+
+  /* HEADER */
+  header {
+    padding: 40px 32px 32px;
+    border-bottom: 1px solid var(--border-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+  }
+
+  .header-sys {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--blue-mid);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .header-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(20px, 4vw, 36px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: var(--text-white);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  .header-version {
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--blue-mid);
+  }
+
+  .legend-dot {
+    width: 12px; height: 12px;
+    flex-shrink: 0;
+  }
+
+  .legend-dot.conv { background: var(--orange); }
+  .legend-dot.var  { background: var(--bg-cell); border: 1px solid var(--border-base); }
+
+  /* SCORE BAND */
+  .score-band {
+    background: var(--bg-conv);
+    border-top: 1px solid var(--border-conv);
+    border-bottom: 1px solid var(--border-conv);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .score-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--orange-dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .score-value {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+  }
+
+  .score-sub {
+    font-size: 9px;
+    color: var(--orange-dim);
+    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+
+  .score-divider {
+    width: 1px;
+    height: 48px;
+    background: var(--border-conv);
+    opacity: 0.4;
+  }
+
+  /* MAIN */
+  main {
+    padding: 24px 16px 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* TABLE WRAPPER */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-base);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 900px;
+  }
+
+  /* COLUMN HEADERS */
+  thead th {
+    padding: 14px 8px;
+    background: #071020;
+    border: 1px solid var(--border-base);
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  thead th:first-child {
+    width: 130px;
+  }
+
+  .col-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: var(--blue-bright);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+
+  .col-sub {
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ROW LABEL CELLS */
+  .row-label {
+    padding: 12px 8px;
+    border: 1px solid var(--border-base);
+    vertical-align: middle;
+    text-align: center;
+    position: relative;
+  }
+
+  .row-label.conv {
+    background: var(--bg-conv);
+    border-color: var(--border-conv);
+  }
+
+  .row-label.var {
+    background: #071020;
+  }
+
+  .row-label-text {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .row-label-text.conv { color: var(--orange); }
+  .row-label-text.var  { color: var(--blue-mid); }
+
+  .conv-badge {
+    margin-top: 6px;
+    font-size: 7px;
+    color: #cc6600;
+    letter-spacing: 1px;
+    border: 1px solid #cc6600;
+    padding: 1px 4px;
+    display: inline-block;
+  }
+
+  /* DATA CELLS */
+  td.cell {
+    padding: 10px 8px;
+    border: 1px solid var(--border-base);
+    vertical-align: top;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  td.cell.conv {
+    border-color: var(--border-conv);
+    background: var(--bg-conv-cell);
+  }
+
+  td.cell.var {
+    background: var(--bg-dark);
+  }
+
+  td.cell.conv:hover { background: var(--bg-conv-hover); }
+  td.cell.var:hover  { background: var(--bg-var-hover); }
+
+  td.cell.active.conv { background: var(--bg-conv-hover); }
+  td.cell.active.var  { background: var(--bg-var-hover); }
+
+  .conv-dot {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  .cell-text {
+    font-size: 8.5px;
+    line-height: 1.55;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .cell-text.conv { color: var(--orange-text); }
+  .cell-text.var  { color: var(--blue-text); }
+
+  .expand-hint {
+    font-size: 7px;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .expand-hint.conv { color: var(--orange-dim); }
+  .expand-hint.var  { color: var(--blue-dim); }
+
+  /* CONVERGENCE ANALYSIS */
+  .analysis {
+    margin-top: 24px;
+    border: 1px solid var(--border-conv);
+    background: var(--bg-conv);
+    padding: 20px 24px;
+  }
+
+  .analysis-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--orange);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .analysis-col-label {
+    font-size: 9px;
+    color: var(--blue-mid);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .analysis-item {
+    font-size: 9px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .analysis-item.conv { color: var(--orange-text); }
+  .analysis-item.var  { color: var(--blue-text); }
+
+  .analysis-note {
+    margin-top: 10px;
+    font-size: 8px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    border-top: 1px solid var(--border-base);
+    padding-top: 10px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border-base);
+    padding: 20px 32px;
+    text-align: center;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    line-height: 2;
+    background: #050d1a;
+  }
+
+  footer a {
+    color: var(--blue-dim);
+    text-decoration: none;
+  }
+
+  footer a:hover { color: var(--blue-mid); }
+
+  @media (max-width: 600px) {
+    header { padding: 24px 16px; }
+    .score-band { padding: 12px 16px; gap: 20px; }
+    .analysis-grid { grid-template-columns: 1fr; }
+    .header-meta { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  SOVRA-FCL-MHCE-v2.5 · FOXTROT-CHIMERA-LAMBDA · DS4-KES-109 · NFIE COMPLIANT
+</div>
+
+<header>
+  <div class="header-sys">SOVRA-FCL-MHCE · OBSERVING · STRUCTURAL ANALYSIS</div>
+  <div class="header-title">Destructive Systems<br>Convergence Plot</div>
+  <div class="header-version">VERSION 1.0 · MARCH 2026</div>
+  <div class="header-meta">
+    <div class="legend-item">
+      <div class="legend-dot conv"></div>
+      CONVERGENCE POINT — Mechanism &amp; behavior identical across all domains
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot var"></div>
+      DOMAIN VARIANT — Behavior identical, mechanism domain-specific
+    </div>
+  </div>
+</header>
+
+<!-- SCORE BAND -->
+<div class="score-band">
+  <div>
+    <div class="score-label">Hard Convergence</div>
+    <div class="score-value">20</div>
+    <div class="score-sub">MECHANISM + BEHAVIOR IDENTICAL</div>
+  </div>
+  <div class="score-divider"></div>
+  <div>
+    <div class="score-label">Soft Convergence</div>
+    <div class="score-value" style="color:var(--blue-bright)">10</div>
+    <div class="score-sub">BEHAVIOR IDENTICAL · MECHANISM VARIES</div>
+  </div>
+  <div class="score-divider"></div>
+  <div>
+    <div class="score-label">Total Alignment Points</div>
+    <div class="score-value" style="color:var(--text-white)">30</div>
+    <div class="score-sub">ACROSS 5 DOMAINS · 6 BEHAVIORS</div>
+  </div>
+  <div class="score-divider"></div>
+  <div>
+    <div class="score-label">Convergence Rate</div>
+    <div class="score-value" style="color:var(--orange)">66.6%</div>
+    <div class="score-sub">HARD · 100% BEHAVIORAL</div>
+  </div>
+</div>
+
+<main>
+  <div class="table-wrap">
+    <table id="grid">
+      <thead>
+        <tr>
+          <th><div class="col-label">BEHAVIOR</div></th>
+          <th><div class="col-label">LETHIC</div><div class="col-sub">Digital</div></th>
+          <th><div class="col-label">HPV</div><div class="col-sub">Biological</div></th>
+          <th><div class="col-label">TTX / PUFFER</div><div class="col-sub">Chemical</div></th>
+          <th><div class="col-label">RECOVERING ALCOHOLIC</div><div class="col-sub">Behavioral</div></th>
+          <th><div class="col-label">WHITE SUPREMACY</div><div class="col-sub">Ideological</div></th>
+        </tr>
+      </thead>
+      <tbody id="grid-body"></tbody>
+    </table>
+  </div>
+
+  <div class="analysis">
+    <div class="analysis-title">◆ CONVERGENCE ANALYSIS · 20 HARD / 10 SOFT / 30 TOTAL</div>
+    <div class="analysis-grid">
+      <div>
+        <div class="analysis-col-label">FULL CONVERGENCE POINTS (4 ROWS · 20 CELLS)</div>
+        <div class="analysis-item conv"><span style="color:var(--orange)">◆</span> EVASION OF DETECTION</div>
+        <div class="analysis-item conv"><span style="color:var(--orange)">◆</span> PERSISTENCE MECHANISM</div>
+        <div class="analysis-item conv"><span style="color:var(--orange)">◆</span> REPLICATION THROUGH HOST</div>
+        <div class="analysis-item conv"><span style="color:var(--orange)">◆</span> RESURRECTION AFTER DISRUPTION</div>
+      </div>
+      <div>
+        <div class="analysis-col-label">DOMAIN VARIANTS (2 ROWS · 10 CELLS)</div>
+        <div class="analysis-item var"><span style="color:var(--blue-dim)">◇</span> COMMAND &amp; CONTROL</div>
+        <div class="analysis-item var"><span style="color:var(--blue-dim)">◇</span> HOST IMMUNITY / RESISTANCE</div>
+        <div class="analysis-note">
+          Domain variants exhibit identical behavioral architecture across all five domains. Mechanism implementation is substrate-specific. Behavioral convergence rate: 30/30 — 100%. The architecture is the same system running in five different substrates.
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div>PROPERTY OF SAMUEL PAUL PEACOCK · SOVRA-FCL-MHCE-v2.5 · FOXTROT-CHIMERA-LAMBDA</div>
+  <div>AUTHOR: SAMUEL PAUL PEACOCK · JACKSON, TENNESSEE · MARCH 2026</div>
+  <div>DEVELOPED WITH CLAUDE (ANTHROPIC) · NFIE COMPLIANT</div>
+  <div style="margin-top:8px">
+    <a href="https://steelsam99.github.io/Machine-Human-Code-Evolution/">← ARTIFACT GALLERY</a>
+    &nbsp;·&nbsp;
+    <a href="https://sovra-terminal.vercel.app/">SOVRA TERMINAL →</a>
+  </div>
+  <div style="margin-top:10px; font-size:7px; color:#1e3a5f; letter-spacing:1px;">
+    NOTHING IN THIS DOCUMENT PERSUADES. NOTHING ASSERTS MEANING. IT PLACES STRUCTURE AND LETS COGNITION DECIDE.
+  </div>
+</footer>
+
+<script>
+const BEHAVIORS = [
+  {
+    id: 1,
+    label: "EVASION OF DETECTION",
+    conv: true,
+    cells: [
+      "Checks for virtual/debug environment on execution. Terminates itself if analysis tools detected. Hides inside explorer.exe process.",
+      "Suppresses interferon response. Blocks dendritic cell maturation. Immune system never receives the alert signal.",
+      "Concentrated in organs, not flesh. Accumulates via bacterial proxy carrier. Source mechanism still not fully confirmed.",
+      "Minimization. Denial. Downplaying severity. 'It wasn't that bad.' System conceals the load from the host.",
+      "Entered as religion, not race. 'Non-Christian' not 'non-white.' Racial framing installed after infrastructure was already running. Host never saw the original packet."
+    ]
+  },
+  {
+    id: 2,
+    label: "PERSISTENCE MECHANISM",
+    conv: true,
+    cells: [
+      "Writes registry keys at startup. Runs on every boot. Survives reboot cycles. Mutex prevents duplicate detection.",
+      "Hitchhikes on host chromosomes during cell division. Passes to daughter cells. Low copy number — quiet, stable, long-term.",
+      "Heat stable. Cannot be destroyed by cooking, freezing, or drying. No antidote exists. Persists after host organism dies.",
+      "Grooved M — repeated identical outputs compress the option set. Routing becomes deterministic. The groove waits, does not erase.",
+      "Loaded into property law, land title, curriculum, economic architecture. Dum Diversas 1452 → Johnson v. M'Intosh 1823 → active in U.S. federal Indian law today. Runs in infrastructure, not individuals."
+    ]
+  },
+  {
+    id: 3,
+    label: "COMMAND & CONTROL",
+    conv: false,
+    cells: [
+      "Connects to remote C&C server. Waits for instructions. Operators relocated servers after 2010 takedown and rebuilt within weeks.",
+      "E6/E7 oncoproteins hijack host cell cycle regulators. Virus rewrites the host's own replication rules from inside.",
+      "Bacterial endosymbionts produce TTX inside the host. Fish becomes delivery vehicle for something produced by something living inside it.",
+      "Bargaining. Trigger networks — people, places, things — function as external C&C nodes. 'Just on holidays.' 'Just one.'",
+      "Pope → Crown → Parliament → Congress → State Legislature → Local Ordinance. Chain decentralized across 573 years. When one node disrupted, others keep running. TN 2021 law traced to 1955 statutes."
+    ]
+  },
+  {
+    id: 4,
+    label: "REPLICATION THROUGH HOST",
+    conv: true,
+    cells: [
+      "210K–310K infected machines become spam relays. 8–10% of global spam at peak. Host does the spreading without awareness.",
+      "Viral DNA amplified in differentiating cells. Shed from epithelial surface. Host body becomes the distribution system.",
+      "TTX moves up the food chain. Accumulates and concentrates at each level. More potent per carrier as it rises.",
+      "Children of alcoholics. Normalized drinking culture. Social environments carry the pattern forward without awareness or intent.",
+      "3-Generation Separation problem. Montana and South Carolina families never met. Both carriers. Transmission vehicle: shared legal system, curriculum architecture, economic permission set."
+    ]
+  },
+  {
+    id: 5,
+    label: "RESURRECTION AFTER DISRUPTION",
+    conv: true,
+    cells: [
+      "Taken down January 2010. Rebuilt with new C&C servers by February 2010. Back to 2 billion spam/day by April 2010.",
+      "80–90% of infections resolve — but HPV16 evades clearance for years, decades. Latent infection hides until immunity drops.",
+      "TTX persists in tissue after the organism dies. Fish can be dead — toxin still active. No heat, freeze, or drying destroys it.",
+      "40–60% relapse rate. The grooved M doesn't erase — it waits. Recovery is management, not deletion.",
+      "Reconstruction. Rolled back. Civil Rights Act gutted by Shelby County v. Holder 2013. Every legislative disruption met with new C&C architecture. Vatican repudiated Doctrine of Discovery 2023. Still embedded in U.S. property law."
+    ]
+  },
+  {
+    id: 6,
+    label: "HOST IMMUNITY / RESISTANCE",
+    conv: false,
+    cells: [
+      "Terminates itself when analysis tools detected. Actively evades reverse engineering. Minimal footprint by design.",
+      "Suppresses T-cell response. Prevents immune system from building recognition memory. Prophylactic vaccines exist but not therapeutic.",
+      "Puffer fish developed TTX-resistant sodium channels through genetic mutation. Resistance is structural — built into the architecture.",
+      "Long-term sobriety. Sponsor networks. Daily inventory. Resistance requires active maintenance — the groove never fully fills.",
+      "Critical race theory. Ethnic studies. Honest curriculum. Structural analysis. The immune response the 2021 Tennessee law — and 18 state equivalents — was specifically designed to suppress. Evasion behavior targeting the antivirus."
+    ]
+  }
+];
+
+const PREVIEW_LEN = 60;
+const activeMap = {};
+
+function buildGrid() {
+  const tbody = document.getElementById('grid-body');
+
+  BEHAVIORS.forEach(behavior => {
+    const tr = document.createElement('tr');
+
+    // Row label
+    const labelTd = document.createElement('td');
+    labelTd.className = 'row-label ' + (behavior.conv ? 'conv' : 'var');
+    labelTd.innerHTML = `
+      <div class="row-label-text ${behavior.conv ? 'conv' : 'var'}">${behavior.label}</div>
+      ${behavior.conv ? '<div class="conv-badge">◆ CONVERGENT</div>' : ''}
+    `;
+    tr.appendChild(labelTd);
+
+    // Data cells
+    behavior.cells.forEach((text, i) => {
+      const td = document.createElement('td');
+      td.className = 'cell ' + (behavior.conv ? 'conv' : 'var');
+      const key = `${behavior.id}-${i}`;
+
+      td.innerHTML = renderCell(text, behavior.conv, false);
+
+      td.addEventListener('click', () => {
+        const isActive = activeMap[key];
+        activeMap[key] = !isActive;
+        td.classList.toggle('active', !isActive);
+        td.innerHTML = renderCell(text, behavior.conv, !isActive);
+      });
+
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+function renderCell(text, conv, expanded) {
+  const dot = conv ? '<div class="conv-dot"></div>' : '';
+  const cls = conv ? 'conv' : 'var';
+  const display = expanded ? text : (text.length > PREVIEW_LEN ? text.substring(0, PREVIEW_LEN) + '...' : text);
+  const hint = (!expanded && text.length > PREVIEW_LEN)
+    ? `<div class="expand-hint ${cls}">[CLICK TO EXPAND]</div>`
+    : (expanded ? `<div class="expand-hint ${cls}">[CLICK TO COLLAPSE]</div>` : '');
+  return `${dot}<div class="cell-text ${cls}">${display}</div>${hint}`;
+}
+
+buildGrid();
+</script>
+</body>
+</html>
