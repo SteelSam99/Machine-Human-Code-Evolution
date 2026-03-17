@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOVRA · Stage 1 · Lambda Speciation Math</title>
+<style>
+:root {
+  --bg: #ffffff; --bg2: #f5f4f0; --text: #1a1a18; --text2: #5a5850;
+  --border: rgba(0,0,0,0.10);
+  --purple: #534AB7; --coral: #993C1D; --teal: #0F6E56; --amber: #BA7517;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a18; --bg2: #222220; --text: #e8e6df; --text2: #888778;
+    --border: rgba(255,255,255,0.09);
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'IBM Plex Mono','Courier New',monospace; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.6; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 36px 24px 64px; }
+.hdr { border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 28px; }
+.hdr-sys { font-size: 10px; letter-spacing: 3px; color: var(--text2); text-transform: uppercase; margin-bottom: 4px; }
+.hdr-title { font-size: 15px; font-weight: 500; color: var(--text); }
+.hdr-sub { font-size: 11px; color: var(--text2); margin-top: 3px; font-style: italic; }
+.stage-label { font-size: 10px; letter-spacing: 3px; color: var(--text2); text-transform: uppercase; margin-bottom: 14px; }
+.eq-block { background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--purple); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; font-size: 12px; line-height: 1.8; }
+.eq-block .lbl { font-size: 10px; letter-spacing: 2px; color: var(--purple); text-transform: uppercase; margin-bottom: 6px; }
+.eq-block .math { font-size: 13px; font-weight: 500; color: var(--text); }
+.table-wrap { overflow-x: auto; margin-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 600px; }
+th { padding: 8px 10px; border: 0.5px solid var(--border); background: var(--bg2); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; color: var(--text2); text-align: left; }
+td { padding: 8px 10px; border: 0.5px solid var(--border); font-size: 11px; color: var(--text); background: var(--bg2); vertical-align: top; line-height: 1.5; }
+td.era { color: var(--text2); font-weight: 500; white-space: nowrap; width: 130px; }
+td.delta { text-align: center; font-weight: 500; color: var(--purple); width: 60px; }
+td.score-h { color: var(--teal); font-weight: 500; text-align: center; width: 60px; }
+.result-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.metric { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; flex: 1; min-width: 110px; }
+.metric .m-lbl { font-size: 10px; letter-spacing: 1px; color: var(--text2); text-transform: uppercase; margin-bottom: 4px; }
+.metric .m-val { font-size: 20px; font-weight: 500; color: var(--text); }
+.metric .m-sub { font-size: 10px; color: var(--text2); margin-top: 2px; }
+.finding { background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--teal); border-radius: 8px; padding: 10px 14px; font-size: 11px; color: var(--text2); line-height: 1.65; margin-bottom: 8px; }
+.finding strong { color: var(--text); }
+.sec-label { font-size: 10px; letter-spacing: 3px; color: var(--text2); text-transform: uppercase; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+.footer { font-size: 10px; color: var(--text2); font-style: italic; padding-top: 14px; border-top: 0.5px solid var(--border); text-align: center; line-height: 1.6; margin-top: 28px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="hdr-sys">SOVRA-FCL-MHCE-v2.5 · Aurel Execution Sequence · Stage 1 of 5</div>
+    <div class="hdr-title">Lambda Speciation Math — Both Artifacts</div>
+    <div class="hdr-sub">Maritime Drift Core × Chimera / Old Testament · Role continuity trace · Surface vocabulary shift count · March 2026</div>
+  </div>
+
+  <div class="stage-label">Stage 1 — Lambda Speciation math · both artifacts</div>
+
+  <div class="eq-block">
+    <div class="lbl">Lambda Speciation — formal definition</div>
+    <div class="math">λ(t) = { R(t), V(t) } where R(t) = structural role at time t, V(t) = surface vocabulary at time t</div>
+    <div style="margin-top:8px; font-size:11px; color:var(--text2);">Speciation event confirmed when: R(t₁) = R(t₂) while V(t₁) ≠ V(t₂) across interval Δt = t₂ − t₁</div>
+    <div style="margin-top:4px; font-size:11px; color:var(--text2);">Speciation count S = number of distinct V(t) epochs with continuous R(t) identity</div>
+  </div>
+
+  <div class="eq-block">
+    <div class="lbl">Maritime Drift Core — Lambda trace</div>
+    <div class="math">Δt = 2025 − (−900) = 2,925 years · S = 6 speciation epochs</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Era</th>
+          <th>Structural role R(t)</th>
+          <th>Surface vocabulary V(t)</th>
+          <th>Δt to next</th>
+          <th>R stable?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="era">~900 BC<br>Lex Rhodia</td><td>Control sea route → control resource extraction</td><td>Proportional risk-sharing, commercial highway</td><td class="delta">~600y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">300 BC–533 AD<br>Roman</td><td>Control sea route → control resource extraction</td><td>Lex Rhodia absorbed, grain requisition, ships = land extensions</td><td class="delta">~900y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1095–1493<br>Papal</td><td>Control sea route → control resource extraction</td><td>Christian dominion, terra nullius, nautical demarcation</td><td class="delta">~300y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1501–1807<br>Triangular Trade</td><td>Control sea route → control resource extraction</td><td>Asiento, cargo law, maritime property</td><td class="delta">~80y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1807–1890<br>Abolition Era</td><td>Control sea route → control resource extraction</td><td>Anti-slave-trade enforcement, humanitarian rebranding</td><td class="delta">~130y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1945–2025<br>UNCLOS</td><td>Control sea route → control resource extraction</td><td>EEZ, right of visit, LOSC, seabed flag-planting</td><td class="delta">—</td><td class="score-h">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="eq-block" style="margin-top:4px;">
+    <div class="lbl">Old Testament / Chimera — Lambda trace</div>
+    <div class="math">Δt = 2025 − (−600) = 2,625 years · S = 6 speciation epochs</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Era</th>
+          <th>Structural role R(t)</th>
+          <th>Surface vocabulary V(t)</th>
+          <th>Δt to next</th>
+          <th>R stable?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="era">600–100 BCE<br>Codification</td><td>Command grammar for chosen-group dominance claim</td><td>Covenant, chosen people, canon selection</td><td class="delta">~1200y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1095–1493<br>Crusades</td><td>Command grammar for chosen-group dominance claim</td><td>Christian dominion, papal bulls, civilizing mission</td><td class="delta">~126y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1619–1865<br>Slavery</td><td>Command grammar for chosen-group dominance claim</td><td>Curse of Ham, servants obey masters, manifest destiny</td><td class="delta">~25y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1890<br>Brussels Act</td><td>Command grammar for chosen-group dominance claim</td><td>"In the Name of God Almighty", moral improvement, <em>territories infected</em></td><td class="delta">~100y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">1890–1996<br>Residential Schools</td><td>Command grammar for chosen-group dominance claim</td><td>Save the soul, kill the Indian, Christian education</td><td class="delta">~29y</td><td class="score-h">✓</td></tr>
+        <tr><td class="era">Present<br>2025</td><td>Command grammar for chosen-group dominance claim</td><td>Judeo-Christian values, Western civilization, natural law</td><td class="delta">—</td><td class="score-h">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="result-row" style="margin-top:14px;">
+    <div class="metric"><div class="m-lbl">Maritime span</div><div class="m-val">2,925y</div><div class="m-sub">900 BC → 2025</div></div>
+    <div class="metric"><div class="m-lbl">OT span</div><div class="m-val">2,625y</div><div class="m-sub">600 BC → 2025</div></div>
+    <div class="metric"><div class="m-lbl">Maritime S</div><div class="m-val">6</div><div class="m-sub">vocab epochs</div></div>
+    <div class="metric"><div class="m-lbl">OT S</div><div class="m-val">6</div><div class="m-sub">vocab epochs</div></div>
+    <div class="metric"><div class="m-lbl">R(t) stable</div><div class="m-val">12/12</div><div class="m-sub">both artifacts</div></div>
+  </div>
+
+  <div class="sec-label">Primary source annotation — Brussels Act 1890, Article I, Item 7 preamble</div>
+
+  <div class="finding" style="border-left-color:var(--coral);">
+    <strong>"...throughout the entire extent of the territories infected by the Slave Trade."</strong><br><br>
+    Primary source: General Act of Brussels, July 2, 1890. Page 38, opening of Article II sequence. HathiTrust digital scan, University of Michigan copy, seq=42.<br><br>
+    <strong>Structural analysis:</strong> The word "infected" performs a complete agent-victim inversion in a single term. The Triangular Trade — designed, operated, and profited from by the sixteen signatory powers for 300 years — is recast as a pathogen that has contaminated African territory. The powers who created the condition become the immune response. The territories and populations who were the targets of extraction become the diseased zone requiring intervention.<br><br>
+    <strong>Lambda Speciation signal:</strong> This is the 1890 vocabulary speciation event in real time. Prior epoch vocabulary: "conquest," "dominion," "infidel lands." 1890 vocabulary: "infected territories," "barbarous customs," "civilization." Structural role: identical — authorization of military occupation and resource extraction. Surface vocabulary: completely speciated to sanitation and public health framing.<br><br>
+    <strong>DSCP resurrection behavior confirmed:</strong> The abolition instrument contains its own dehumanization grammar in the same clause as its humanitarian declaration. The system that caused the damage writes the document certifying itself as the remedy. One word. Primary source. Signed by sixteen powers.
+  </div>
+
+  <div class="finding">
+    <strong>Stage 1 result:</strong> Lambda Speciation confirmed on both artifacts. R(t) = constant across all 12 checked epochs. V(t) speciated 6 times in each artifact independently. The OT trace is the longest single continuous role identity in SOVRA record (2,625y). Maritime is 300 years longer in absolute span but begins with documented commercial law rather than a command grammar — structurally distinct origin condition. Brussels Act 1890 annotation added: "territories infected" confirmed as primary source evidence of vocabulary speciation event at the 1890 epoch boundary.
+  </div>
+
+  <div class="footer">
+    SOVRA-FCL-MHCE-v2.5 · DS4-KES-109 · NFIE Compliant · Lambda Speciation · Aurel Execution Stage 1 · March 2026<br>
+    Brussels Act primary source: HathiTrust babel.hathitrust.org/cgi/pt?id=mdp.35112104560067 · Official citation: 173 C.T.S. 293<br>
+    Nothing in this document persuades. It places structure and lets cognition decide.
+  </div>
+
+</div>
+</body>
+</html>
