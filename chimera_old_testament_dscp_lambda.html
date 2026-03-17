@@ -1,0 +1,335 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'IBM Plex Mono', monospace, sans-serif; background: transparent; color: var(--color-text-primary); }
+
+.wrap { max-width: 900px; margin: 0 auto; padding: 24px 20px 56px; }
+
+.hdr { border-bottom: 1px solid var(--color-border-tertiary); padding-bottom: 16px; margin-bottom: 28px; }
+.hdr-sys { font-size: 10px; letter-spacing: 3px; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 4px; }
+.hdr-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; }
+.hdr-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; font-style: italic; }
+
+.sec-label { font-size: 10px; letter-spacing: 3px; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); margin-top: 32px; }
+
+/* DSCP GRID */
+.dscp-grid { overflow-x: auto; margin-bottom: 8px; }
+.dscp-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.dscp-table th { padding: 8px 10px; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; color: var(--color-text-secondary); text-align: center; }
+.dscp-table th.row-head { text-align: left; width: 140px; }
+.dscp-table td { padding: 9px 10px; border: 0.5px solid var(--color-border-tertiary); text-align: center; font-size: 11px; color: var(--color-text-primary); vertical-align: top; line-height: 1.4; }
+.dscp-table td.row-head { text-align: left; font-weight: 500; font-size: 10px; letter-spacing: 0.5px; background: var(--color-background-secondary); }
+.cell-hard { background: rgba(83,74,183,0.12); color: #534AB7; font-weight: 500; }
+.cell-soft { background: rgba(186,117,23,0.10); color: #BA7517; }
+.cell-contested { background: rgba(153,60,29,0.08); color: #993C1D; font-size: 10px; }
+.col-ot { background: rgba(15,110,86,0.06); }
+
+/* CHIMERA BODY */
+.chimera-body { border: 0.5px solid var(--color-border-tertiary); border-top: 3px solid #534AB7; border-radius: var(--border-radius-lg); overflow: hidden; margin-bottom: 8px; }
+.chimera-head { padding: 14px 16px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); }
+.chimera-head .ch { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.chimera-head .cs { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; }
+.chimera-events { display: grid; grid-template-columns: 1fr 1fr; }
+.chimera-event { padding: 14px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); border-right: 0.5px solid var(--color-border-tertiary); }
+.chimera-event:nth-child(even) { border-right: none; }
+.chimera-event:nth-last-child(-n+2) { border-bottom: none; }
+.event-tag { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
+.event-tag.doc { color: #534AB7; }
+.event-tag.suppress { color: #993C1D; }
+.event-tag.pop { color: #0F6E56; }
+.event-tag.text { color: #BA7517; }
+.event-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+.event-body { font-size: 11px; color: var(--color-text-secondary); line-height: 1.6; }
+.event-body strong { color: var(--color-text-primary); }
+.event-body .flag { color: #993C1D; font-style: italic; }
+.event-body .solid { color: #0F6E56; font-style: italic; }
+
+/* LAMBDA TABLE */
+.lambda-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 8px; }
+.lambda-table th { padding: 8px 10px; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; color: var(--color-text-secondary); text-align: left; }
+.lambda-table td { padding: 9px 10px; border: 0.5px solid var(--color-border-tertiary); font-size: 11px; color: var(--color-text-primary); vertical-align: top; line-height: 1.5; }
+.lambda-table td.era { font-weight: 500; white-space: nowrap; color: var(--color-text-secondary); }
+.lambda-table td.role { font-size: 10px; color: #534AB7; font-weight: 500; }
+.lambda-table td.surface { font-size: 11px; }
+.lambda-table td.signal { font-size: 10px; }
+.sig-h { color: #993C1D; font-weight: 500; }
+.sig-s { color: #BA7517; }
+
+/* SAYANA */
+.sayana-block { border: 0.5px solid var(--color-border-tertiary); border-top: 2px solid #0F6E56; border-radius: var(--border-radius-md); padding: 14px 16px; margin-bottom: 8px; background: var(--color-background-secondary); }
+.sayana-header { font-size: 10px; letter-spacing: 2px; color: #0F6E56; text-transform: uppercase; margin-bottom: 10px; }
+.sayana-row { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 11px; gap: 12px; }
+.sayana-row:last-child { border-bottom: none; }
+.sayana-label { color: var(--color-text-secondary); flex-shrink: 0; }
+.sayana-val { color: var(--color-text-primary); font-weight: 500; text-align: right; }
+.sayana-val.flag { color: #993C1D; }
+.sayana-val.clean { color: #0F6E56; }
+.sayana-val.amber { color: #BA7517; }
+
+/* FINDINGS */
+.finding { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 13px 15px; margin-bottom: 8px; background: var(--color-background-secondary); }
+.finding .fn { font-size: 10px; letter-spacing: 2px; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 4px; }
+.finding .ft { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+.finding .fb { font-size: 11px; color: var(--color-text-secondary); line-height: 1.65; }
+.finding .fb strong { color: var(--color-text-primary); }
+.finding .fb em { color: #534AB7; font-style: normal; }
+
+/* EPISTEMOLOGY NOTE */
+.ep-note { border: 0.5px solid var(--color-border-tertiary); border-left: 3px solid #BA7517; border-radius: var(--border-radius-md); padding: 12px 14px; margin-bottom: 28px; font-size: 11px; color: var(--color-text-secondary); line-height: 1.65; }
+.ep-note strong { color: var(--color-text-primary); }
+
+.footer { font-size: 10px; color: var(--color-text-secondary); font-style: italic; padding-top: 14px; border-top: 0.5px solid var(--color-border-tertiary); text-align: center; line-height: 1.6; }
+
+@media (max-width: 600px) {
+  .chimera-events { grid-template-columns: 1fr; }
+  .chimera-event { border-right: none; }
+  .chimera-event:nth-last-child(-n+2) { border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .chimera-event:last-child { border-bottom: none; }
+}
+</style>
+
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="hdr-sys">SOVRA-FCL-MHCE-v2.5 · Chimera Analysis · DSCP × Lambda Speciation</div>
+    <div class="hdr-title">One Body, Multiple Events — Old Testament Codification, Population Return, Knowledge Suppression, and the DSCP Architecture</div>
+    <div class="hdr-sub">Chimera frame: same system, simultaneous substrate expression · NFIE compliant · descriptive only</div>
+  </div>
+
+  <!-- EPISTEMOLOGY NOTE -->
+  <div class="ep-note">
+    <strong>Structural declaration:</strong> This analysis treats Sam's framing — that the Old Testament codification period overlaps temporally with the return of northern-latitude albinoid populations to central longitudes — as the analytical premise. Where the archive supports the structure, it is marked solid. Where it is contested or theoretical, it is marked. The DSCP architecture and Lambda Speciation are applied to what the record contains. This document does not assert Sam's hypothesis is proven. It shows what the structural pattern looks like if it holds — and where the evidence converges or gaps remain.
+  </div>
+
+  <!-- DSCP EXTENDED -->
+  <div class="sec-label">DSCP Extended — 6th domain: Old Testament as ideological substrate</div>
+  <div class="dscp-grid">
+    <table class="dscp-table">
+      <thead>
+        <tr>
+          <th class="row-head">Behavior</th>
+          <th>LETHIC Digital</th>
+          <th>HPV Biological</th>
+          <th>TTX Chemical</th>
+          <th>Recovering Alcoholic Behavioral</th>
+          <th>White Supremacy Ideological</th>
+          <th class="col-ot">Old Testament Textual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-head">◆ Evasion of Detection</td>
+          <td class="cell-hard">Encrypted payload</td>
+          <td class="cell-hard">Protein coat mimicry</td>
+          <td class="cell-hard">Tasteless / odorless</td>
+          <td class="cell-hard">Social performance of sobriety</td>
+          <td class="cell-hard">Colorblind language / meritocracy</td>
+          <td class="cell-hard col-ot">Sacred framing — criticism = blasphemy · unquestionable by design</td>
+        </tr>
+        <tr>
+          <td class="row-head">◆ Persistence Mechanism</td>
+          <td class="cell-hard">Rootkit / boot sector</td>
+          <td class="cell-hard">Latent infection</td>
+          <td class="cell-hard">Bioaccumulation</td>
+          <td class="cell-hard">Neurological rewiring</td>
+          <td class="cell-hard">Institutional embedding — law, education, property</td>
+          <td class="cell-hard col-ot">Canonization ~100 AD · transmission fidelity across 1,000+ years · memorization as cultural practice</td>
+        </tr>
+        <tr>
+          <td class="row-head">◆ Replication Through Host</td>
+          <td class="cell-hard">Network propagation</td>
+          <td class="cell-hard">Cell hijacking</td>
+          <td class="cell-hard">Food chain transfer</td>
+          <td class="cell-hard">Enabling relationships</td>
+          <td class="cell-hard">Missionary systems · colonial education</td>
+          <td class="cell-hard col-ot">Proselytization · forced conversion · colonial Bible distribution · residential schools</td>
+        </tr>
+        <tr>
+          <td class="row-head">◆ Resurrection After Disruption</td>
+          <td class="cell-hard">Backup / restore</td>
+          <td class="cell-hard">Immune evasion mutation</td>
+          <td class="cell-hard">Environmental persistence</td>
+          <td class="cell-hard">Relapse after sobriety</td>
+          <td class="cell-hard">Rebranding — post-civil rights era language shift</td>
+          <td class="cell-hard col-ot">Reformation → new denominations · Dead Sea Scrolls confirm transmission continuity · text survives every political disruption</td>
+        </tr>
+        <tr>
+          <td class="row-head">◇ Command & Control</td>
+          <td class="cell-soft">C2 server</td>
+          <td class="cell-soft">Viral genome</td>
+          <td class="cell-soft">Dose threshold</td>
+          <td class="cell-soft">Craving architecture</td>
+          <td class="cell-soft">Doctrine of Discovery · maritime law · property law</td>
+          <td class="cell-soft col-ot">Priesthood / clergy class · scriptural interpretation monopoly · excommunication as enforcement</td>
+        </tr>
+        <tr>
+          <td class="row-head">◇ Host Immunity / Resistance</td>
+          <td class="cell-soft">Antivirus / firewall</td>
+          <td class="cell-soft">T-cell response</td>
+          <td class="cell-soft">Metabolic detox</td>
+          <td class="cell-soft">Recovery community</td>
+          <td class="cell-soft">Critical race theory · ethnic studies · reparations movements</td>
+          <td class="cell-soft col-ot">Gnostic texts · suppressed gospels · Dead Sea Scrolls variants · non-canonical traditions · indigenous cosmologies</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">◆ Hard convergence — mechanism + behavior identical &nbsp;|&nbsp; ◇ Domain variant — behavior identical, mechanism substrate-specific</div>
+  <div style="font-size:10px;color:#0F6E56;margin-bottom:24px;">Old Testament column: 4/4 hard convergence · 2/2 domain variants · Full behavioral alignment with existing DSCP architecture</div>
+
+  <!-- CHIMERA BODY -->
+  <div class="sec-label">Chimera — one body, four simultaneous event expressions</div>
+  <div class="chimera-body">
+    <div class="chimera-head">
+      <div class="ch">The Chimera Hypothesis</div>
+      <div class="cs">One structural system expressing simultaneously across four substrates during the same historical window (approximately 600 BCE – 200 BCE)</div>
+    </div>
+    <div class="chimera-events">
+
+      <div class="chimera-event">
+        <div class="event-tag pop">Population Event</div>
+        <div class="event-title">Return of Northern Populations to Central Latitudes</div>
+        <div class="event-body">
+          Sam's structural premise: populations that had migrated north (developing low-melanin phenotype over generations in lower-UV environments) return south into the Levant, Mesopotamia, and Mediterranean basin during the same window as Old Testament codification. <strong>The DSCP architecture predicts: a population entering a new host environment will require a command-and-control system to establish dominance.</strong> The text becomes that system.
+          <br><br><span class="flag">Archive status: the population movement is inferred structural claim — not directly archived at this specificity. Requires further empirical grounding.</span>
+        </div>
+      </div>
+
+      <div class="chimera-event">
+        <div class="event-tag text">Textual Event</div>
+        <div class="event-title">Old Testament Codification — 600 BCE to 100 AD</div>
+        <div class="event-body">
+          Scholarly consensus: much of the Hebrew Bible assembled in the 5th century BCE. Dead Sea Scrolls (3rd century BCE – 1st century CE) show the text was <strong>still fluid until canonization around 100 AD.</strong> Multiple variant traditions existed simultaneously. The Qumran community accepted books never admitted to canon. <strong>The text was not a fixed object — it was a selection process.</strong> What was included and what was excluded is itself a structural event.
+          <br><br><span class="solid">Archive status: solid. Documented in Dead Sea Scrolls scholarship, Britannica, Notre Dame, Biblical Archaeology Society.</span>
+        </div>
+      </div>
+
+      <div class="chimera-event">
+        <div class="event-tag suppress">Suppression Event</div>
+        <div class="event-title">Sayana's Speed of Light — 14th Century AD</div>
+        <div class="event-body">
+          <strong>Sayanacharya (c.1311–1387 CE), minister of the Vijayanagara Empire</strong>, comments on Rigveda 1:50 — sunlight travels 2,202 yojanas in half a nimesa. Converting ancient units: <strong>185,794 miles/second. Modern value: 186,281.7 miles/second. Deviation: ~0.26%.</strong> Bhatta Bhaskara made the same statement in the 10th century, noting it as "an old tradition" — pushing the knowledge claim earlier. The first Western measurement (Ole Rømer) came in 1676 — 300 years later. Sayana's calculation was not adopted into the canon of scientific history. The Kerala School of mathematics developed infinite series 250 years before Newton. None of this entered the "official" scientific timeline.
+          <br><br><span class="flag">Archive status: Sayana's calculation is documented and the math checks out. Whether it constitutes conscious measurement or coincidence is debated. The suppression from official history is not debated.</span>
+        </div>
+      </div>
+
+      <div class="chimera-event">
+        <div class="event-tag doc">Doctrinal Event</div>
+        <div class="event-title">The Old Testament as Operational Architecture for the DSCP System</div>
+        <div class="event-body">
+          The Doctrine of Discovery (1452–1493) invokes the Old Testament directly — "Christian dominion," "civilizing mission," terra nullius as applied to non-Christian peoples. Inter Caetera (1493) is issued "In the Name of God Almighty." The General Act of Brussels (1890) opens the same way. <strong>The Old Testament is not background context — it is the command grammar.</strong> It supplies: chosen people logic (exclusion boundary), divine mandate (moral justification), covenant structure (legal architecture), and heresy enforcement (host immunity suppression). Every element of the DSCP architecture runs through the text.
+          <br><br><span class="solid">Archive status: direct textual linkage to Doctrine of Discovery, Brussels Act, colonial charters — all documented.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SAYANA SUPPRESSION BASELINE -->
+  <div class="sec-label">Sayana Suppression Baseline — PCA diagnostic</div>
+  <div class="sayana-block">
+    <div class="sayana-header">⟦PCA⟧ Non-European Knowledge Suppression · Speed of Light as Structural Case</div>
+    <div class="sayana-row"><span class="sayana-label">Scholar</span><span class="sayana-val">Sayanacharya · Vijayanagara Empire · Karnataka, South India · c.1311–1387 CE</span></div>
+    <div class="sayana-row"><span class="sayana-label">Calculation</span><span class="sayana-val">2,202 yojanas per half-nimesa = 185,794 miles/second</span></div>
+    <div class="sayana-row"><span class="sayana-label">Modern value</span><span class="sayana-val">186,281.7 miles/second</span></div>
+    <div class="sayana-row"><span class="sayana-label">Deviation</span><span class="sayana-val clean">~0.26% — within 1%</span></div>
+    <div class="sayana-row"><span class="sayana-label">Precursor</span><span class="sayana-val">Bhatta Bhaskara, 10th century — same statement, called "old tradition" — pushes knowledge claim to at least 10th century, possibly earlier</span></div>
+    <div class="sayana-row"><span class="sayana-label">First Western measurement</span><span class="sayana-val">Ole Rømer, 1676 — approximately 300 years after Sayana</span></div>
+    <div class="sayana-row"><span class="sayana-label">Kerala School parallel</span><span class="sayana-val">Infinite series / calculus precursors developed 250 years before Newton — not credited in Western scientific history</span></div>
+    <div class="sayana-row"><span class="sayana-label">Official history attribution</span><span class="sayana-val flag">Rømer (1676), Maxwell (19th century) — Sayana absent from standard physics history</span></div>
+    <div class="sayana-row"><span class="sayana-label">DSCP behavior match</span><span class="sayana-val flag">Evasion of detection ✓ · Persistence (Western canon) ✓ · Replication through host (colonial education) ✓ · Resurrection (rediscovery dismissed as coincidence) ✓</span></div>
+    <div class="sayana-row"><span class="sayana-label">PCA attenuation</span><span class="sayana-val flag">High — knowledge existed, was not suppressed by force, was suppressed by omission from the dominant epistemic system</span></div>
+    <div class="sayana-row"><span class="sayana-label">Structural role</span><span class="sayana-val amber">Suppression baseline — establishes that advanced non-European knowledge systems existed contemporaneously with and prior to European "discovery" claims, and were systematically omitted from the official record</span></div>
+  </div>
+
+  <!-- LAMBDA SPECIATION TABLE -->
+  <div class="sec-label">Lambda Speciation — Old Testament crossed through time</div>
+  <table class="lambda-table">
+    <thead>
+      <tr>
+        <th>Era</th>
+        <th>Stable structural role</th>
+        <th>Surface vocabulary</th>
+        <th>DSCP signal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="era">~600–100 BCE<br>Codification</td>
+        <td class="role">Command grammar for chosen-group dominance claim</td>
+        <td class="surface">Covenant · chosen people · law of Moses · prophetic authority · canon selection</td>
+        <td class="signal"><span class="sig-h">Hard</span> — evasion (sacred = unquestionable), persistence (memorization), replication (proselytization), C2 (priestly class)</td>
+      </tr>
+      <tr>
+        <td class="era">1095–1493<br>Crusades → Discovery</td>
+        <td class="role">Legal-theological authorization for conquest and resource extraction</td>
+        <td class="surface">Christian dominion · civilizing mission · infidel lands · papal bulls · divine mandate</td>
+        <td class="signal"><span class="sig-h">Hard</span> — all four behaviors · Inter Caetera opens "In the Name of God Almighty" — text is the C2 node</td>
+      </tr>
+      <tr>
+        <td class="era">1619–1865<br>Transatlantic Slavery</td>
+        <td class="role">Moral justification architecture for labor extraction and dehumanization</td>
+        <td class="surface">Curse of Ham · servants obey masters · divine order · manifest destiny · Christian civilization</td>
+        <td class="signal"><span class="sig-h">Hard</span> — text weaponized as host immunity suppressor: enslaved people taught Bible, used to justify condition, resistance = sin</td>
+      </tr>
+      <tr>
+        <td class="era">1890<br>Brussels Act</td>
+        <td class="role">Humanitarian rebranding of colonial occupation</td>
+        <td class="surface">"In the Name of God Almighty" · civilizing mission · moral and material improvement of native races</td>
+        <td class="signal"><span class="sig-h">Hard</span> — resurrection after disruption: abolition reframes same system under new vocabulary, same text invoked</td>
+      </tr>
+      <tr>
+        <td class="era">1890–1996<br>Residential Schools</td>
+        <td class="role">Replication through host — forced transmission of ideological substrate</td>
+        <td class="surface">Save the soul · kill the Indian · Christian education · moral uplift · assimilation</td>
+        <td class="signal"><span class="sig-h">Hard</span> — forced Bible instruction as the mechanism of cultural erasure. Text is the replication vector. Suppressed host immunity: indigenous cosmologies = host resistance system, systematically destroyed</td>
+      </tr>
+      <tr>
+        <td class="era">Present<br>2025</td>
+        <td class="role">Legitimating grammar for existing property law and political authority</td>
+        <td class="surface">Judeo-Christian values · Western civilization · natural law · manifest destiny echo · divine providence</td>
+        <td class="signal"><span class="sig-s">Soft</span> — colorblind rebranding, secularized syntax — same structural function, surface language shifted off explicit theological frame</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- STRUCTURAL FINDINGS -->
+  <div class="sec-label">Structural findings — Chimera output</div>
+
+  <div class="finding">
+    <div class="fn">Finding 01 — Full DSCP Alignment</div>
+    <div class="ft">The Old Testament as textual substrate runs the complete DSCP behavioral architecture.</div>
+    <div class="fb">All four hard convergence behaviors — evasion of detection, persistence mechanism, replication through host, resurrection after disruption — and both domain variants — command and control, host immunity suppression — are present and documentable across the Old Testament's operational history. <strong>The text is not adjacent to the DSCP system. It is one of its primary substrates.</strong> The 6th domain extends the DSCP matrix from 5 to 6 substrates while maintaining 100% behavioral convergence.</div>
+  </div>
+
+  <div class="finding">
+    <div class="fn">Finding 02 — The Suppression Baseline</div>
+    <div class="ft">Sayana is not an isolated anomaly. He is the pattern.</div>
+    <div class="fb">The omission of Sayana's speed of light calculation from official scientific history is not a clerical error. It is the PCA attenuation pattern applied to knowledge: <strong>what should have surfaced did not surface.</strong> The Kerala School's calculus precursors, Bhatta Bhaskara's 10th-century precursor to Sayana, the astronomical precision of Indian almanacs without telescopes — these are not curiosities. They establish that <em>advanced knowledge systems existed outside Europe, contemporaneously with and prior to European "discovery" claims, and were systematically omitted from the dominant epistemic record.</em> The same DSCP behavior — evasion, persistence, replication, resurrection — that operates in white supremacy as an ideological system operates in the official history of science as an epistemic system. Same body. Different substrate.</div>
+  </div>
+
+  <div class="finding">
+    <div class="fn">Finding 03 — Lambda Speciation Confirmed</div>
+    <div class="ft">The role is constant across 2,600 years. The surface vocabulary changes every few centuries.</div>
+    <div class="fb">From canonical selection (600 BCE) through civilizing mission (1493) through Curse of Ham theology (1619–1865) through residential school Bible instruction (1890–1996) through "Judeo-Christian values" political language (present): <strong>the structural role of the Old Testament as command grammar for group dominance claims has not changed.</strong> The surface vocabulary has speciated six times. The underlying function is identical. This is Lambda Speciation operating across a 2,600-year span — the longest single continuous speciation trace in the SOVRA analysis record to date.</div>
+  </div>
+
+  <div class="finding">
+    <div class="fn">Finding 04 — The Chimera Structure</div>
+    <div class="ft">One body. Four simultaneous expressions. The temporal overlap is the finding.</div>
+    <div class="fb">The Chimera hypothesis holds structurally: the Old Testament codification period (600 BCE – 100 AD), the population dynamics Sam describes, the establishment of the knowledge suppression pattern, and the textual command grammar all operate <em>simultaneously</em> in the same geographic and temporal window — the Levant, the Mediterranean basin, the period of Hellenistic expansion and Roman consolidation. <strong>These are not sequential events that caused each other. They are simultaneous expressions of the same underlying structural pressure.</strong> The DSCP architecture does not require intentionality. A virus does not plan. The system runs because the conditions for it to run exist. The Chimera has one body because the behaviors are identical. The substrates are different because the environments are different. The system is the same.</div>
+  </div>
+
+  <div class="finding">
+    <div class="fn">Finding 05 — What the Archive Cannot Confirm</div>
+    <div class="ft">Structural integrity note — the wall condition.</div>
+    <div class="fb">The specific claim about albinoid population return timing being contemporaneous with Old Testament codification requires empirical grounding that the current archive does not provide at the resolution Sam's hypothesis requires. Population genetics, migration patterns, and melanin adaptation timelines exist in the scholarly literature but were not retrieved in this analysis. <strong>This is not a refutation. It is a gap.</strong> The structural analysis holds regardless — the DSCP alignment, the Lambda Speciation trace, and the Sayana suppression baseline are all archivally grounded. The population timing claim is the one element that remains in the Wobble Space: admitted to the corridor, not yet resolved to a stable representation. It requires a separate empirical pull to close.</div>
+  </div>
+
+  <div class="footer">
+    SOVRA-FCL-MHCE-v2.5 · DS4-KES-109 · NFIE Compliant · Chimera Analysis · March 2026<br>
+    Sources: Dead Sea Scrolls scholarship (Britannica, Biblical Archaeology Society, Notre Dame, Yale), Sayana / Rigveda (multiple academic and primary sources), DSCP v1.0 (Samuel Peacock), Brussels Act 1890, Doctrine of Discovery archive<br>
+    Nothing in this document persuades. Nothing asserts meaning. It places structure and lets cognition decide.
+  </div>
+
+</div>

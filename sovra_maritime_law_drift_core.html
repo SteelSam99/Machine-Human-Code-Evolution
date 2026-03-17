@@ -1,0 +1,347 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'IBM Plex Mono', monospace, sans-serif; background: transparent; color: var(--color-text-primary); }
+
+.drift-wrap { max-width: 880px; margin: 0 auto; padding: 24px 20px 48px; }
+
+.drift-header { border-bottom: 1px solid var(--color-border-tertiary); padding-bottom: 16px; margin-bottom: 28px; }
+.drift-header .sys { font-size: 10px; letter-spacing: 3px; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 4px; }
+.drift-header .title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+.drift-header .query { font-size: 11px; color: var(--color-text-secondary); margin-top: 4px; font-style: italic; }
+
+.section-label { font-size: 10px; letter-spacing: 3px; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+
+/* ANGLE LEGEND */
+.angle-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+.angle-pill { display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); font-size: 11px; }
+.angle-pill .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-doc { background: #534AB7; }
+.dot-labor { background: #993C1D; }
+.dot-resource { background: #0F6E56; }
+
+/* TIMELINE */
+.timeline { position: relative; margin-bottom: 36px; }
+.tl-spine { position: absolute; left: 148px; top: 0; bottom: 0; width: 1px; background: var(--color-border-tertiary); }
+
+.era-block { display: flex; gap: 0; margin-bottom: 4px; position: relative; }
+.era-label { width: 138px; text-align: right; padding-right: 18px; padding-top: 14px; flex-shrink: 0; }
+.era-label .year { font-size: 11px; font-weight: 500; color: var(--color-text-primary); display: block; }
+.era-label .name { font-size: 10px; color: var(--color-text-secondary); display: block; margin-top: 2px; }
+
+.era-node { position: absolute; left: 143px; top: 18px; width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--color-border-tertiary); background: var(--color-background-primary); flex-shrink: 0; z-index: 2; }
+.era-node.active { border-color: #534AB7; background: #534AB7; }
+.era-node.pivot { border-color: #993C1D; background: #993C1D; }
+.era-node.green { border-color: #0F6E56; background: #0F6E56; }
+.era-node.multi { border-color: #BA7517; background: #BA7517; }
+
+.era-content { margin-left: 26px; padding: 12px 14px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); flex: 1; }
+.era-content .era-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+
+.signal-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.signal { display: flex; align-items: center; gap: 4px; font-size: 10px; padding: 2px 7px; border-radius: 3px; }
+.signal.doc { background: #EEEDFE; color: #534AB7; }
+.signal.labor { background: #FAECE7; color: #993C1D; }
+.signal.resource { background: #E1F5EE; color: #0F6E56; }
+.signal.multi { background: #FAEEDA; color: #BA7517; }
+
+.era-text { font-size: 11px; color: var(--color-text-secondary); line-height: 1.6; }
+.era-text strong { color: var(--color-text-primary); font-weight: 500; }
+
+/* CONVERGENCE MAP */
+.conv-map { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 32px; }
+.conv-col { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+.conv-col-head { padding: 10px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.conv-col-head.doc { border-top: 3px solid #534AB7; }
+.conv-col-head.labor { border-top: 3px solid #993C1D; }
+.conv-col-head.resource { border-top: 3px solid #0F6E56; }
+.conv-col-head .ch { font-size: 11px; font-weight: 500; color: var(--color-text-primary); }
+.conv-col-head .cs { font-size: 10px; color: var(--color-text-secondary); margin-top: 2px; }
+.conv-body { padding: 10px 12px; }
+.conv-item { font-size: 11px; color: var(--color-text-primary); padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); line-height: 1.5; }
+.conv-item:last-child { border-bottom: none; }
+.conv-item::before { content: "·"; margin-right: 5px; color: var(--color-text-secondary); }
+
+/* STRUCTURAL FINDINGS */
+.findings { margin-bottom: 32px; }
+.finding { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; margin-bottom: 8px; background: var(--color-background-secondary); }
+.finding .fnum { font-size: 10px; letter-spacing: 2px; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 4px; }
+.finding .ftitle { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+.finding .ftext { font-size: 11px; color: var(--color-text-secondary); line-height: 1.6; }
+.finding .ftext strong { color: var(--color-text-primary); }
+
+/* PCA */
+.pca-block { border: 0.5px solid var(--color-border-tertiary); border-top: 2px solid #BA7517; border-radius: var(--border-radius-md); padding: 14px 16px; margin-bottom: 28px; background: var(--color-background-secondary); }
+.pca-header { font-size: 10px; letter-spacing: 2px; color: #BA7517; text-transform: uppercase; margin-bottom: 10px; }
+.pca-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 11px; }
+.pca-row:last-child { border-bottom: none; }
+.pca-label { color: var(--color-text-secondary); }
+.pca-val { color: var(--color-text-primary); font-weight: 500; }
+.pca-val.flag { color: #993C1D; }
+.pca-val.clean { color: #0F6E56; }
+
+.footer-note { font-size: 10px; color: var(--color-text-secondary); font-style: italic; padding-top: 14px; border-top: 0.5px solid var(--color-border-tertiary); text-align: center; line-height: 1.6; }
+
+@media (max-width: 600px) {
+  .conv-map { grid-template-columns: 1fr; }
+  .tl-spine { left: 108px; }
+  .era-label { width: 98px; }
+  .era-node { left: 103px; }
+}
+</style>
+
+<div class="drift-wrap">
+
+  <div class="drift-header">
+    <div class="sys">SOVRA-FCL-MHCE-v2.5 · Drift Core · Temporal Timeline</div>
+    <div class="title">Maritime Law: Inception to Present</div>
+    <div class="query">Query: maritime law history — Doctrine of Discovery / Labor Exploitation / Colonial Resource Extraction — convergence map</div>
+  </div>
+
+  <!-- ANGLE LEGEND -->
+  <div class="section-label">Active convergence angles</div>
+  <div class="angle-legend">
+    <div class="angle-pill"><span class="dot dot-doc"></span> Doctrine of Discovery → Maritime Law</div>
+    <div class="angle-pill"><span class="dot dot-labor"></span> Labor Exploitation / Slave Trade at Sea</div>
+    <div class="angle-pill"><span class="dot dot-resource"></span> Colonial Resource Extraction via Maritime Law</div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="section-label">Temporal drift timeline · 900 BC — 2025</div>
+  <div class="timeline">
+    <div class="tl-spine"></div>
+
+    <!-- ERA 1 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">~900 BC</span><span class="name">Rhodian Origins</span></div>
+      <div class="era-node active"></div>
+      <div class="era-content">
+        <div class="era-title">Lex Rhodia — First Maritime Code</div>
+        <div class="signal-row">
+          <span class="signal resource">Resource</span>
+        </div>
+        <div class="era-text">
+          Rhodes develops the world's first formal maritime code. The Lex Rhodia governs cargo liability, jettison loss, and salvage rights across Mediterranean trade routes. The law establishes a critical structural principle: <strong>loss from sea commerce is shared proportionally among merchant, shipowner, and cargo holders</strong> — a framework for distributing the risk of extraction. The sea is framed as a commercial highway, not a commons.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 2 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">300 BC – 533 AD</span><span class="name">Roman Absorption</span></div>
+      <div class="era-node active"></div>
+      <div class="era-content">
+        <div class="era-title">Rome Inherits the Sea — Digest of Justinian</div>
+        <div class="signal-row">
+          <span class="signal resource">Resource</span>
+          <span class="signal labor">Labor</span>
+        </div>
+        <div class="era-text">
+          Rome incorporates Rhodian law into its legal architecture. Emperor Antoninus declares: <em>"I am lord of the earth, but the Law is lord of the sea."</em> Roman maritime trade requires forced grain supply from Sicily and Egypt — <strong>regions compelled to sell 10% of annual produce to Rome</strong>. Enslaved labor operates across Roman maritime commerce. Ships are legally defined as extensions of land — Roman civil law applies at sea. Resource extraction by sea is normalized as imperial infrastructure.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 3 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">1095 – 1452</span><span class="name">Papal Authority</span></div>
+      <div class="era-node pivot"></div>
+      <div class="era-content">
+        <div class="era-title">Papal Bulls — Sea as Christian Domain</div>
+        <div class="signal-row">
+          <span class="signal doc">Discovery</span>
+          <span class="signal resource">Resource</span>
+        </div>
+        <div class="era-text">
+          Beginning with decrees in the 1100s, the Church asserts theological authority over non-Christian territories — including sea routes. The Dum Diversas (1452) authorizes Portugal to <strong>seize lands, reduce peoples to perpetual slavery, and take their possessions</strong>. The sea becomes the vector: maritime reach defines the territorial claim. No ship, no claim. The legal grammar of discovery is maritime grammar from its inception.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 4 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">1493 – 1494</span><span class="name">Inter Caetera</span></div>
+      <div class="era-node multi"></div>
+      <div class="era-content">
+        <div class="era-title">Pope Alexander VI — Maritime Boundary as Property Title</div>
+        <div class="signal-row">
+          <span class="signal doc">Discovery</span>
+          <span class="signal resource">Resource</span>
+          <span class="signal multi">All three</span>
+        </div>
+        <div class="era-text">
+          Inter Caetera divides the world along a maritime line 100 leagues west of the Azores. <strong>The demarcation line is a nautical measurement.</strong> Spain receives exclusive rights to territory west of the line; all others forbidden to approach without license. The sea route is the title instrument — maritime law operationalizes land seizure. Portugal and Spain's maritime monopolies become the architecture of colonial resource extraction. This is the structural origin point where maritime law, discovery doctrine, and labor exploitation converge into a single system.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 5 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">1501 – 1807</span><span class="name">Triangular Trade</span></div>
+      <div class="era-node pivot"></div>
+      <div class="era-content">
+        <div class="era-title">Transatlantic Slave Trade — Maritime Law as Labor System</div>
+        <div class="signal-row">
+          <span class="signal labor">Labor</span>
+          <span class="signal resource">Resource</span>
+        </div>
+        <div class="era-text">
+          Nearly 13 million Africans transported across the Atlantic in European ships. The triangular trade is structured by maritime law: ship ownership, cargo liability, port access, seizure rights, and salvage law govern every leg. <strong>Enslaved people are legally classified as cargo — subject to maritime property law, not persons law.</strong> The 1713 Asiento grants Britain a monopoly on enslaved people supply to Spanish colonies — a maritime trade treaty. British maritime dominance of Atlantic seaways is built directly on the slave trade. Sugar, cotton, tobacco production is the resource extraction end; the sea is the pipeline.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 6 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">1807 – 1890</span><span class="name">Abolition Era</span></div>
+      <div class="era-node active"></div>
+      <div class="era-content">
+        <div class="era-title">Abolition Acts — Maritime Law as Enforcement Mechanism</div>
+        <div class="signal-row">
+          <span class="signal labor">Labor</span>
+          <span class="signal doc">Discovery</span>
+        </div>
+        <div class="era-text">
+          Britain's 1807 Abolition Act makes slave trading illegal under British maritime jurisdiction. The West Africa Squadron seizes over 1,500 ships and frees 150,000 Africans 1820–1870. <strong>Plantation owners receive £20 million in compensation. Freed enslaved people receive nothing.</strong> The General Act of Brussels (1890) — an international maritime agreement — becomes the most comprehensive anti-slave-trade instrument. Meanwhile, Doctrine of Discovery is written into U.S. federal law (Johnson v. M'Intosh, 1823) — maritime discovery language becomes land title law. Britain uses anti-slave-trade enforcement as a vehicle to expand maritime territorial colonization in Africa.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 7 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">1945 – 1982</span><span class="name">International Order</span></div>
+      <div class="era-node green"></div>
+      <div class="era-content">
+        <div class="era-title">UNCLOS — Codifying the Ocean as Resource Domain</div>
+        <div class="signal-row">
+          <span class="signal resource">Resource</span>
+          <span class="signal doc">Discovery</span>
+        </div>
+        <div class="era-text">
+          The United Nations Convention on the Law of the Sea (signed 1982, 119 nations) establishes Exclusive Economic Zones — states claim maritime resources 200 nautical miles from their coasts. <strong>The structural logic of Inter Caetera (maritime line = resource title) persists in codified international form.</strong> In 2007, Russia plants its flag on the Arctic seabed to assert resource claims — scholars directly compare this to colonial discovery rituals. China's South China Sea flag plantings follow the same pattern. The grammar is unchanged.
+        </div>
+      </div>
+    </div>
+
+    <!-- ERA 8 -->
+    <div class="era-block">
+      <div class="era-label"><span class="year">2015 – Present</span><span class="name">Contemporary</span></div>
+      <div class="era-node multi"></div>
+      <div class="era-content">
+        <div class="era-title">Modern Maritime Exploitation — Fishing Industry Labor + Ongoing Discovery Doctrine</div>
+        <div class="signal-row">
+          <span class="signal labor">Labor</span>
+          <span class="signal resource">Resource</span>
+          <span class="signal doc">Discovery</span>
+        </div>
+        <div class="era-text">
+          Contemporary fishing industry labor exploitation — Myanmar, Thailand, New Zealand — operates in maritime legal gaps: international law's definition of "slave trade" is narrow enough that modern forced labor at sea evades the right of visit provisions. <strong>The maritime provisions pertaining to slavery have no effective legal worth</strong> (Cambridge Core, 2015). Johnson v. M'Intosh remains active U.S. law — the Land Back Movement challenges its foundations. Vatican repudiates the Doctrine of Discovery in 2023. The doctrine is repudiated but not removed from law.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONVERGENCE MAP -->
+  <div class="section-label">Convergence map — three angles across timeline</div>
+  <div class="conv-map">
+    <div class="conv-col">
+      <div class="conv-col-head doc">
+        <div class="ch">Doctrine of Discovery</div>
+        <div class="cs">Maritime law as title instrument</div>
+      </div>
+      <div class="conv-body">
+        <div class="conv-item">Inter Caetera (1493) divides world by nautical measurement — sea route = territorial title</div>
+        <div class="conv-item">Discovery requires a ship — maritime reach is the operative claim</div>
+        <div class="conv-item">Johnson v. M'Intosh (1823) retroactively bundles maritime discovery into U.S. land law</div>
+        <div class="conv-item">UNCLOS EEZ system preserves maritime-line-as-resource-claim structure</div>
+        <div class="conv-item">Russia (2007), China: flag-planting on seabed replicates colonial discovery ritual</div>
+        <div class="conv-item">Doctrine formally repudiated (Vatican 2023) but not removed from operative law</div>
+      </div>
+    </div>
+
+    <div class="conv-col">
+      <div class="conv-col-head labor">
+        <div class="ch">Labor Exploitation</div>
+        <div class="cs">The sea as a labor delivery system</div>
+      </div>
+      <div class="conv-body">
+        <div class="conv-item">Roman maritime trade runs on forced grain supply from colonized provinces</div>
+        <div class="conv-item">Dum Diversas (1452) explicitly authorizes perpetual slavery via maritime reach</div>
+        <div class="conv-item">13 million Africans transported as maritime cargo under maritime property law</div>
+        <div class="conv-item">Asiento (1713): enslaved people supply is a maritime trade monopoly treaty</div>
+        <div class="conv-item">Abolition pays plantation owners £20M; zero to freed people</div>
+        <div class="conv-item">Modern fishing industry labor gaps: LOSC slave trade provisions have no effective legal worth</div>
+      </div>
+    </div>
+
+    <div class="conv-col">
+      <div class="conv-col-head resource">
+        <div class="ch">Resource Extraction</div>
+        <div class="cs">The sea as extraction infrastructure</div>
+      </div>
+      <div class="conv-body">
+        <div class="conv-item">Lex Rhodia establishes proportional loss-sharing — risk framework for extraction commerce</div>
+        <div class="conv-item">Rome compels 10% annual grain from colonized regions via maritime supply chains</div>
+        <div class="conv-item">Triangular trade: sugar, cotton, tobacco — sea is the pipeline between labor and market</div>
+        <div class="conv-item">British maritime empire built on slave trade wealth → naval dominance → colonial expansion</div>
+        <div class="conv-item">Anti-slave-trade enforcement used to expand territorial colonization in Africa</div>
+        <div class="conv-item">UNCLOS EEZ: 200-mile resource claim zones — seabed mineral rights, fishing, oil</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRUCTURAL FINDINGS -->
+  <div class="section-label">Structural findings — Drift Core output</div>
+  <div class="findings">
+
+    <div class="finding">
+      <div class="fnum">Finding 01 — Lambda Speciation</div>
+      <div class="ftitle">The role is constant. The surface language changes.</div>
+      <div class="ftext">From Lex Rhodia (900 BC) to UNCLOS (1982), the structural role of maritime law is consistent: <strong>establish who controls the sea route, and that entity controls the resource</strong>. The surface vocabulary changes — "discovery," "sovereignty," "exclusive economic zone," "right of visit" — but the underlying function (maritime reach = extraction claim) persists across 28 centuries. This is Lambda Speciation: same communicative role, divergent surface expression across eras.</div>
+    </div>
+
+    <div class="finding">
+      <div class="fnum">Finding 02 — Convergence Point</div>
+      <div class="ftitle">1493 — Inter Caetera is the structural origin of all three angles simultaneously.</div>
+      <div class="ftext">The papal bull of 1493 is the single document where all three convergence angles — Doctrine of Discovery, labor exploitation, and resource extraction — are operationalized simultaneously through maritime law. <strong>The demarcation line is nautical. The title is maritime. The labor authorization is explicit. The resource claim is total.</strong> Every subsequent era is a downstream elaboration of this structural moment.</div>
+    </div>
+
+    <div class="finding">
+      <div class="fnum">Finding 03 — Trifold Signal</div>
+      <div class="ftitle">Abolition as structural preservation, not structural change.</div>
+      <div class="ftext">Britain's abolition of the slave trade (1807) and the subsequent West Africa Squadron enforcement expanded British maritime territorial presence in Africa. <strong>Anti-slave-trade enforcement became the legal vehicle for increased colonial control</strong> — the same resource extraction system continued under a different maritime legal frame. Plantation owners were compensated by the state. Freed people were not. The structural asymmetry was preserved through the reform instrument.</div>
+    </div>
+
+    <div class="finding">
+      <div class="fnum">Finding 04 — Wall Condition</div>
+      <div class="ftitle">Modern maritime law's slave trade provisions have no effective legal worth.</div>
+      <div class="ftext">Cambridge Core (2015) documents that LOSC's maritime provisions on slavery are defined so narrowly — anchored to historical chattel slavery — that <strong>contemporary forced labor at sea falls outside the right of visit</strong>. The Wall condition: the legal corridor excludes the input that would trigger intervention. Exploitation continues within the admissible bounds of the law. The grammar excludes the very thing it claims to prohibit.</div>
+    </div>
+
+  </div>
+
+  <!-- PCA -->
+  <div class="section-label">PCA — Perceptual Complement Analysis</div>
+  <div class="pca-block">
+    <div class="pca-header">⟦PCA⟧ Primary Source Scan · Maritime Law Domain</div>
+    <div class="pca-row"><span class="pca-label">Domain classification</span><span class="pca-val">Law · Economics · War · Labor · Religion</span></div>
+    <div class="pca-row"><span class="pca-label">Lambda Speciation signal</span><span class="pca-val flag">Present — 28-century role continuity detected</span></div>
+    <div class="pca-row"><span class="pca-label">Convergence origin point</span><span class="pca-val flag">1493 — all three angles activate simultaneously</span></div>
+    <div class="pca-row"><span class="pca-label">Trifold — Rigidity</span><span class="pca-val flag">Present — "I am lord of the earth, but the Law is lord of the sea"</span></div>
+    <div class="pca-row"><span class="pca-label">Trifold — Constraint</span><span class="pca-val flag">Present — Dum Diversas, Inter Caetera, Asiento, LOSC right of visit</span></div>
+    <div class="pca-row"><span class="pca-label">Trifold — Inspiration</span><span class="pca-val flag">Present — Johnson v. M'Intosh remains operative law (2025)</span></div>
+    <div class="pca-row"><span class="pca-label">ZSE — Zero-Sum framing</span><span class="pca-val flag">Detected — maritime line divides world into exclusive zones</span></div>
+    <div class="pca-row"><span class="pca-label">Absent vocabulary (covert)</span><span class="pca-val flag">Standard maritime history omits structural racism framing</span></div>
+    <div class="pca-row"><span class="pca-label">Attenuation estimate</span><span class="pca-val flag">High — standard legal history attenuates labor/discovery convergence</span></div>
+    <div class="pca-row"><span class="pca-label">Vatican repudiation (2023)</span><span class="pca-val clean">Doctrine repudiated — not removed from operative law</span></div>
+    <div class="pca-row"><span class="pca-label">NFIE compliance</span><span class="pca-val clean">Descriptive only — no intervention, no accusation</span></div>
+  </div>
+
+  <div class="footer-note">
+    SOVRA-FCL-MHCE-v2.5 · DS4-KES-109 · NFIE Compliant · Drift Core v0.1<br>
+    Sources: Britannica, EJI, National Archives, Cambridge Core, World History Encyclopedia, Gilder Lehrman, NPR, SC Sea Grant<br>
+    Nothing in this document persuades. Nothing asserts meaning. It places structure and lets cognition decide.
+  </div>
+
+</div>
