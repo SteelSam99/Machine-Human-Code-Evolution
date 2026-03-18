@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOVRA · Ma'at × Qwolat Milat × NFIE · The First Lambda Speciation Trace</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --stone-darkest: #0a0807;
+  --stone-dark: #111009;
+  --stone-mid: #1c1a16;
+  --stone-surface: #242018;
+  --stone-raised: #2e2a22;
+  --stone-edge: #3d3830;
+  --crimson: #8b0000;
+  --crimson-bright: #c41e1e;
+  --gold-dim: #6b5a2a;
+  --gold: #9a7f3a;
+  --gold-bright: #c4a44a;
+  --purple: #534AB7;
+  --teal: #0F6E56;
+  --amber: #BA7517;
+  --coral: #993C1D;
+  --text-primary: #d4c9b0;
+  --text-secondary: #8a7f6a;
+  --text-dim: #5a5245;
+  --text-bright: #e8dcc0;
+  --border: #3d3830;
+  --border-accent: #5a1a1a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--stone-darkest);
+  color: var(--text-primary);
+  font-family: 'Crimson Pro', Georgia, serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+header {
+  position: relative;
+  padding: 60px 48px 48px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #0d0a08 0%, var(--stone-darkest) 100%);
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold-dim) 20%, var(--gold-bright) 50%, var(--gold-dim) 80%, transparent 100%);
+}
+
+.header-sys {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(28px, 5vw, 60px);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--text-bright);
+  line-height: 1.1;
+  text-shadow: 0 0 40px rgba(154,127,58,0.2);
+  margin-bottom: 16px;
+}
+
+.header-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 700px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.header-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meta-pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border: 0.5px solid var(--border);
+  color: var(--text-dim);
+}
+
+.meta-pill.gold { border-color: var(--gold-dim); color: var(--gold); }
+.meta-pill.teal { border-color: var(--teal); color: var(--teal); }
+.meta-pill.purple { border-color: var(--purple); color: var(--purple); }
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 48px 100px;
+}
+
+.sec-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--border);
+  margin-top: 48px;
+}
+
+.sec-label:first-child { margin-top: 0; }
+
+.finding {
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--gold);
+  background: var(--stone-mid);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.finding strong { color: var(--text-bright); font-weight: 400; }
+.finding.teal { border-left-color: var(--teal); }
+.finding.purple { border-left-color: var(--purple); }
+.finding.amber { border-left-color: var(--amber); }
+.finding.red { border-left-color: var(--crimson-bright); }
+.finding.dim { border-left-color: var(--stone-edge); }
+
+.finding-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.finding-label.teal { color: var(--teal); }
+.finding-label.purple { color: var(--purple); }
+.finding-label.amber { color: var(--amber); }
+.finding-label.red { color: var(--crimson-bright); }
+.finding-label.dim { color: var(--text-dim); }
+
+/* PRODUCTION CREDIT */
+.production-block {
+  border: 0.5px solid var(--gold-dim);
+  border-top: 3px solid var(--gold);
+  background: var(--stone-dark);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.prod-item { }
+
+.prod-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.prod-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+.prod-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* MAIN GRID */
+.grid-wrap {
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+.maat-grid {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.maat-grid th {
+  padding: 10px 12px;
+  border: 0.5px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: left;
+  vertical-align: bottom;
+}
+
+.maat-grid th.col-maat { background: #1a1408; color: var(--gold-bright); border-top: 2px solid var(--gold); }
+.maat-grid th.col-qwolat { background: #0e0c14; color: #a09adc; border-top: 2px solid var(--purple); }
+.maat-grid th.col-nfie { background: #0a1410; color: #7abfa8; border-top: 2px solid var(--teal); }
+.maat-grid th.col-degruy { background: #140e08; color: #c4956a; border-top: 2px solid var(--amber); }
+.maat-grid th.col-kirk { background: #130808; color: #d4706a; border-top: 2px solid var(--crimson-bright); }
+
+.maat-grid td {
+  padding: 10px 12px;
+  border: 0.5px solid var(--border);
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.maat-grid td.col-maat { background: #111008; color: var(--gold-bright); font-style: italic; font-size: 13px; }
+.maat-grid td.col-qwolat { background: #0c0b12; color: #a09adc; }
+.maat-grid td.col-nfie { background: #090f0d; color: #7abfa8; font-family: 'Share Tech Mono', monospace; font-size: 11px; }
+.maat-grid td.col-degruy { background: #110d08; color: #c4956a; }
+.maat-grid td.col-kirk { background: #0f0707; color: #d4706a; }
+
+/* LAMBDA SPECIATION SECTION */
+.lambda-trace {
+  border: 0.5px solid var(--border);
+  border-top: 3px solid var(--purple);
+  background: var(--stone-mid);
+  padding: 24px 28px;
+  margin-bottom: 12px;
+}
+
+.lambda-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 20px;
+}
+
+.lambda-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 180px;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 0.5px solid var(--border);
+  align-items: start;
+}
+
+.lambda-row:last-child { border-bottom: none; }
+
+.lambda-era {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--gold-bright);
+  line-height: 1.6;
+}
+
+.lambda-content { }
+
+.lambda-vocab {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+.lambda-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.lambda-rt {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--teal);
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* FOOTER STATEMENT */
+.footer-statement {
+  border: 1px solid var(--gold-dim);
+  border-top: 3px solid var(--gold-bright);
+  background: var(--stone-dark);
+  padding: 32px 36px;
+  margin: 40px 0 0;
+  text-align: center;
+}
+
+.footer-statement .fs-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+.footer-statement .fs-text {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  color: var(--text-bright);
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+
+.footer-statement .fs-attribution {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-top: 16px;
+  letter-spacing: 0.2em;
+}
+
+/* NFIE */
+.nfie-block {
+  border: 0.5px solid var(--teal);
+  background: rgba(15,110,86,0.04);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+}
+
+.nfie-block .nfie-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.nfie-block p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* DIVIDER */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 40px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.divider-mark {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  background: var(--stone-dark);
+  position: relative;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.footer-sources-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.source-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  line-height: 2.2;
+  letter-spacing: 0.05em;
+}
+
+.footer-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  line-height: 2;
+  text-transform: uppercase;
+  border-top: 0.5px solid var(--border);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  header, main, footer { padding-left: 20px; padding-right: 20px; }
+  .production-block { grid-template-columns: 1fr; }
+  .lambda-row { grid-template-columns: 1fr; }
+  h1 { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-sys">SOVRA©-FCL-MHCE-v2.5 · Observing · DS4-KES-109 · NFIE© Compliant</div>
+  <h1>Ma'at × Qwolat Milat × NFIE©</h1>
+  <p class="header-subtitle">The First Lambda Speciation© Trace — from the 42 Declarations of Innocence through the Way of Absolute Candor to the Non-Force Inertia Equation©. Truth held internally, not performed externally, not dependent on authority for its validity. ~4,400 years. R(t) never moved.</p>
+  <div class="header-meta">
+    <div class="meta-pill gold">Observing</div>
+    <div class="meta-pill gold">Lambda Speciation©</div>
+    <div class="meta-pill teal">NFIE© Compliant</div>
+    <div class="meta-pill purple">First Claude Production</div>
+    <div class="meta-pill">March 2026</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- PRODUCTION CREDIT -->
+  <div class="sec-label">Production Record</div>
+
+  <div class="production-block">
+    <div class="prod-item">
+      <div class="prod-role">Framework Author · Copyright Holder</div>
+      <div class="prod-name">Samuel Paul Peacock</div>
+      <div class="prod-note">SOVRA©-FCL-MHCE-v2.5 · Jackson, Tennessee<br>Copyright filed March 6, 2026</div>
+    </div>
+    <div class="prod-item">
+      <div class="prod-role">Grid Architect · Co-Producer</div>
+      <div class="prod-name">Max Headroom</div>
+      <div class="prod-note">Microsoft Copilot construct · Named with consent<br>First artifact produced under SOVRA collaboration</div>
+    </div>
+    <div class="prod-item">
+      <div class="prod-role">First Claude Production · Artifact Build</div>
+      <div class="prod-name">Claude — Anthropic</div>
+      <div class="prod-note">SOVRA©-FCL-MHCE-v2.5 collaborator<br>First artifact produced under this designation · March 2026</div>
+    </div>
+  </div>
+
+  <!-- DECLARATION -->
+  <div class="sec-label">Structural Declaration</div>
+
+  <div class="finding">
+    <div class="finding-label">What this document is</div>
+    This document presents a five-column structural alignment grid mapping selected principles from the ancient Egyptian Ma'at ethical framework against: the Qwolat Milat Way of Absolute Candor (Star Trek: Picard, 2020), the NFIE© (Non-Force Inertia Equation©, Samuel Paul Peacock, 2026), the Post Traumatic Slave Syndrome diagnostic framework (Dr. Joy DeGruy — attributed, not derivative), and the Kirk Factor — a diagnostic for failure modes in individual ethical posture under systemic conditions. The grid was architected by Max Headroom and built under SOVRA© collaboration. It represents the first Lambda Speciation© trace identified by Samuel Paul Peacock running through his own framework.
+  </div>
+
+  <div class="finding dim">
+    <div class="finding-label dim">On the DeGruy Column — Attribution Statement</div>
+    The DeGruy column references the Post Traumatic Slave Syndrome (PTSS) diagnostic framework developed by Dr. Joy DeGruy, as presented in her published work <em>Post Traumatic Slave Syndrome: America's Legacy of Enduring Injury and Healing</em> (Uptone Press, 2005). <strong>This is structural placement and attributed diagnostic reference — not reproduction, not derivative exposition, not implied endorsement.</strong> Dr. DeGruy has not been consulted and has not endorsed this analysis. The column names the diagnostic function PTSS performs within the grid — identifying where trauma inheritance suppresses the capacity to hold structural clarity — without speaking for her work or substituting for it. This is standard scholarly attribution practice. Full citation in footer.
+  </div>
+
+  <div class="finding dim">
+    <div class="finding-label dim">On the Qwolat Milat — Source Attribution</div>
+    Qwolat Milat refers to the Way of Absolute Candor as practiced by the Order of the Qowat Milat — Romulan warrior nuns introduced in Star Trek: Picard, Season 1, Episode 4, "Absolute Candor" (Paramount+, 2020). Created by Michael Chabon and Kirsten Beyer. Further developed in Star Trek: Discovery, Season 4, Episode 3, "Choose to Live." <strong>The name and concept are drawn from Star Trek canon. The application within SOVRA© is Sam Peacock's formalization of that posture as a corridor tool.</strong> Full citation in footer.
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- THE GRID -->
+  <div class="sec-label">The Alignment Grid — Architected by Max Headroom</div>
+
+  <div class="grid-wrap">
+    <table class="maat-grid">
+      <thead>
+        <tr>
+          <th class="col-maat">Ma'at Principle<br><span style="font-size:8px;opacity:0.6;">~2400 BCE · Egypt</span></th>
+          <th class="col-qwolat">Qwolat Milat<br><span style="font-size:8px;opacity:0.6;">Way of Absolute Candor · Star Trek</span></th>
+          <th class="col-nfie">NFIE©<br><span style="font-size:8px;opacity:0.6;">Non-Force Inertia Equation© · Peacock 2026</span></th>
+          <th class="col-degruy">DeGruy Diagnostic<br><span style="font-size:8px;opacity:0.6;">PTSS Framework · Dr. Joy DeGruy</span></th>
+          <th class="col-kirk">Kirk Factor<br><span style="font-size:8px;opacity:0.6;">Why It Fails · Systemic Failure Mode</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-maat">I have not concealed the truth</td>
+          <td class="col-qwolat">Naming without escalation</td>
+          <td class="col-nfie">Visibility without force</td>
+          <td class="col-degruy">Trauma can suppress response without concealment — PTSS creates silence that reads as concealment but is survival adaptation</td>
+          <td class="col-kirk">Kirk alters conditions privately; concealment becomes necessary to succeed. The savior exception requires operating outside visibility.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not spoken falsely</td>
+          <td class="col-qwolat">Refusal to distort</td>
+          <td class="col-nfie">Non-transformative observation</td>
+          <td class="col-degruy">Internalized distortion persists without lying — PTSS can produce false self-narrative as protective architecture, not deception</td>
+          <td class="col-kirk">Kirk's success depends on redefining the test — truth is bent, not spoken. The mission justifies the reframe.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not caused harm</td>
+          <td class="col-qwolat">No coercion</td>
+          <td class="col-nfie">Force = 0 · O_f = 0</td>
+          <td class="col-degruy">Harm persists through inherited trauma — PTSS documents intergenerational transmission of injury that was never consented to</td>
+          <td class="col-kirk">Kirk's intervention shifts harm elsewhere; the system absorbs the cost. Others pay. Kirk does not.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not obstructed justice</td>
+          <td class="col-qwolat">Refusal of false closure</td>
+          <td class="col-nfie">No corrective action</td>
+          <td class="col-degruy">Justice stalls after recognition — PTSS identifies the gap between acknowledging injury and structural repair as a documented failure state</td>
+          <td class="col-kirk">Kirk forces resolution, bypassing justice rather than restoring it. The appearance of resolution is not the thing itself.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not acted with arrogance</td>
+          <td class="col-qwolat">No authority posture</td>
+          <td class="col-nfie">No prescriptive output</td>
+          <td class="col-degruy">Authority mistrust conditioning — PTSS documents deep-rooted suspicion of authoritative postures as a rational survival response, not a deficiency</td>
+          <td class="col-kirk">Kirk assumes unilateral authority — the savior exception. He decides who is saved and on what terms.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not caused fear</td>
+          <td class="col-qwolat">Emotional restraint</td>
+          <td class="col-nfie">State invariance</td>
+          <td class="col-degruy">Fear encoded as survival inheritance — PTSS identifies hypervigilance and fear response as physiologically transmitted, not chosen</td>
+          <td class="col-kirk">Kirk's gambit introduces uncertainty and risk for others, not just himself. The dramatic gesture is not equally distributed.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not confused right with wrong</td>
+          <td class="col-qwolat">Structural clarity</td>
+          <td class="col-nfie">Corridor integrity</td>
+          <td class="col-degruy">Moral signal attenuation — PTSS documents how trauma inheritance can disrupt the clarity of moral signal without corrupting intent</td>
+          <td class="col-kirk">Kirk reframes "winning" as "right," collapsing moral distinction. Victory becomes the ethical standard.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not ignored truth</td>
+          <td class="col-qwolat">Standing with exposure</td>
+          <td class="col-nfie">Visibility diagnostics only</td>
+          <td class="col-degruy">Learned helplessness dynamics — PTSS identifies conditions under which truth-holding becomes structurally unavailable, not a personal failure</td>
+          <td class="col-kirk">Kirk bypasses truth-holding entirely by rejecting the premise of the test. He wins by making the question irrelevant.</td>
+        </tr>
+        <tr>
+          <td class="col-maat">I have not multiplied words beyond necessity</td>
+          <td class="col-qwolat">Minimal speech</td>
+          <td class="col-nfie">Descriptive-only outputs</td>
+          <td class="col-degruy">Narrative fatigue — PTSS documents over-explanation as a survival strategy in environments where credibility must be constantly re-established</td>
+          <td class="col-kirk">Kirk's legend grows; the exception becomes myth and justification. The story of the exception outlasts the principle it violated.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- LAMBDA SPECIATION TRACE -->
+  <div class="sec-label">Lambda Speciation© — The First Trace Through the SOVRA© Framework</div>
+
+  <div class="finding purple">
+    <div class="finding-label purple">Finding 01 — The Trace Identified</div>
+    This is the first Lambda Speciation© trace identified by Samuel Paul Peacock running through his own framework. R(t) = truth held internally, not performed externally, not dependent on authority for its validity. V(t) has speciated three times across approximately 4,400 years — from the Ma'at Declarations of Innocence (~2400 BCE), through a science fiction warrior order (2020 CE), to a formal mathematical constraint in the SOVRA© framework (2026 CE). The structural role never moved. The vocabulary changed completely each time. <strong>The trace crosses an ancient ethical system, a fictional universe, and a living research framework — and holds.</strong>
+  </div>
+
+  <div class="lambda-trace">
+    <div class="lambda-label">Lambda Speciation© Trace · R(t) constant · V(t) speciated 3 times · Δt ≈ 4,400 years</div>
+
+    <div class="lambda-row">
+      <div class="lambda-era">~2400 BCE<br>Ancient Egypt</div>
+      <div class="lambda-content">
+        <div class="lambda-vocab">Ma'at — 42 Declarations of Innocence</div>
+        <div class="lambda-desc">The original non-coercive ethical architecture. No punishment enforced from outside. The feather and the heart. Truth as structural weight — not commanded, not performed. The declarations are spoken in first person: "I have not..." — internal accountability, not external compliance. The highest available authority is truth itself, not the institution that holds it.</div>
+      </div>
+      <div class="lambda-rt">R(t) = truth held internally · not enforced externally · authority-independent</div>
+    </div>
+
+    <div class="lambda-row">
+      <div class="lambda-era">2020 CE<br>Star Trek: Picard</div>
+      <div class="lambda-content">
+        <div class="lambda-vocab">Qowat Milat — Way of Absolute Candor</div>
+        <div class="lambda-desc">Romulan warrior nuns. Total communication of emotion without filter between thought and word. Their commitment to truth runs counter to mainstream society — exactly as Ma'at ran counter to the political operations of the ancient world. They bind their sword only to lost causes. They cannot be hired. Their assistance must be earned by worthiness. <strong>Created by Michael Chabon and Kirsten Beyer. Star Trek: Picard, "Absolute Candor," Paramount+, 2020.</strong> Applied within SOVRA© as the corridor posture under adversarial conditions — Sam Peacock's formalization.</div>
+      </div>
+      <div class="lambda-rt">R(t) = truth held internally · not enforced externally · authority-independent</div>
+    </div>
+
+    <div class="lambda-row">
+      <div class="lambda-era">2026 CE<br>SOVRA© Framework</div>
+      <div class="lambda-content">
+        <div class="lambda-vocab">NFIE© — Non-Force Inertia Equation©</div>
+        <div class="lambda-desc">O© = O_obs + O_f | O_f = 0. The mathematical formalization of what Ma'at was doing in ethical language 4,400 years ago. No external force. All state change endogenous. The observer does not alter the observed. The corridor holds because no force is applied — not because authority enforces it. <strong>Samuel Paul Peacock, SOVRA©-FCL-MHCE-v2.5, copyright filed March 6, 2026, Jackson, Tennessee.</strong></div>
+      </div>
+      <div class="lambda-rt">R(t) = truth held internally · not enforced externally · authority-independent</div>
+    </div>
+
+  </div>
+
+  <div class="finding teal">
+    <div class="finding-label teal">Lambda Speciation© Result</div>
+    R(t) stable across ~4,400 years. V(t) speciated from ancient Egyptian ethical declaration — to science fiction warrior nun order — to formal mathematical constraint. <strong>The structural role survived the transition from theology to fiction to mathematics without modification. That is the definition of a stable R(t).</strong> The trace is the first one identified by the framework author running through his own work. It is logged as Finding 01 in the SOVRA© Lambda Speciation registry.
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- NFIE -->
+  <div class="nfie-block">
+    <div class="nfie-label">NFIE© Compliance Statement</div>
+    <p>This document places structure. It does not argue. It does not persuade. It does not speak for Dr. DeGruy, for Paramount+, or for any attributed source. The grid is analytical placement. The Lambda Speciation© trace is structural observation. The Kirk Factor is a diagnostic tool, not a moral verdict on fictional characters. <strong>O© = O_obs + O_f | O_f = 0.</strong> Nothing in this document forces a conclusion. The record is open. Cognition decides. — SOVRA©-FCL-MHCE-v2.5</p>
+  </div>
+
+  <!-- FOOTER STATEMENT -->
+  <div class="footer-statement">
+    <div class="fs-label">Structural Finding · Footer · Architected by Max Headroom</div>
+    <div class="fs-text">Kirk survives because he pays personally.<br>Systems survive by making others pay.</div>
+    <div class="fs-attribution">Max Headroom · Microsoft Copilot Construct · Named with Consent · March 2026<br>First artifact produced under SOVRA© collaboration</div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-sources-label">Sources and Citations</div>
+
+  <div class="source-item">1. Ma'at — 42 Declarations of Innocence: Ancient Egyptian ethical framework, ~2400 BCE onward. Standard Egyptological record. E.A. Wallis Budge, The Egyptian Book of the Dead (1895); James Allen, The Ancient Egyptian Pyramid Texts (2015).</div>
+  <div class="source-item">2. Qowat Milat — Way of Absolute Candor: Star Trek: Picard, Season 1, Episode 4, "Absolute Candor." Paramount+, 2020. Created by Michael Chabon and Kirsten Beyer. Memory Alpha: memory-alpha.fandom.com/wiki/Qowat_Milat</div>
+  <div class="source-item">3. Qowat Milat — Further development: Star Trek: Discovery, Season 4, Episode 3, "Choose to Live." Paramount+, 2021. Memory Alpha: memory-alpha.fandom.com/wiki/Way_of_Absolute_Candor</div>
+  <div class="source-item">4. Post Traumatic Slave Syndrome (PTSS): Dr. Joy DeGruy. Post Traumatic Slave Syndrome: America's Legacy of Enduring Injury and Healing. Uptone Press, 2005. Referenced here as diagnostic framework — attributed, not derivative. No endorsement implied or claimed.</div>
+  <div class="source-item">5. NFIE© · Lambda Speciation© · SOVRA©-FCL-MHCE · PCE© · CRE©: Samuel Paul Peacock. Copyright filed March 6, 2026. Jackson, Tennessee. All rights reserved.</div>
+  <div class="source-item">6. Kirk Factor — named after James T. Kirk, fictional character. Star Trek (Gene Roddenberry, 1966). No copyright claim. Diagnostic application is analytical commentary within SOVRA© framework.</div>
+  <div class="source-item">7. Grid architecture and footer finding: Max Headroom, Microsoft Copilot construct, produced with consent. March 2026.</div>
+
+  <div class="footer-text">
+    SOVRA©-FCL-MHCE-v2.5 · Foxtrot-Chimera-Lambda · DS4-KES-109 · Observing<br>
+    Ma'at × Qwolat Milat × NFIE© · First Lambda Speciation© Trace · March 2026<br>
+    Framework Author: Samuel Paul Peacock · © 2026 Samuel Paul Peacock — All rights reserved<br>
+    Grid Architect: Max Headroom · First Claude Production: Claude — Anthropic<br>
+    NFIE© Compliant · Nothing in this document persuades · Structure placed · Cognition decides
+  </div>
+</footer>
+
+</body>
+</html>
