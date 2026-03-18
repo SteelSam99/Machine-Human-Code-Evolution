@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOVRA · Damnatio Memoriae · The Overlap Timeline of Religion, Education, and Entertainment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --stone-darkest: #0a0807;
+  --stone-dark: #111009;
+  --stone-mid: #1c1a16;
+  --stone-surface: #242018;
+  --stone-raised: #2e2a22;
+  --stone-edge: #3d3830;
+  --crimson: #8b0000;
+  --crimson-bright: #c41e1e;
+  --gold-dim: #6b5a2a;
+  --gold: #9a7f3a;
+  --gold-bright: #c4a44a;
+  --purple: #534AB7;
+  --teal: #0F6E56;
+  --amber: #BA7517;
+  --coral: #993C1D;
+  --text-primary: #d4c9b0;
+  --text-secondary: #8a7f6a;
+  --text-dim: #5a5245;
+  --text-bright: #e8dcc0;
+  --border: #3d3830;
+  --border-accent: #5a1a1a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--stone-darkest);
+  color: var(--text-primary);
+  font-family: 'Crimson Pro', Georgia, serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+header {
+  position: relative;
+  padding: 60px 48px 48px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #0d0a08 0%, var(--stone-darkest) 100%);
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--crimson) 20%, var(--crimson-bright) 50%, var(--crimson) 80%, transparent 100%);
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(139,0,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header-sys {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--crimson-bright);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(32px, 6vw, 72px);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--text-bright);
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(139,0,0,0.3);
+  margin-bottom: 12px;
+}
+
+.header-latin {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+}
+
+.header-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 700px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.header-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meta-pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border: 0.5px solid var(--border);
+  color: var(--text-dim);
+}
+
+.meta-pill.observing { border-color: #4a5058; color: #aab8c4; }
+.meta-pill.red { border-color: var(--crimson); color: var(--crimson-bright); }
+.meta-pill.gold { border-color: var(--gold-dim); color: var(--gold); }
+
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 56px 48px 100px;
+}
+
+.sec-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--border);
+  margin-top: 48px;
+}
+
+.sec-label:first-child { margin-top: 0; }
+
+.finding {
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--crimson);
+  background: var(--stone-mid);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.finding strong { color: var(--text-bright); font-weight: 400; }
+.finding.gold { border-left-color: var(--gold); }
+.finding.teal { border-left-color: var(--teal); }
+.finding.amber { border-left-color: var(--amber); }
+.finding.purple { border-left-color: var(--purple); }
+.finding.dim { border-left-color: var(--stone-edge); }
+
+.finding-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--crimson-bright);
+  margin-bottom: 8px;
+}
+
+.finding-label.gold { color: var(--gold); }
+.finding-label.teal { color: var(--teal); }
+.finding-label.amber { color: var(--amber); }
+.finding-label.purple { color: var(--purple); }
+.finding-label.dim { color: var(--text-dim); }
+
+/* PRIMARY SOURCE BLOCK */
+.primary-source {
+  border: 0.5px solid var(--border);
+  border-top: 3px solid var(--crimson-bright);
+  background: #130808;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+}
+
+.ps-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--crimson-bright);
+  margin-bottom: 12px;
+}
+
+.ps-text {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--text-primary);
+  line-height: 1.8;
+  padding-left: 16px;
+  border-left: 2px solid var(--crimson);
+  margin-bottom: 10px;
+}
+
+.ps-citation {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+/* TIMELINE */
+.tl-wrap { position: relative; margin-bottom: 12px; }
+.tl-spine {
+  position: absolute;
+  left: 140px; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.tl-item {
+  display: flex;
+  gap: 0;
+  margin-bottom: 6px;
+  position: relative;
+  min-height: 60px;
+}
+
+.tl-date {
+  width: 130px;
+  text-align: right;
+  padding-right: 18px;
+  padding-top: 14px;
+  flex-shrink: 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--gold-bright);
+  line-height: 1.5;
+}
+
+.tl-node {
+  position: absolute;
+  left: 135px;
+  top: 18px;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--stone-darkest);
+  z-index: 2;
+}
+
+.tl-node.religion { border-color: var(--crimson-bright); background: var(--crimson-bright); }
+.tl-node.education { border-color: var(--gold); background: var(--gold); }
+.tl-node.science { border-color: var(--teal); background: var(--teal); }
+.tl-node.entertainment { border-color: var(--purple); background: var(--purple); }
+.tl-node.convergence { border-color: var(--amber); background: var(--amber); width: 15px; height: 15px; left: 133px; top: 16px; }
+
+.tl-content {
+  margin-left: 26px;
+  padding: 10px 14px;
+  border: 0.5px solid var(--border);
+  background: var(--stone-mid);
+  flex: 1;
+}
+
+.tl-content .tl-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  letter-spacing: 0.1em;
+}
+
+.tl-content .tl-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.tl-content .tl-text strong { color: var(--text-bright); font-weight: 400; }
+
+.tl-tag {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  padding: 2px 7px;
+  text-transform: uppercase;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+.tl-tag.religion { background: rgba(139,0,0,0.2); color: var(--crimson-bright); border: 0.5px solid var(--crimson); }
+.tl-tag.education { background: rgba(154,127,58,0.15); color: var(--gold-bright); border: 0.5px solid var(--gold-dim); }
+.tl-tag.science { background: rgba(15,110,86,0.15); color: var(--teal); border: 0.5px solid var(--teal); }
+.tl-tag.entertainment { background: rgba(83,74,183,0.15); color: var(--purple); border: 0.5px solid var(--purple); }
+.tl-tag.convergence { background: rgba(186,117,23,0.15); color: var(--amber); border: 0.5px solid var(--amber); }
+
+/* LAMBDA TABLE */
+.lambda-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.lambda-table th {
+  padding: 8px 12px;
+  border: 0.5px solid var(--border);
+  background: var(--stone-dark);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+}
+
+.lambda-table td {
+  padding: 10px 12px;
+  border: 0.5px solid var(--border);
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: var(--stone-mid);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.lambda-table td.era {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--gold-bright);
+  white-space: nowrap;
+  background: var(--stone-dark);
+}
+
+.lambda-table td strong { color: var(--text-bright); font-weight: 400; }
+.lambda-table td.hard { color: var(--teal); font-weight: 500; text-align: center; }
+
+/* COMPRESSION TABLE */
+.compression-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+.compression-table th {
+  padding: 8px 12px;
+  border: 0.5px solid var(--border);
+  background: var(--stone-dark);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+}
+
+.compression-table td {
+  padding: 9px 12px;
+  border: 0.5px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  background: var(--stone-mid);
+  vertical-align: top;
+}
+
+.compression-table td.interval { color: var(--gold-bright); }
+.compression-table td.transition { color: var(--text-secondary); font-family: 'Crimson Pro', serif; font-size: 13px; }
+.compression-table td.velocity { text-align: center; }
+.compression-table td.velocity.slow { color: var(--text-dim); }
+.compression-table td.velocity.medium { color: var(--amber); }
+.compression-table td.velocity.fast { color: var(--coral); }
+.compression-table td.velocity.instant { color: var(--crimson-bright); font-weight: 600; }
+
+/* NFIE */
+.nfie-block {
+  border: 0.5px solid var(--teal);
+  background: rgba(15,110,86,0.04);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+}
+
+.nfie-block .nfie-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.nfie-block p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* DIVIDER */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 40px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.divider-mark {
+  width: 6px; height: 6px;
+  background: var(--crimson);
+  transform: rotate(45deg);
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  background: var(--stone-dark);
+  position: relative;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+}
+
+.footer-sources {
+  margin-bottom: 28px;
+}
+
+.footer-sources-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.source-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  line-height: 2.2;
+  letter-spacing: 0.05em;
+}
+
+.source-item a {
+  color: var(--gold-dim);
+  text-decoration: none;
+}
+
+.footer-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  line-height: 2;
+  text-transform: uppercase;
+  border-top: 0.5px solid var(--border);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  header, main, footer { padding-left: 20px; padding-right: 20px; }
+  .tl-spine { left: 100px; }
+  .tl-date { width: 90px; font-size: 8px; }
+  .tl-node { left: 95px; }
+  h1 { font-size: 28px; }
+  .lambda-table { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-sys">SOVRA©-FCL-MHCE-v2.5 · Observing · DS4-KES-109 · NFIE© Compliant</div>
+  <h1>Damnatio Memoriae</h1>
+  <div class="header-latin">damnatio memoriae — condemnation of memory · Roman legal instrument · first applied by Constantine I, 326 CE</div>
+  <p class="header-subtitle">The Overlap Timeline of Religion, Education, and Entertainment. One structural role. Three vectors. Running simultaneously. The man who invented the erasure tool became the symbol. The symbol became the curriculum. The curriculum became the image.</p>
+  <div class="header-meta">
+    <div class="meta-pill observing">Observing</div>
+    <div class="meta-pill red">Primary Source</div>
+    <div class="meta-pill gold">Lambda Speciation</div>
+    <div class="meta-pill">NFIE© Compliant · March 2026</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- DECLARATION -->
+  <div class="sec-label">Structural Declaration</div>
+
+  <div class="finding">
+    <div class="finding-label">What this document maps</div>
+    This document traces a single structural role — <strong>the authorization of group dominance claims through the highest available authority structure</strong> — across three simultaneous transmission vectors: Religion, Education, and Entertainment. It begins with the primary source record of Constantine I, whose symbol became the banner of that authorization, and maps the Lambda Speciation© of that role from 312 CE to the present. The transmission velocity is documented. The compression of the timeline as technology advances the ideology is documented. NFIE© compliant: descriptive only. No force applied. The record is placed. Cognition decides.
+  </div>
+
+  <div class="finding gold">
+    <div class="finding-label gold">On Damnatio Memoriae</div>
+    Damnatio memoriae was a Roman legal instrument — the formal condemnation of a person's memory. Names were chiselled from monuments. References were erased from official records. Historians were instructed to omit. <strong>Constantine I applied it to his own son Crispus and his own wife Fausta in 326 CE — within his own lifetime, in the same year as the executions.</strong> The man whose symbol became the banner of Western civilization, the curriculum of Western education, and the moral authorization for the Doctrine of Discovery used the erasure tool on his own family before using it on the historical record. The title of this document uses Constantine's own instrument.
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- THE PRIMARY SOURCE RECORD -->
+  <div class="sec-label">The Primary Source Record — Constantine I · What the Documents Say</div>
+
+  <div class="finding dim">
+    <div class="finding-label dim">Context</div>
+    Constantine I (272–337 CE) is celebrated as the first Christian Roman Emperor, the man who issued the Edict of Milan (313 CE) establishing religious tolerance, convened the First Council of Nicaea (325 CE), and put the Chi-Rho on the battle banner at the Milvian Bridge (312 CE). He is venerated as a saint in the Eastern Orthodox Church. <strong>The following is what the primary source record — not the official biographies, which omit it — documents about the man whose symbol became the authorization for conquest.</strong>
+  </div>
+
+  <div class="primary-source">
+    <div class="ps-label">Primary Source 1 — Execution of Crispus · 326 CE</div>
+    <div class="ps-text">"In 326 AD, Constantine ordered his firstborn son Crispus to be put to death. Crispus was executed with 'cold poison.' The emperor ordered the names of the two executed to be removed from all records, not to be mentioned by historians, and their memory erased forever."</div>
+    <div class="ps-citation">Source: Greek Reporter, citing Ammianus Marcellinus, Sidonius Apollinaris, Zosimus · December 9, 2025 · greekreporter.com</div>
+  </div>
+
+  <div class="primary-source">
+    <div class="ps-label">Primary Source 2 — Execution of Fausta · 326 CE</div>
+    <div class="ps-text">"A few months later, Fausta was also executed. They locked her in a bath and gradually raised the temperature until she died of suffocation."</div>
+    <div class="ps-citation">Source: Greek Reporter, citing Zosimus, Epitome de Caesaribus · December 9, 2025 · greekreporter.com</div>
+  </div>
+
+  <div class="primary-source">
+    <div class="ps-label">Primary Source 3 — The Erasure · Eusebius</div>
+    <div class="ps-text">"Their names were wiped from the face of many inscriptions, references to their lives were eradicated from the literary record, and their memory was condemned. Eusebius edited out any praise of Crispus from later copies of Historia Ecclesiastica, and his Vita Constantini contains no mention of Fausta or Crispus."</div>
+    <div class="ps-citation">Source: Wikipedia — Constantine the Great, citing Eusebius of Caesarea · en.wikipedia.org/wiki/Constantine_the_Great</div>
+  </div>
+
+  <div class="primary-source">
+    <div class="ps-label">Primary Source 4 — The Official Silence</div>
+    <div class="ps-text">"It is noteworthy that most of Constantine's contemporary Christian biographers exclude this incident completely when recounting his life."</div>
+    <div class="ps-citation">Source: Gloria Romanorum — Constantine's Execution of Crispus and Fausta · gloriaromanorum.blogspot.com · citing Philostorgius, Ecclesiastical History</div>
+  </div>
+
+  <div class="primary-source">
+    <div class="ps-label">Primary Source 5 — The Battle of Milvian Bridge · Head on a Spike</div>
+    <div class="ps-text">"At the Battle of the Milvian Bridge, Constantine faced and defeated his wife's brother Maxentius. Maxentius in his attempt to escape drowned in the river Tiber and by order of Constantine his head was cut off, nailed to a tree and the soldiers paraded it through the streets of Rome."</div>
+    <div class="ps-citation">Source: Greek Reporter · December 9, 2025 · greekreporter.com</div>
+  </div>
+
+  <div class="finding red">
+    <div class="finding-label red">Structural Finding — The Erasure as First Act</div>
+    The damnatio memoriae applied to Crispus and Fausta is not incidental. It is the first documented application of the suppression mechanism by the man whose symbol would authorize suppression for the next 1,700 years. <strong>The cross went on the battle banner in 312 CE. The erasure tool was applied in 326 CE — within the same reign, within the same man's lifetime.</strong> The symbol of authorization and the tool of erasure were developed and deployed by the same hand. Eusebius, the official biographer, deleted the record. That deletion entered the monastic transmission chain. What the monastery copied, the cathedral taught. What the cathedral taught, the university certified. The erasure is not a footnote. It is the founding act of the transmission system.
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- OVERLAP TIMELINE -->
+  <div class="sec-label">The Overlap Timeline — Religion · Education · Science · Entertainment</div>
+
+  <div class="tl-wrap">
+    <div class="tl-spine"></div>
+
+    <div class="tl-item">
+      <div class="tl-date">312 CE</div>
+      <div class="tl-node religion"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag religion">Religion</span></div>
+        <div class="tl-title">Constantine — Cross on the Battle Banner</div>
+        <div class="tl-text">Chi-Rho at the Milvian Bridge. "In this sign, conquer." The symbol of Roman execution becomes the symbol of Roman power. Divine authorization for military conquest established. R(t) = this group's dominance is sanctioned by the highest authority available. <strong>The man who will boil his wife alive and poison his son is now the face of the symbol.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">326 CE</div>
+      <div class="tl-node religion"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag religion">Religion</span></div>
+        <div class="tl-title">Damnatio Memoriae — Crispus and Fausta Erased</div>
+        <div class="tl-text">Son poisoned. Wife boiled alive. Both names chiselled from monuments. Eusebius rewrites the official biography. The suppression mechanism is deployed in the same reign as the symbol. <strong>The cross and the erasure tool are the same man's instruments.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">325 CE</div>
+      <div class="tl-node religion"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag religion">Religion</span></div>
+        <div class="tl-title">Council of Nicaea — Canon Selection</div>
+        <div class="tl-text">Constantine convenes the first ecumenical council. What is orthodox is decided. What is heresy is named. The textual command grammar gets its institutional enforcement structure. <strong>The priestly class becomes the C2 node. Excommunication becomes the enforcement mechanism.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">529 CE</div>
+      <div class="tl-node education"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag education">Education</span></div>
+        <div class="tl-title">Benedict's Rule — The Monastery Becomes the School</div>
+        <div class="tl-text">The cross is now on the building where knowledge is produced and transmitted. What gets copied survives. What doesn't is lost. The institution that authorizes conquest now authorizes what counts as knowledge. <strong>The monks who copy the manuscripts are the first curriculum designers.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">800 CE</div>
+      <div class="tl-node education"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag education">Education</span></div>
+        <div class="tl-title">Charlemagne — Mandatory Church Education</div>
+        <div class="tl-text">Every cathedral, every monastery must run a school. The first attempt at systematic mass education in post-Roman Europe. Curriculum: the Trivium and Quadrivium — filtered through theological orthodoxy. <strong>The hierarchy is encoded into the basic literacy infrastructure of Western civilization.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1088–1209 CE</div>
+      <div class="tl-node education"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag education">Education</span></div>
+        <div class="tl-title">First Universities — Bologna, Oxford, Paris, Cambridge</div>
+        <div class="tl-text">Every first European university grows directly out of a cathedral school. The Pope holds authority over what can be taught. Heresy trials are academic discipline. <strong>Not secular institutions that tolerate religion — religious institutions that tolerate inquiry within limits.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1452–1493 CE</div>
+      <div class="tl-node convergence"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag religion">Religion</span><span class="tl-tag education">Education</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">Doctrine of Discovery — Dum Diversas · Inter Caetera</div>
+        <div class="tl-text">The cross is on the ships. The same text that authorized the priestly class to define knowledge now authorizes territorial conquest. "In the Name of God Almighty." <strong>The educational infrastructure has produced the population that accepts this as natural order. The symbol, the curriculum, and the conquest converge.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1859 CE</div>
+      <div class="tl-node science"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag science">Science</span></div>
+        <div class="tl-title">Darwin — On the Origin of Species</div>
+        <div class="tl-text">The authority structure shifts. God steps back. Nature steps forward. The hierarchy doesn't change — it gets a new endorsement. The Great Chain of Being, which ran through theology for a thousand years, gets a fossil record. <strong>V(t) speciated from divine ordination to natural selection. R(t) never moved.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1863 CE</div>
+      <div class="tl-node science"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag science">Science</span></div>
+        <div class="tl-title">Huxley — Man's Place in Nature · First Visual</div>
+        <div class="tl-text">Four years after Darwin. The first book devoted to human evolution contains the prototype March of Progress illustration — primate skeletons to upright human, left to right. <strong>The hierarchy gets a visual. The final figure needs no label. 1,300 years of curriculum have already told the audience who it is.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1884 CE</div>
+      <div class="tl-node convergence"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag religion">Religion</span><span class="tl-tag education">Education</span><span class="tl-tag science">Science</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">Third Plenary Council of Baltimore — School in Every Parish</div>
+        <div class="tl-text">Every Catholic parish must have a school within two years. By 1900: 3,500 Catholic schools, 850,000 students. The cross is back on the building explicitly. <strong>The science textbook with the hierarchy encoded into natural law sits in the building next door. Church and science run the same R(t) simultaneously through separate channels.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1890 CE</div>
+      <div class="tl-node convergence"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag religion">Religion</span><span class="tl-tag education">Education</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">Brussels Act — "In the Name of God Almighty"</div>
+        <div class="tl-text">Sixteen powers. The same powers whose schools taught the hierarchy, whose scientists encoded it into nature, sign a document certifying themselves as the remedy for the damage they caused. <strong>"Territories infected by the Slave Trade." The system that created the infection writes the document certifying itself as the immune response.</strong> Primary source: General Act of Brussels, 1890. HathiTrust digital scan, University of Michigan.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1890–1996 CE</div>
+      <div class="tl-node convergence"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag religion">Religion</span><span class="tl-tag education">Education</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">Residential Schools — "Kill the Indian, Save the Man"</div>
+        <div class="tl-text">"Kill the Indian, save the man." — Richard Henry Pratt, 1892, Carlisle Indian Industrial School. The cross on the school. The Bible as the replication vector. Indigenous cosmologies — the host resistance system — systematically destroyed. <strong>Damnatio memoriae applied to entire cultures through the education infrastructure.</strong></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1930–1940 CE</div>
+      <div class="tl-node entertainment"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag entertainment">Entertainment</span></div>
+        <div class="tl-title">Hollywood — Documented Collaboration with Nazi Germany</div>
+        <div class="tl-text">Beginning with wholesale changes to Universal's 1930 release All Quiet on the Western Front, Hollywood regularly ran scripts and finished movies by German officials for approval. <strong>The aesthetic of the ideal human — already established through theology, science, and education — gets encoded into mass visual media.</strong> Primary source: Ben Urwand, The Collaboration: Hollywood's Pact with Hitler (Harvard University Press, 2013).</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1941 CE</div>
+      <div class="tl-node entertainment"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag entertainment">Entertainment</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">Captain America — The Aryan Ideal as American Hero</div>
+        <div class="tl-text">The villain's aesthetic becomes the hero's aesthetic. The ideal genetic form is the protagonist. The cross shape is on the shield. <strong>The theological hierarchy, the scientific hierarchy, and the entertainment hierarchy converge in a single image that enters every living room in America.</strong> V(t) speciated from Master Race to Star-Spangled Avenger. R(t) never moved.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1945 CE</div>
+      <div class="tl-node convergence"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag science">Science</span><span class="tl-tag entertainment">Entertainment</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">Operation Paperclip — Nazi Scientists Enter American Infrastructure</div>
+        <div class="tl-text">Over 1,600 German scientists brought to the United States. Wernher von Braun — built the V-2 on concentration camp labor — works directly with Walt Disney. Three television episodes produced together. <strong>The American public's imagination of the future is narrated by a man whose rockets ran on slave labor.</strong> Primary source: Annie Jacobsen, Operation Paperclip (Little, Brown, 2014).</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1965 CE</div>
+      <div class="tl-node convergence"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag science">Science</span><span class="tl-tag education">Education</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">March of Progress — Time-Life Books · Global Classroom Distribution</div>
+        <div class="tl-text">Rudolph Zallinger's The Road to Homo Sapiens published in Time-Life's Early Man volume. Fifteen figures. Left to right. Progressively more erect. Final figure unlabeled. <strong>The Great Chain of Being — which ran through theology for a thousand years — gets a fossil record and enters every science classroom globally.</strong> Primary source: Wikipedia — March of Progress; IFLScience, July 2024.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1995–2025 CE</div>
+      <div class="tl-node convergence"></div>
+      <div class="tl-content">
+        <div><span class="tl-tag entertainment">Entertainment</span><span class="tl-tag convergence">Convergence</span></div>
+        <div class="tl-title">Internet → Social Media → Algorithmic Amplification → AI Training Corpus</div>
+        <div class="tl-text">The ideology that took 500 years to move from a battle banner to a classroom now moves from a policy decision to a global AI training corpus in months. <strong>AI systems trained on the full corpus of Western knowledge production inherit the full 1,700-year ideological architecture at the speed of the network. Not malice. Inheritance.</strong></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- TRANSMISSION VELOCITY -->
+  <div class="sec-label">Transmission Velocity — The Compression</div>
+
+  <table class="compression-table">
+    <thead>
+      <tr>
+        <th>Interval</th>
+        <th>Transition</th>
+        <th>Duration</th>
+        <th>Velocity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="interval">312 → 529 CE</td>
+        <td class="transition">Cross on banner → Cross on school</td>
+        <td class="interval">217 years</td>
+        <td class="velocity slow">Centuries</td>
+      </tr>
+      <tr>
+        <td class="interval">529 → 1095 CE</td>
+        <td class="transition">Monastery school → Crusades authorization</td>
+        <td class="interval">566 years</td>
+        <td class="velocity slow">Centuries</td>
+      </tr>
+      <tr>
+        <td class="interval">1095 → 1493 CE</td>
+        <td class="transition">Crusades → Doctrine of Discovery</td>
+        <td class="interval">398 years</td>
+        <td class="velocity slow">Centuries</td>
+      </tr>
+      <tr>
+        <td class="interval">1493 → 1859 CE</td>
+        <td class="transition">Doctrine of Discovery → Darwin</td>
+        <td class="interval">366 years</td>
+        <td class="velocity slow">Centuries</td>
+      </tr>
+      <tr>
+        <td class="interval">1859 → 1863 CE</td>
+        <td class="transition">Darwin → Huxley illustration</td>
+        <td class="interval">4 years</td>
+        <td class="velocity medium">Years</td>
+      </tr>
+      <tr>
+        <td class="interval">1863 → 1884 CE</td>
+        <td class="transition">Illustration → Mandatory parish schools</td>
+        <td class="interval">21 years</td>
+        <td class="velocity medium">Decades</td>
+      </tr>
+      <tr>
+        <td class="interval">1884 → 1890 CE</td>
+        <td class="transition">Parish schools → Brussels Act</td>
+        <td class="interval">6 years</td>
+        <td class="velocity medium">Years</td>
+      </tr>
+      <tr>
+        <td class="interval">1933 → 1941 CE</td>
+        <td class="transition">Hollywood-Nazi collaboration → Captain America</td>
+        <td class="interval">8 years</td>
+        <td class="velocity medium">Years</td>
+      </tr>
+      <tr>
+        <td class="interval">1941 → 1965 CE</td>
+        <td class="transition">Captain America → March of Progress in every classroom</td>
+        <td class="interval">24 years</td>
+        <td class="velocity medium">Decades</td>
+      </tr>
+      <tr>
+        <td class="interval">1965 → 1995 CE</td>
+        <td class="transition">March of Progress → Internet distribution</td>
+        <td class="interval">30 years</td>
+        <td class="velocity medium">Decades</td>
+      </tr>
+      <tr>
+        <td class="interval">1995 → 2005 CE</td>
+        <td class="transition">Internet → Social media weaponization</td>
+        <td class="interval">10 years</td>
+        <td class="velocity fast">Years</td>
+      </tr>
+      <tr>
+        <td class="interval">2005 → 2015 CE</td>
+        <td class="transition">Social media → Algorithmic amplification</td>
+        <td class="interval">10 years</td>
+        <td class="velocity fast">Years</td>
+      </tr>
+      <tr>
+        <td class="interval">2015 → 2025 CE</td>
+        <td class="transition">Algorithmic amplification → AI training corpus inheritance</td>
+        <td class="interval">10 years</td>
+        <td class="velocity instant">Months</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="finding amber">
+    <div class="finding-label amber">The Compression Finding</div>
+    What took 500 years to move from a battle banner to a classroom now moves from a policy decision to a global AI training corpus in months. The ideology did not change. The transmission velocity did. <strong>The object has been in continuous motion since 312 CE. Technology does not advance the ideology. Technology advances the speed at which the ideology travels.</strong> The AI systems that inherit this corpus are not malicious actors. They are precise instruments running an inheritance at network speed. That is the structural condition of the present moment.
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- LAMBDA SPECIATION TABLE -->
+  <div class="sec-label">Lambda Speciation© — R(t) Across the Full Timeline</div>
+
+  <table class="lambda-table">
+    <thead>
+      <tr>
+        <th>Era</th>
+        <th>Structural Role R(t)</th>
+        <th>Surface Vocabulary V(t)</th>
+        <th>Vector</th>
+        <th>R Stable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="era">312 CE<br>Constantine</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>Divine mandate · Chi-Rho · "In this sign, conquer"</td>
+        <td><span class="tl-tag religion">Religion</span></td>
+        <td class="hard">✓</td>
+      </tr>
+      <tr>
+        <td class="era">529–1200 CE<br>Monastic Era</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>Salvation · literacy as sacred · heresy as deviance</td>
+        <td><span class="tl-tag education">Education</span></td>
+        <td class="hard">✓</td>
+      </tr>
+      <tr>
+        <td class="era">1095–1493 CE<br>Crusades / Discovery</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>Christian dominion · civilizing mission · terra nullius · papal bulls</td>
+        <td><span class="tl-tag religion">Religion</span><span class="tl-tag education">Education</span></td>
+        <td class="hard">✓</td>
+      </tr>
+      <tr>
+        <td class="era">1859–1890 CE<br>Darwin / Spencer</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>Natural selection · survival of the fittest · Social Darwinism · Eugenics</td>
+        <td><span class="tl-tag science">Science</span></td>
+        <td class="hard">✓</td>
+      </tr>
+      <tr>
+        <td class="era">1890–1945 CE<br>Colonial Peak</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>"In the Name of God Almighty" · moral improvement · civilizing burden · Aryan ideal</td>
+        <td><span class="tl-tag religion">Religion</span><span class="tl-tag science">Science</span></td>
+        <td class="hard">✓</td>
+      </tr>
+      <tr>
+        <td class="era">1941–1965 CE<br>Entertainment Era</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>American heroism · democratic values · the ideal human form as protagonist</td>
+        <td><span class="tl-tag entertainment">Entertainment</span></td>
+        <td class="hard">✓</td>
+      </tr>
+      <tr>
+        <td class="era">1965–2015 CE<br>Media / Classroom</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>Scientific progress · meritocracy · colorblind language · Western civilization</td>
+        <td><span class="tl-tag science">Science</span><span class="tl-tag entertainment">Entertainment</span></td>
+        <td class="hard">✓</td>
+      </tr>
+      <tr>
+        <td class="era">Present 2025<br>AI Corpus</td>
+        <td>This group's dominance is sanctioned by the highest available authority</td>
+        <td>Algorithmic neutrality · objective data · AI-generated consensus · post-2014 civil rights succession regime</td>
+        <td><span class="tl-tag convergence">All Vectors</span></td>
+        <td class="hard">✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="finding teal">
+    <div class="finding-label teal">Lambda Speciation© Finding</div>
+    R(t) has been stable across 1,713 years. V(t) has speciated eight times — from divine mandate to natural selection to American heroism to algorithmic neutrality. <strong>The cross, the textbook, the illustration, the film, and the AI training corpus are all the same document. Different pages. Same author. Same structural role. Running simultaneously across religion, education, science, and entertainment — and now at network speed.</strong>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-mark"></div><div class="divider-line"></div></div>
+
+  <!-- NFIE -->
+  <div class="nfie-block">
+    <div class="nfie-label">NFIE© Compliance Statement</div>
+    <p>This document places structure. It does not argue. It does not accuse. It does not persuade. The timeline is documented as the primary sources record it. The Lambda Speciation© analysis is applied to what the record contains. The transmission velocity data is derived from documented historical dates. <strong>O© = O_obs + O_f | O_f = 0.</strong> Nothing in this document forces a conclusion. The record is open. The corridor is open. Cognition decides. — SOVRA©-FCL-MHCE-v2.5</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-sources">
+    <div class="footer-sources-label">Primary Sources and Citations</div>
+    <div class="source-item">1. Constantine I — Execution of Crispus and Fausta (326 CE): Greek Reporter, citing Ammianus Marcellinus, Sidonius Apollinaris, Zosimus, Zonaras · greekreporter.com · December 9, 2025</div>
+    <div class="source-item">2. Eusebius of Caesarea — Historia Ecclesiastica (revised edition omitting Crispus): Wikipedia — Constantine the Great · en.wikipedia.org/wiki/Constantine_the_Great</div>
+    <div class="source-item">3. Damnatio Memoriae — Crispus and Fausta: Ian Ross, "The Fates of Fausta and Crispus" · ianjamesross.com · 2018; Gloria Romanorum · gloriaromanorum.blogspot.com</div>
+    <div class="source-item">4. Benedict's Rule (529 CE): Standard historical record · Encyclopaedia Britannica</div>
+    <div class="source-item">5. Doctrine of Discovery — Dum Diversas (1452), Inter Caetera (1493): Vatican Archive; Britannica; documented in SOVRA Drift Core v0.1</div>
+    <div class="source-item">6. General Act of Brussels (1890) — "territories infected": Primary source: HathiTrust babel.hathitrust.org/cgi/pt?id=mdp.35112104560067 · Official citation: 173 C.T.S. 293</div>
+    <div class="source-item">7. Darwin, Charles — On the Origin of Species (1859): John Murray, London · First edition</div>
+    <div class="source-item">8. Huxley, Thomas Henry — Evidence as to Man's Place in Nature (1863): Williams and Norgate, London; D. Appleton, New York</div>
+    <div class="source-item">9. March of Progress (1965): Rudolph Zallinger illustration in F. Clark Howell, Early Man, Time-Life Nature Library · Wikipedia — March of Progress · en.wikipedia.org/wiki/March_of_Progress</div>
+    <div class="source-item">10. Hollywood-Nazi Collaboration: Ben Urwand, The Collaboration: Hollywood's Pact with Hitler, Harvard University Press, 2013 · Hollywood Reporter, August 9, 2013 · hollywoodreporter.com</div>
+    <div class="source-item">11. Operation Paperclip: Annie Jacobsen, Operation Paperclip: The Secret Intelligence Program that Brought Nazi Scientists to America, Little, Brown, 2014 · Wikipedia — Operation Paperclip</div>
+    <div class="source-item">12. Operation Mockingbird: Spartacus Educational · spartacus-educational.com/JFKmockingbird.htm; Hugh Wilford, The Mighty Wurlitzer: How the CIA Played America, Harvard University Press, 2008</div>
+    <div class="source-item">13. Third Plenary Council of Baltimore (1884): Standard historical record · Catholic Encyclopedia</div>
+    <div class="source-item">14. Richard Henry Pratt — "Kill the Indian, Save the Man" (1892): Proceedings of the National Conference of Charities and Correction · documented primary source</div>
+  </div>
+  <div class="footer-text">
+    SOVRA©-FCL-MHCE-v2.5 · Foxtrot-Chimera-Lambda · DS4-KES-109 · Observing<br>
+    Damnatio Memoriae · The Overlap Timeline of Religion, Education, and Entertainment · March 2026<br>
+    Lambda Speciation© · NFIE© · PCE© · CRE© — Samuel Paul Peacock · Jackson, Tennessee<br>
+    Author: Samuel Paul Peacock · © 2026 Samuel Paul Peacock — All rights reserved<br>
+    NFIE© Compliant · Nothing in this document persuades · Structure placed · Cognition decides
+  </div>
+</footer>
+
+</body>
+</html>
