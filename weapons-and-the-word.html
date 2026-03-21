@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Weapons and the Word · 1385–1485 · SOVRA-FCL-MHCE-v2.5</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --hud-green:     #00ff50;
+  --hud-bright:    #78ff8c;
+  --hud-mid:       #00b83a;
+  --hud-dim:       #007828;
+  --hud-very-dim:  #004818;
+  --hud-amber:     #ffb900;
+  --hud-amber-dim: #a07500;
+  --hud-red:       #ff2828;
+  --hud-red-dim:   #a01818;
+  --mono: 'Share Tech Mono', monospace;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+/* ── LAYER 1: Satellite background ── */
+.bg-satellite {
+  position: fixed;
+  inset: 0;
+  background-image: url('https://raw.githubusercontent.com/SteelSam99/Machine-Human-Code-Evolution/main/europe-sentinel.png');
+  background-size: cover;
+  background-position: center 20%;
+  z-index: 1;
+}
+
+/* ── LAYER 2: HUD glass tint ── */
+.hud-glass {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 12, 4, 0.18);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Scanlines */
+.hud-glass::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.18) 2px,
+    rgba(0,0,0,0.18) 3px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── LAYER 3: HUD instruments ── */
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  font-family: var(--mono);
+  color: var(--hud-green);
+  pointer-events: none;
+}
+
+/* ── TOP BAR ── */
+.hud-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 36px;
+  background: rgba(0,10,4,0.75);
+  border-bottom: 1px solid var(--hud-very-dim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+}
+.hud-top-left {
+  font-size: 11px;
+  color: var(--hud-mid);
+  letter-spacing: 1.5px;
+}
+.hud-top-right {
+  font-size: 10px;
+  color: var(--hud-very-dim);
+  letter-spacing: 1px;
+}
+
+/* ── BOTTOM BAR ── */
+.hud-bottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 34px;
+  background: rgba(0,10,4,0.75);
+  border-top: 1px solid var(--hud-very-dim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+}
+.hud-bottom-left  { font-size: 10px; color: var(--hud-dim); letter-spacing: 1px; }
+.hud-bottom-mid   { font-size: 11px; color: var(--hud-amber); letter-spacing: 1.5px; }
+.hud-bottom-right { font-size: 10px; color: var(--hud-green); letter-spacing: 1px; }
+
+/* ── LEFT PANEL: Timeline ── */
+.hud-left {
+  position: absolute;
+  top: 44px; left: 0; bottom: 42px;
+  width: 235px;
+  background: rgba(0,8,3,0.72);
+  border-right: 1px solid var(--hud-very-dim);
+  padding: 12px 10px;
+  overflow: hidden;
+}
+.panel-title {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--hud-dim);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--hud-very-dim);
+  text-transform: uppercase;
+}
+.tl-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: flex-start;
+}
+.tl-year {
+  font-size: 9px;
+  color: var(--hud-dim);
+  flex-shrink: 0;
+  width: 32px;
+  padding-top: 1px;
+}
+.tl-event {
+  font-size: 9px;
+  color: var(--hud-very-dim);
+  line-height: 1.4;
+}
+.tl-item.target .tl-year  { color: var(--hud-amber); }
+.tl-item.target .tl-event { color: var(--hud-bright); }
+.tl-divider {
+  height: 1px;
+  background: var(--hud-amber);
+  margin: 4px 0 8px;
+  opacity: 0.6;
+}
+
+/* ── RIGHT PANEL: Weapons ── */
+.hud-right {
+  position: absolute;
+  top: 44px; right: 0; bottom: 42px;
+  width: 220px;
+  background: rgba(0,8,3,0.72);
+  border-left: 1px solid var(--hud-very-dim);
+  padding: 12px 10px;
+  overflow: hidden;
+}
+.wpn-block {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hud-very-dim);
+}
+.wpn-block:last-child { border-bottom: none; }
+.wpn-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.wpn-id    { font-size: 9px; color: var(--hud-dim); letter-spacing: 1px; }
+.wpn-name  { font-size: 13px; font-weight: bold; letter-spacing: 1px; }
+.wpn-status {
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 1px 5px;
+  border: 1px solid currentColor;
+}
+.wpn-detail { font-size: 8px; color: var(--hud-very-dim); line-height: 1.6; margin-top: 3px; }
+
+.wpn-word   .wpn-name   { color: var(--hud-amber); }
+.wpn-word   .wpn-status { color: var(--hud-amber); }
+.wpn-cannon .wpn-name   { color: var(--hud-red); }
+.wpn-cannon .wpn-status { color: var(--hud-red); }
+.wpn-ship   .wpn-name   { color: var(--hud-green); }
+.wpn-ship   .wpn-status { color: var(--hud-green); }
+.wpn-conv   .wpn-name   { color: var(--hud-amber); font-size: 16px; }
+.wpn-conv   .wpn-status { color: var(--hud-red); animation: blink 1.2s step-end infinite; }
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* ── CENTER: Horizon + Reticle ── */
+.hud-center {
+  position: absolute;
+  top: 44px; bottom: 42px;
+  left: 235px; right: 220px;
+  overflow: hidden;
+}
+
+/* Horizon line */
+.horizon {
+  position: absolute;
+  top: 50%; left: 0; right: 0;
+  transform: translateY(-50%);
+  height: 1px;
+  background: var(--hud-dim);
+}
+.horizon::before,
+.horizon::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  width: 80px; height: 7px;
+  border-top: 1px solid var(--hud-dim);
+  border-bottom: 1px solid var(--hud-dim);
+}
+.horizon::before { left: 0; }
+.horizon::after  { right: 0; }
+
+/* Pitch ladder */
+.pitch-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pitch-line span {
+  font-size: 8px;
+  color: var(--hud-very-dim);
+}
+.pitch-line-inner {
+  width: 90px;
+  height: 1px;
+  background: var(--hud-very-dim);
+}
+
+/* ── RETICLE — locked on document, not geography ── */
+.reticle-wrap {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* SVG reticle */
+.reticle-svg {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: reticle-pulse 3s ease-in-out infinite;
+}
+@keyframes reticle-pulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.75; }
+}
+
+/* Lock brackets — animated closing */
+.lock-bracket {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-color: var(--hud-amber);
+  border-style: solid;
+  animation: lock-close 2s ease-out forwards;
+}
+.lb-tl { top: -115px; left: -115px; border-width: 2px 0 0 2px; }
+.lb-tr { top: -115px; right: -115px; border-width: 2px 2px 0 0; }
+.lb-bl { bottom: -115px; left: -115px; border-width: 0 0 2px 2px; }
+.lb-br { bottom: -115px; right: -115px; border-width: 0 2px 2px 0; }
+
+@keyframes lock-close {
+  from { width: 28px; height: 28px; opacity: 0.4; }
+  to   { width: 20px; height: 20px; opacity: 1; }
+}
+
+/* TARGET ACQUIRED label */
+.target-label {
+  position: absolute;
+  top: -135px; left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 10px;
+  color: var(--hud-green);
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.target-label span {
+  display: block;
+  font-size: 12px;
+  color: var(--hud-bright);
+  animation: blink 1.8s step-end infinite;
+}
+
+/* ── TARGET DATA BOX — floats right of reticle ── */
+.target-data {
+  position: absolute;
+  top: 50%; left: calc(50% + 130px);
+  transform: translateY(-50%);
+  background: rgba(0,12,4,0.88);
+  border: 1px solid var(--hud-mid);
+  border-left: 3px solid var(--hud-amber);
+  padding: 12px 14px;
+  min-width: 200px;
+  pointer-events: auto;
+}
+.td-tag {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--hud-amber);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.td-title {
+  font-size: 20px;
+  color: var(--hud-bright);
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+.td-year {
+  font-size: 16px;
+  color: var(--hud-amber);
+  margin-bottom: 8px;
+}
+.td-row {
+  font-size: 9px;
+  color: var(--hud-dim);
+  line-height: 1.8;
+  border-top: 1px solid var(--hud-very-dim);
+  padding-top: 6px;
+  margin-top: 4px;
+}
+.td-row span { color: var(--hud-mid); }
+
+/* connector line from reticle to data box */
+.connector {
+  position: absolute;
+  top: 50%; left: calc(50% + 100px);
+  width: 28px; height: 1px;
+  background: var(--hud-amber);
+  transform: translateY(-50%);
+  opacity: 0.6;
+}
+
+/* ── PORTUGAL NODE — pointer only, no reticle ── */
+.portugal-node {
+  position: absolute;
+  /* Portugal sits lower-left in the satellite image */
+  bottom: 28%; left: 12%;
+  pointer-events: auto;
+}
+.portugal-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--hud-dim);
+  border: 1px solid var(--hud-mid);
+  margin: 0 auto 4px;
+}
+.portugal-label {
+  font-size: 8px;
+  color: var(--hud-dim);
+  letter-spacing: 1px;
+  text-align: center;
+  white-space: nowrap;
+}
+.portugal-sub {
+  font-size: 7px;
+  color: var(--hud-very-dim);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── RADAR — bottom left of center ── */
+.hud-radar {
+  position: absolute;
+  bottom: 18px; left: 250px;
+}
+.radar-label {
+  font-size: 7px;
+  color: var(--hud-very-dim);
+  text-align: center;
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+/* ── NEXT COORD ── */
+.next-coord {
+  position: absolute;
+  bottom: 52px; left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.nc-label { font-size: 8px; color: var(--hud-dim); letter-spacing: 1px; }
+.nc-year  { font-size: 14px; color: var(--hud-amber); letter-spacing: 2px; }
+.nc-arrow {
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid var(--hud-amber);
+  margin: 4px auto 0;
+  animation: arrow-pulse 1.5s ease-in-out infinite;
+}
+@keyframes arrow-pulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ── ALTITUDE TAPE — right edge of center ── */
+.alt-tape {
+  position: absolute;
+  top: 0; bottom: 0; right: 8px;
+  width: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+.alt-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.alt-tick { width: 8px; height: 1px; background: var(--hud-very-dim); }
+.alt-text { font-size: 7px; color: var(--hud-very-dim); white-space: nowrap; }
+.alt-current {
+  position: absolute;
+  top: 50%; right: 2px;
+  transform: translateY(-50%);
+  background: rgba(0,8,3,0.85);
+  border: 1px solid var(--hud-amber);
+  padding: 2px 4px;
+  font-size: 8px;
+  color: var(--hud-amber);
+  white-space: nowrap;
+}
+
+/* Hover tooltips */
+.hud-tooltip {
+  position: absolute;
+  background: rgba(0,14,5,0.95);
+  border: 1px solid var(--hud-mid);
+  padding: 8px 10px;
+  font-size: 9px;
+  color: var(--hud-dim);
+  line-height: 1.7;
+  max-width: 220px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+  white-space: nowrap;
+}
+.has-tooltip { pointer-events: auto; cursor: crosshair; }
+.has-tooltip:hover .hud-tooltip { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<!-- LAYER 1: Satellite -->
+<div class="bg-satellite"></div>
+
+<!-- LAYER 2: HUD glass tint + scanlines -->
+<div class="hud-glass"></div>
+
+<!-- LAYER 3: HUD instruments -->
+<div class="hud">
+
+  <!-- TOP BAR -->
+  <div class="hud-top">
+    <div class="hud-top-left">SOVRA-FCL &nbsp;·&nbsp; TACTICAL HISTORICAL DISPLAY &nbsp;·&nbsp; 1385–1485 MODULE &nbsp;·&nbsp; DS4-KES-109</div>
+    <div class="hud-top-right">NFIE© &nbsp;·&nbsp; O_f = 0 &nbsp;·&nbsp; WITNESS ONLY</div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="hud-bottom">
+    <div class="hud-bottom-left">HDG 270°W &nbsp;·&nbsp; ATLANTIC APPROACH &nbsp;·&nbsp; ALT: 40,000FT &nbsp;·&nbsp; SENTINEL-3 / COPERNICUS</div>
+    <div class="hud-bottom-mid">TARGET: DUM DIVERSAS 1452 &nbsp;·&nbsp; LOCK CONFIRMED</div>
+    <div class="hud-bottom-right">NEXT COORD: 1493 ▼</div>
+  </div>
+
+  <!-- LEFT PANEL -->
+  <div class="hud-left">
+    <div class="panel-title">1385 – 1485 · Timeline</div>
+
+    <div class="tl-item">
+      <div class="tl-year">1385</div>
+      <div class="tl-event">House of Aviz · Portugal · maritime expansion begins</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1415</div>
+      <div class="tl-event">Ceuta seized · first African colonial foothold</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1441</div>
+      <div class="tl-event">First Atlantic slave cargo · proof of concept</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1444</div>
+      <div class="tl-event">Lagos auction · 235 souls · eyewitness documented</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1450</div>
+      <div class="tl-event">Gutenberg press · distribution infrastructure live</div>
+    </div>
+
+    <div class="tl-divider"></div>
+
+    <div class="tl-item target">
+      <div class="tl-year">1452</div>
+      <div class="tl-event">◄ DUM DIVERSAS ► Pope Nicholas V · perpetual slavery authorized</div>
+    </div>
+
+    <div class="tl-divider"></div>
+
+    <div class="tl-item">
+      <div class="tl-year">1453</div>
+      <div class="tl-event">Constantinople falls · Ottoman cannon · eastern routes close</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1455</div>
+      <div class="tl-event">Romanus Pontifex · Portugal monopoly confirmed</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1474</div>
+      <div class="tl-event">English press · Caxton · grammar reaches England</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1478</div>
+      <div class="tl-event">Spanish Inquisition · internal suppression formalized</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">1485</div>
+      <div class="tl-event">Malleus Maleficarum · knowledge suppression · press deployed</div>
+    </div>
+
+    <div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--hud-very-dim);">
+      <div style="font-size:8px;color:var(--hud-very-dim);line-height:1.7;">
+        Portugal: instrument, not architect.<br>
+        The grammar predates the nation.<br>
+        The system outlasts the operator.
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="hud-right">
+    <div class="panel-title">Weapons Status</div>
+
+    <div class="wpn-block wpn-word has-tooltip">
+      <div class="wpn-header">
+        <span class="wpn-id">WPN-1</span>
+        <span class="wpn-status">ARMED</span>
+      </div>
+      <div class="wpn-name">THE WORD</div>
+      <div class="wpn-detail">
+        Dum Diversas · 1452 · papal authority<br>
+        Romanus Pontifex · 1455 · confirmed<br>
+        Inter Caetera · 1493 · world divided
+      </div>
+      <div class="hud-tooltip" style="right:105%;top:0;">
+        First weapon deployed.<br>
+        Converts the grammar into law.<br>
+        Distributed via the press.<br>
+        Enforced by the cannon.<br>
+        Still operative: Johnson v. M'Intosh<br>
+        remains U.S. law (2025).
+      </div>
+    </div>
+
+    <div class="wpn-block wpn-cannon has-tooltip">
+      <div class="wpn-header">
+        <span class="wpn-id">WPN-2</span>
+        <span class="wpn-status">HOT</span>
+      </div>
+      <div class="wpn-name">THE CANNON</div>
+      <div class="wpn-detail">
+        Operational: Europe 1326<br>
+        Deployed: Ceuta 1415<br>
+        Constantinople: 1453 · decisive
+      </div>
+      <div class="hud-tooltip" style="right:105%;top:0;">
+        Chinese origin · 9th century CE.<br>
+        Transmitted via Islamic scholarship.<br>
+        First European military use: 1326.<br>
+        By 1452 — mature siege weapon.<br>
+        Physical enforcement of the document.
+      </div>
+    </div>
+
+    <div class="wpn-block wpn-ship has-tooltip">
+      <div class="wpn-header">
+        <span class="wpn-id">WPN-3</span>
+        <span class="wpn-status">ARMED</span>
+      </div>
+      <div class="wpn-name">THE SHIP</div>
+      <div class="wpn-detail">
+        Caravel · Atlantic range<br>
+        W. Africa route: open 1441<br>
+        Range: global · payload: doctrine
+      </div>
+      <div class="hud-tooltip" style="right:105%;top:0;">
+        Delivery system for WPN-1 and WPN-2.<br>
+        Maritime reach = territorial claim.<br>
+        No ship, no discovery, no title.<br>
+        The document requires the vessel.
+      </div>
+    </div>
+
+    <div class="wpn-block wpn-conv">
+      <div class="wpn-header">
+        <span class="wpn-id">CONV.</span>
+        <span class="wpn-status">FIRE</span>
+      </div>
+      <div class="wpn-name">1493</div>
+      <div class="wpn-detail" style="color:var(--hud-amber-dim);">
+        All three weapons operational.<br>
+        Inter Caetera · world divided.<br>
+        System: fully deployed.
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER AREA -->
+  <div class="hud-center">
+
+    <!-- Horizon -->
+    <div class="horizon" style="top:48%"></div>
+
+    <!-- Pitch ladder -->
+    <div class="pitch-line" style="top:calc(48% - 55px)">
+      <span>+5</span><div class="pitch-line-inner" style="width:70px"></div><span>+5</span>
+    </div>
+    <div class="pitch-line" style="top:calc(48% - 110px)">
+      <span>+10</span><div class="pitch-line-inner" style="width:110px"></div><span>+10</span>
+    </div>
+    <div class="pitch-line" style="top:calc(48% + 55px)">
+      <span>-5</span><div class="pitch-line-inner" style="width:70px"></div><span>-5</span>
+    </div>
+    <div class="pitch-line" style="top:calc(48% + 110px)">
+      <span>-10</span><div class="pitch-line-inner" style="width:110px"></div><span>-10</span>
+    </div>
+
+    <!-- RETICLE — center of display, locked on document -->
+    <div class="reticle-wrap" style="top:48%;left:42%;">
+
+      <!-- Lock brackets -->
+      <div class="lock-bracket lb-tl"></div>
+      <div class="lock-bracket lb-tr"></div>
+      <div class="lock-bracket lb-bl"></div>
+      <div class="lock-bracket lb-br"></div>
+
+      <!-- TARGET ACQUIRED -->
+      <div class="target-label">
+        TARGET<span>ACQUIRED</span>
+      </div>
+
+      <!-- SVG reticle -->
+      <svg class="reticle-svg" width="200" height="200" viewBox="-100 -100 200 200">
+        <!-- Outer circle with gaps -->
+        <circle cx="0" cy="0" r="80" fill="none" stroke="var(--hud-green)"
+          stroke-width="1" stroke-dasharray="35 10 35 10 35 10 35 10"/>
+        <!-- Inner circle -->
+        <circle cx="0" cy="0" r="50" fill="none" stroke="var(--hud-dim)"
+          stroke-width="0.8" stroke-dasharray="20 8 20 8 20 8 20 8"/>
+        <!-- Crosshair lines -->
+        <line x1="-100" y1="0" x2="-55" y2="0" stroke="var(--hud-green)" stroke-width="1"/>
+        <line x1="55"   y1="0" x2="100" y2="0" stroke="var(--hud-green)" stroke-width="1"/>
+        <line x1="0" y1="-100" x2="0" y2="-55" stroke="var(--hud-green)" stroke-width="1"/>
+        <line x1="0" y1="55"   x2="0" y2="100" stroke="var(--hud-green)" stroke-yunits="1"/>
+        <!-- Center dot -->
+        <circle cx="0" cy="0" r="3" fill="var(--hud-green)"/>
+        <!-- Range ticks -->
+        <line x1="-80" y1="-10" x2="-80" y2="10" stroke="var(--hud-dim)" stroke-width="0.8"/>
+        <line x1="80"  y1="-10" x2="80"  y2="10" stroke="var(--hud-dim)" stroke-width="0.8"/>
+        <line x1="-10" y1="-80" x2="10"  y2="-80" stroke="var(--hud-dim)" stroke-width="0.8"/>
+        <line x1="-10" y1="80"  x2="10"  y2="80"  stroke="var(--hud-dim)" stroke-width="0.8"/>
+      </svg>
+
+    </div><!-- /reticle-wrap -->
+
+    <!-- Connector line -->
+    <div class="connector" style="top:48%;left:calc(42% + 102px);"></div>
+
+    <!-- TARGET DATA BOX -->
+    <div class="target-data" style="top:48%;left:calc(42% + 132px);">
+      <div class="td-tag">◄ TARGET ACQUIRED ►</div>
+      <div class="td-title">DUM DIVERSAS</div>
+      <div class="td-year">1452 CE</div>
+      <div class="td-row">
+        <span>Issuer:</span> Pope Nicholas V<br>
+        <span>Recipient:</span> King Alfonso V · Portugal<br>
+        <span>Authorization:</span> Perpetual slavery · seizure of lands<br>
+        <span>Distribution:</span> Gutenberg press · 1452<br>
+        <span>Enforcement:</span> Cannon + Caravel<br>
+        <span>Archive:</span> HathiTrust · primary source<br>
+        <span>Status:</span> Operative chain → 1493 → present
+      </div>
+    </div>
+
+    <!-- PORTUGAL NODE — pointer, not target -->
+    <div class="portugal-node">
+      <div class="portugal-dot"></div>
+      <div class="portugal-label">PORTUGAL</div>
+      <div class="portugal-sub">ORIGIN NODE · NOT TARGET</div>
+      <div class="portugal-sub">Instrument of the document</div>
+    </div>
+
+    <!-- NEXT COORD -->
+    <div class="next-coord">
+      <div class="nc-label">NEXT COORDINATE</div>
+      <div class="nc-year">1493</div>
+      <div class="nc-arrow"></div>
+    </div>
+
+    <!-- RADAR -->
+    <div class="hud-radar">
+      <svg width="90" height="90" viewBox="-45 -45 90 90">
+        <!-- rings -->
+        <circle cx="0" cy="0" r="42" fill="none" stroke="var(--hud-very-dim)" stroke-width="0.8"/>
+        <circle cx="0" cy="0" r="28" fill="none" stroke="#002810" stroke-width="0.5"/>
+        <circle cx="0" cy="0" r="14" fill="none" stroke="#002810" stroke-width="0.5"/>
+        <!-- crosshairs -->
+        <line x1="-42" y1="0" x2="42" y2="0" stroke="#002810" stroke-width="0.5"/>
+        <line x1="0" y1="-42" x2="0" y2="42" stroke="#002810" stroke-width="0.5"/>
+        <!-- sweep -->
+        <line x1="0" y1="0" x2="38" y2="-18" stroke="var(--hud-dim)" stroke-width="1"
+          style="transform-origin:center;animation:sweep 4s linear infinite"/>
+        <!-- contacts -->
+        <circle cx="-12" cy="-20" r="3" fill="var(--hud-amber)"/>
+        <circle cx="18"  cy="-8"  r="2" fill="var(--hud-dim)"/>
+        <circle cx="-8"  cy="22"  r="2" fill="var(--hud-dim)"/>
+        <circle cx="28"  cy="15"  r="2" fill="var(--hud-red)"/>
+      </svg>
+      <div class="radar-label">RADAR · 1385–1493</div>
+    </div>
+
+    <!-- ALTITUDE TAPE -->
+    <div class="alt-tape">
+      <div class="alt-item"><div class="alt-tick"></div><div class="alt-text">GLOBAL</div></div>
+      <div class="alt-item"><div class="alt-tick"></div><div class="alt-text">CONT.</div></div>
+      <div class="alt-item"><div class="alt-tick"></div><div class="alt-text">REGION</div></div>
+      <div class="alt-item"><div class="alt-tick"></div><div class="alt-text">LOCAL</div></div>
+      <div class="alt-item"><div class="alt-tick"></div><div class="alt-text">ORIGIN</div></div>
+      <div class="alt-current">GLOBAL</div>
+    </div>
+
+  </div><!-- /hud-center -->
+
+</div><!-- /hud -->
+
+<style>
+@keyframes sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+</style>
+
+</body>
+</html>
