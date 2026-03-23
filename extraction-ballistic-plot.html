@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Four Extractions — Ballistic Plot · SOVRA-FCL-MHCE-v2.5©</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone-darkest: #0a0807;
+    --stone-dark: #111009;
+    --teal-dim: #00a070;
+    --teal-dark: #003828;
+    --text-bright: #e8dcc0;
+    --text-secondary: #8a7f6a;
+    --text-dim: #5a5245;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--stone-darkest); color: var(--text-bright); font-family: 'Crimson Pro', Georgia, serif; min-height: 100vh; overflow-x: hidden; }
+  header { padding: 48px 64px 36px; border-bottom: 1px solid #1a3a28; background: linear-gradient(180deg, #040a06 0%, var(--stone-darkest) 100%); position: relative; }
+  header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--teal-dim), transparent); }
+  .header-class { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.4em; color: var(--teal-dim); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: 'Cinzel', serif; font-size: clamp(28px, 4vw, 52px); font-weight: 900; color: var(--text-bright); letter-spacing: 0.06em; line-height: 1.05; margin-bottom: 8px; }
+  .subtitle { font-family: 'Cinzel', serif; font-size: clamp(11px, 1.5vw, 15px); letter-spacing: 0.2em; color: var(--teal-dim); text-transform: uppercase; margin-bottom: 20px; }
+  .header-thesis { font-style: italic; font-size: clamp(15px, 1.8vw, 18px); color: var(--text-secondary); max-width: 800px; line-height: 1.65; border-left: 2px solid var(--teal-dark); padding-left: 16px; }
+  .map-section { padding: 48px 64px; }
+  .map-outer { max-width: 1400px; margin: 0 auto; border: 1px solid #1a3a28; position: relative; line-height: 0; }
+  .map-outer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--teal-dim), transparent); z-index: 10; }
+  #mapImg { display: block; width: 100%; height: auto; filter: saturate(0.55) brightness(0.65); }
+  #arcCanvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+  .legend { position: absolute; bottom: 16px; left: 16px; background: rgba(4,8,6,0.95); border: 1px solid #1a3a28; padding: 14px 18px; z-index: 20; min-width: 210px; line-height: normal; }
+  .legend-title { font-family: 'Share Tech Mono', monospace; font-size: 7px; letter-spacing: 0.4em; color: var(--teal-dim); text-transform: uppercase; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #1a3a28; }
+  .legend-row { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+  .legend-swatch { width: 28px; height: 2px; flex-shrink: 0; }
+  .legend-label { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; }
+  .legend-note { margin-top: 10px; padding-top: 7px; border-top: 1px solid #1a3a28; font-family: 'Share Tech Mono', monospace; font-size: 7px; color: #1a5a38; letter-spacing: 0.15em; }
+  .panels-section { padding: 0 64px 64px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; }
+  .extraction-panel { background: rgba(4,8,6,0.8); border: 1px solid #1a3a28; padding: 24px 28px; position: relative; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)); transition: border-color 0.3s; }
+  .extraction-panel:hover { border-color: var(--teal-dim); }
+  .panel-num { font-family: 'Cinzel', serif; font-size: 32px; font-weight: 900; opacity: 0.12; position: absolute; top: 12px; right: 16px; line-height: 1; }
+  .panel-tag { font-family: 'Share Tech Mono', monospace; font-size: 7px; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .panel-title { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 600; letter-spacing: 0.06em; color: var(--text-bright); margin-bottom: 10px; line-height: 1.3; }
+  .panel-origin { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
+  .panel-body { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
+  .panel-landing { font-family: 'Share Tech Mono', monospace; font-size: 8px; letter-spacing: 0.15em; line-height: 1.8; padding: 8px 12px; background: rgba(0,20,12,0.6); border-left: 2px solid; }
+  footer { padding: 32px 64px; border-top: 1px solid #1a3a28; background: var(--stone-dark); display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+  .footer-desig { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--text-dim); line-height: 1.8; text-transform: uppercase; }
+  .footer-nfie { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.3em; color: var(--teal-dim); text-transform: uppercase; }
+  @media (max-width: 768px) { header, .map-section, .panels-section, footer { padding-left: 24px; padding-right: 24px; } .panels-section { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-class">The Continuous Trace · SOVRA-FCL-MHCE-v2.5© · DS4-KES-109©</div>
+  <h1>The Four Extractions</h1>
+  <div class="subtitle">Ballistic Plot · Africa as Origin</div>
+  <p class="header-thesis">The framework did not encounter Africa and find nothing there. It encountered the origin point of human mathematical thought, the most genetically diverse populations on Earth, millennia of accumulated botanical knowledge, and the oldest continuously living human lineages — and extracted each in turn. The trajectories are documented. The landing points are named. The origin platform has never been credited.</p>
+</header>
+
+<div class="map-section">
+  <div class="map-outer" id="mapOuter">
+    <img id="mapImg" src="map.jpg" alt="World political map">
+    <canvas id="arcCanvas"></canvas>
+    <div class="legend">
+      <div class="legend-title">Extraction Trajectories</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#f4a340"></div><span class="legend-label" style="color:#f4a340">I · Mathematics</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#e05555"></div><span class="legend-label" style="color:#e05555">II · Sex / Genetics</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#4caf7d"></div><span class="legend-label" style="color:#4caf7d">III · Environmental</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#7b8cde"></div><span class="legend-label" style="color:#7b8cde">IV · Temporal / Origin</span></div>
+      <div class="legend-note">● Origin &nbsp;&nbsp; ◎ Landing</div>
+    </div>
+  </div>
+</div>
+
+<div class="panels-section">
+  <div class="extraction-panel" style="border-color:rgba(244,163,64,0.3)">
+    <div class="panel-num" style="color:#f4a340">I</div>
+    <span class="panel-tag" style="color:#f4a340">Extraction · Mathematics</span>
+    <div class="panel-title">The Ishango Bone to Western Academia</div>
+    <div class="panel-origin">Origin: Congo Basin · 20,000 BCE · Nile Headwaters</div>
+    <p class="panel-body">The oldest mathematical artifact on Earth. Three columns. Prime numbers. All four arithmetic operations. The tradition runs north through the Nile corridor into Kemet, east through the Vedic tradition — Brahmagupta formalizes zero, 628 CE — through Al-Khwarizmi's algebra, 820 CE — and lands in Western European academic institutions which claim the tradition as their own inheritance.</p>
+    <div class="panel-landing" style="border-color:#f4a340;color:#a07830">LANDING: Western European universities · History of mathematics curricula · Patent offices · The Ishango Bone: Brussels, Belgium · Still there.</div>
+  </div>
+  <div class="extraction-panel" style="border-color:rgba(224,85,85,0.3)">
+    <div class="panel-num" style="color:#e05555">II</div>
+    <span class="panel-tag" style="color:#e05555">Extraction · Sex / Genetics</span>
+    <div class="panel-title">The Origin Platform Extracted</div>
+    <div class="panel-origin">Origin: Great Rift Valley · East Africa · All Human Diversity</div>
+    <p class="panel-body">The most genetically diverse populations on Earth. More genetic variants in Africa than every other continent combined. The framework first stripped the cosmological dimensions from reproduction — the Kemetic, Kongo, and Vedic understanding of continuous becoming — leaving a raw biological drive it could legislate, shame, and weaponize. Then extracted the genetic science confirming African origin priority.</p>
+    <div class="panel-landing" style="border-color:#e05555;color:#8a3535">LANDING: NIH · Pharmaceutical companies · Genomics databases · US Patent Office · Nagoya Protocol: unsigned by USA.</div>
+  </div>
+  <div class="extraction-panel" style="border-color:rgba(76,175,125,0.3)">
+    <div class="panel-num" style="color:#4caf7d">III</div>
+    <span class="panel-tag" style="color:#4caf7d">Extraction · Environmental / Botanical</span>
+    <div class="panel-title">The Gene Rush</div>
+    <div class="panel-origin">Origins: Kalahari · Gabon · Ethiopia · South Africa</div>
+    <p class="panel-body">Millennia of accumulated indigenous knowledge. Hoodia: San people, patented by CSIR, sold to Pfizer. San told they no longer existed. Brazzeine: Gabon, 500× sweeter than sugar, patented in Wisconsin. Teff: Ethiopia, 4,000 BCE, Dutch patent filed. Pelargonium: South Africa, respiratory medicine, European pharmaceutical companies. Obtaining indigenous knowledge increases pharmaceutical screening efficiency 400%+.</p>
+    <div class="panel-landing" style="border-color:#4caf7d;color:#2a6a48">LANDING: Pfizer · US Patent Office · European pharmaceutical companies · The Inter Caetera filed as a patent application.</div>
+  </div>
+  <div class="extraction-panel" style="border-color:rgba(123,140,222,0.3)">
+    <div class="panel-num" style="color:#7b8cde">IV</div>
+    <span class="panel-tag" style="color:#7b8cde">Extraction · Temporal / Origin</span>
+    <div class="panel-title">The Shortest Arc · The Most Direct</div>
+    <div class="panel-origin">Origin: Ishango, DRC · Removed 1950 · Belgian Colonial Administration</div>
+    <p class="panel-body">The physical artifact. Not gradual institutional absorption. Not centuries of knowledge transmission. A direct removal. The oldest mathematical artifact on Earth — carried from the same geography the Force Publique operated in — to Brussels. Same city. Same institutional tradition. The Brussels Act was signed in 1890. The bone arrived in 1950. The quartz tip is still attached. The forensic analysis has never been done.</p>
+    <div class="panel-landing" style="border-color:#7b8cde;color:#4a5898">LANDING: Royal Belgian Institute of Natural Sciences · Brussels · Permanent collection · The people of the DRC require a visa and airfare to see it.</div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-desig">SOVRA-FCL-MHCE-v2.5© :: Foxtrot-Chimera-Lambda© :: DS4-KES-109©<br>The Four Extractions · Ballistic Plot · The Continuous Trace<br>Author: Samuel Paul Peacock :: Jackson, Tennessee :: March 2026<br>© 2026 Samuel Paul Peacock — All rights reserved</div>
+  <div class="footer-nfie">NFIE© Compliant · O_f = 0</div>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// CALIBRATED COORDINATES — direct from Sam's clicks
+// extraction-calibration.html · March 22, 2026
+// ─────────────────────────────────────────────────────────────
+
+// Points as [fx, fy] — exactly as returned by the calibration tool
+const PT = {
+  ishango:     [0.5490, 0.7087],  // Congo/DRC
+  brussels:    [0.4809, 0.3568],  // Belgium
+  riftValley:  [0.6028, 0.6936],  // Kenya/Tanzania
+  kalahari:    [0.5553, 0.8214],  // Botswana
+  gabon:       [0.5022, 0.6796],  // Gabon
+  ethiopia:    [0.6068, 0.6125],  // Ethiopia
+  india:       [0.7303, 0.5138],  // India center
+  usaEast:     [0.2093, 0.4480],  // US East Coast
+  netherlands: [0.4722, 0.3417],  // Netherlands
+  uk:          [0.4619, 0.3062],  // UK
+  usaMidwest:  [0.1222, 0.4277],  // Wisconsin/Midwest
+};
+
+// Control points for bezier arcs — defined as fractions
+// Arcs curve ABOVE the straight line path (northward) to read as ballistic
+const EXTR = [
+
+  // ── I · MATHEMATICS · Orange ──
+  // Ishango → India (Vedic waypoint) → Brussels/Western Europe
+  {
+    color: '#f4a340',
+    shadow: 'rgba(244,163,64,0.25)',
+    arcs: [
+      // Leg 1: Congo → India (lighter, showing the knowledge route east)
+      { from: PT.ishango,
+        cp1:  [0.62, 0.55], cp2: [0.70, 0.42],
+        to:   PT.india,
+        w: 2.0, dash: [10,5], alpha: 0.65, arrow: false },
+      // Leg 2: India → Western Europe (main arc, heavy)
+      { from: PT.india,
+        cp1:  [0.72, 0.28], cp2: [0.58, 0.20],
+        to:   PT.brussels,
+        w: 2.8, dash: [10,5], alpha: 1.0, arrow: true },
+    ],
+    origins:  [PT.ishango],
+    landings: [PT.brussels],
+    labels: [
+      { pt: PT.ishango,  dx:  4, dy: 16, lines: ['ISHANGO', '20,000 BCE'] },
+      { pt: PT.india,    dx: 10, dy: -6, lines: ['VEDIC'], small: true, alpha: 0.8 },
+      { pt: PT.brussels, dx: -4, dy:-14, lines: ['BRUSSELS', 'MATH ABSORBED'] },
+    ]
+  },
+
+  // ── II · SEX/GENETICS · Red ──
+  // Rift Valley → USA East + Western Europe
+  {
+    color: '#e05555',
+    shadow: 'rgba(224,85,85,0.25)',
+    arcs: [
+      // Rift Valley → USA (long westward arc over Atlantic)
+      { from: PT.riftValley,
+        cp1:  [0.50, 0.42], cp2: [0.32, 0.30],
+        to:   PT.usaEast,
+        w: 2.8, dash: [10,5], alpha: 1.0, arrow: true },
+      // Rift Valley → Western Europe
+      { from: PT.riftValley,
+        cp1:  [0.56, 0.50], cp2: [0.50, 0.38],
+        to:   PT.netherlands,
+        w: 2.0, dash: [8,5],  alpha: 0.7, arrow: true },
+    ],
+    origins:  [PT.riftValley],
+    landings: [PT.usaEast, PT.netherlands],
+    labels: [
+      { pt: PT.riftValley,  dx: 12, dy:  0, lines: ['RIFT VALLEY', 'ORIGIN · ALL DIVERSITY'] },
+      { pt: PT.usaEast,     dx:  0, dy: 16, lines: ['UNITED STATES', 'NIH · PHARMA · PATENTS'] },
+    ]
+  },
+
+  // ── III · ENVIRONMENTAL/BOTANICAL · Green ──
+  // Kalahari + Gabon + Ethiopia → USA Midwest + Netherlands
+  {
+    color: '#4caf7d',
+    shadow: 'rgba(76,175,125,0.22)',
+    arcs: [
+      // Kalahari → USA Midwest (Hoodia → Pfizer)
+      { from: PT.kalahari,
+        cp1:  [0.40, 0.62], cp2: [0.24, 0.38],
+        to:   PT.usaMidwest,
+        w: 2.4, dash: [9,5], alpha: 1.0, arrow: true },
+      // Gabon → USA East (Brazzeine → Wisconsin via East Coast)
+      { from: PT.gabon,
+        cp1:  [0.38, 0.52], cp2: [0.26, 0.36],
+        to:   PT.usaEast,
+        w: 1.8, dash: [7,5], alpha: 0.7, arrow: true },
+      // Ethiopia → Netherlands (Teff patent)
+      { from: PT.ethiopia,
+        cp1:  [0.60, 0.44], cp2: [0.54, 0.30],
+        to:   PT.netherlands,
+        w: 2.0, dash: [7,5], alpha: 0.85, arrow: true },
+    ],
+    origins:  [PT.kalahari, PT.gabon, PT.ethiopia],
+    landings: [PT.usaMidwest, PT.usaEast, PT.netherlands],
+    labels: [
+      { pt: PT.kalahari,    dx: 12, dy:  0,  lines: ['HOODIA / SAN'] },
+      { pt: PT.gabon,       dx: -8, dy:-12,  lines: ['BRAZZEINE'], anchor: 'right' },
+      { pt: PT.ethiopia,    dx: 12, dy:  0,  lines: ['TEFF · ETHIOPIA'] },
+      { pt: PT.usaMidwest,  dx:  0, dy: 16,  lines: ['PFIZER · USPTO'] },
+      { pt: PT.netherlands, dx: 10, dy:  0,  lines: ['NETHERLANDS / UK'] },
+    ]
+  },
+
+  // ── IV · TEMPORAL/ORIGIN · Blue-violet ──
+  // Ishango → Brussels — shortest arc, thickest, most urgent
+  {
+    color: '#7b8cde',
+    shadow: 'rgba(123,140,222,0.30)',
+    arcs: [
+      { from: PT.ishango,
+        cp1:  [0.52, 0.55], cp2: [0.49, 0.42],
+        to:   PT.brussels,
+        w: 3.8, dash: [6,4], alpha: 1.0, arrow: true },
+    ],
+    origins:  [PT.ishango],
+    landings: [PT.brussels],
+    labels: [
+      { pt: PT.brussels, dx: 14, dy: 4, lines: ['BRUSSELS', 'STILL THERE · 1950'] },
+    ]
+  },
+];
+
+// ── CANVAS ENGINE ──
+const canvas = document.getElementById('arcCanvas');
+const ctx    = canvas.getContext('2d');
+const img    = document.getElementById('mapImg');
+let raf, cw, ch;
+
+function sync() {
+  cw = img.offsetWidth;
+  ch = img.offsetHeight;
+  canvas.width  = cw;
+  canvas.height = ch;
+  canvas.style.width  = cw + 'px';
+  canvas.style.height = ch + 'px';
+}
+
+function px(f) { return { x: f[0] * cw, y: f[1] * ch }; }
+
+function bezPt(t, p0, p1, p2, p3) {
+  const u = 1-t;
+  return {
+    x: u*u*u*p0.x + 3*u*u*t*p1.x + 3*u*t*t*p2.x + t*t*t*p3.x,
+    y: u*u*u*p0.y + 3*u*u*t*p1.y + 3*u*t*t*p2.y + t*t*t*p3.y,
+  };
+}
+
+function drawArrow(x, y, angle, color, r) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(-r*1.8, -r*0.75);
+  ctx.lineTo(-r*1.8,  r*0.75);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 1.0;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawPulse(x, y, color, phase) {
+  const maxR = cw * 0.018;
+  ctx.setLineDash([]);
+  for (let i = 0; i < 3; i++) {
+    const p = ((phase + i/3) % 1);
+    ctx.beginPath();
+    ctx.arc(x, y, p * maxR, 0, Math.PI*2);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = (1-p) * 0.7;
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function draw(ts) {
+  ctx.clearRect(0, 0, cw, ch);
+  const phase = (ts % 2200) / 2200;
+  const scale = cw / 1400;
+  const dotR  = Math.max(5, cw * 0.0048);
+  const lfs   = Math.max(8, cw * 0.0075);
+  const lfsS  = Math.max(7, cw * 0.0062);
+
+  EXTR.forEach((ext, ei) => {
+
+    // ── ARCS ──
+    ext.arcs.forEach(arc => {
+      const from = px(arc.from);
+      const cp1  = px(arc.cp1);
+      const cp2  = px(arc.cp2);
+      const to   = px(arc.to);
+      const dashS = arc.dash.map(d => d * scale);
+      const dashLen = dashS[0] + dashS[1];
+      const offset  = -(phase * dashLen * 3.5 * (1 + ei * 0.08));
+
+      // Shadow pass for readability over map
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, to.x, to.y);
+      ctx.strokeStyle = ext.shadow;
+      ctx.lineWidth   = (arc.w + 3) * scale;
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 0.6;
+      ctx.stroke();
+      ctx.restore();
+
+      // Main arc
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, to.x, to.y);
+      ctx.strokeStyle   = ext.color;
+      ctx.lineWidth     = arc.w * scale;
+      ctx.setLineDash(dashS);
+      ctx.lineDashOffset = offset;
+      ctx.globalAlpha   = arc.alpha;
+      ctx.stroke();
+      ctx.restore();
+
+      // Arrow
+      if (arc.arrow) {
+        const near  = bezPt(0.97, from, cp1, cp2, to);
+        const angle = Math.atan2(to.y - near.y, to.x - near.x);
+        drawArrow(to.x, to.y, angle, ext.color, dotR * 0.9);
+      }
+    });
+
+    // ── ORIGINS — pulse + dot ──
+    ext.origins.forEach((orig, oi) => {
+      const p = px(orig);
+      drawPulse(p.x, p.y, ext.color, (phase + ei*0.2 + oi*0.28) % 1);
+      ctx.setLineDash([]);
+      // outer glow ring
+      ctx.beginPath(); ctx.arc(p.x, p.y, dotR*1.4, 0, Math.PI*2);
+      ctx.strokeStyle = ext.color; ctx.lineWidth = 1.5*scale;
+      ctx.globalAlpha = 0.5; ctx.stroke();
+      // solid dot
+      ctx.beginPath(); ctx.arc(p.x, p.y, dotR, 0, Math.PI*2);
+      ctx.fillStyle = ext.color; ctx.globalAlpha = 1.0; ctx.fill();
+      // white center
+      ctx.beginPath(); ctx.arc(p.x, p.y, dotR*0.42, 0, Math.PI*2);
+      ctx.fillStyle = 'white'; ctx.globalAlpha = 0.95; ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    // ── LANDINGS — ring + dot ──
+    ext.landings.forEach(land => {
+      const p = px(land);
+      ctx.setLineDash([]);
+      // dark shadow under ring for contrast
+      ctx.beginPath(); ctx.arc(p.x, p.y, dotR*2.0, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 3*scale;
+      ctx.globalAlpha = 0.6; ctx.stroke();
+      // colored ring
+      ctx.beginPath(); ctx.arc(p.x, p.y, dotR*1.8, 0, Math.PI*2);
+      ctx.strokeStyle = ext.color; ctx.lineWidth = 2*scale;
+      ctx.globalAlpha = 1.0; ctx.stroke();
+      // center fill
+      ctx.beginPath(); ctx.arc(p.x, p.y, dotR*0.7, 0, Math.PI*2);
+      ctx.fillStyle = ext.color; ctx.globalAlpha = 1.0; ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    // ── LABELS ──
+    ext.labels.forEach(lbl => {
+      const p  = px(lbl.pt);
+      const x  = p.x + (lbl.dx||0) * scale;
+      const y0 = p.y + (lbl.dy||0) * scale;
+      const fs = lbl.small ? lfsS : lfs;
+      ctx.font      = `bold ${fs}px 'Share Tech Mono', monospace`;
+      ctx.textAlign = (lbl.anchor === 'right') ? 'right' : 'left';
+
+      lbl.lines.forEach((line, li) => {
+        const textX = x;
+        const textY = y0 + li*(fs+2);
+        // dark backing for legibility
+        ctx.fillStyle   = 'rgba(0,0,0,0.7)';
+        ctx.globalAlpha = 1;
+        ctx.fillText(line, textX+1, textY+1);
+        // colored text
+        ctx.fillStyle   = ext.color;
+        ctx.globalAlpha = li === 0 ? (lbl.alpha||1.0) : 0.65;
+        ctx.fillText(line, textX, textY);
+      });
+      ctx.textAlign = 'left'; ctx.globalAlpha = 1;
+    });
+
+  });
+
+  // WATERMARK
+  ctx.setLineDash([]);
+  ctx.font      = `${lfsS*0.8}px 'Share Tech Mono', monospace`;
+  ctx.fillStyle = 'rgba(0,180,110,0.22)';
+  ctx.textAlign = 'right';
+  ctx.fillText('SOVRA-FCL-MHCE-v2.5© · O_f=0 · NFIE©', cw-8, ch-6);
+  ctx.textAlign = 'left';
+
+  raf = requestAnimationFrame(draw);
+}
+
+function init() {
+  sync();
+  if (raf) cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(draw);
+}
+
+img.addEventListener('load', init);
+if (img.complete && img.naturalWidth) init();
+window.addEventListener('resize', () => { sync(); });
+</script>
+</body>
+</html>
