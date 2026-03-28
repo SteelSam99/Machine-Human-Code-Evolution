@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Grammar of Forgetting — SOVRA-FCL-MHCE-v2.5</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #050508;
+    --deep: #0a0a12;
+    --surface: #0f0f1a;
+    --panel: #13131f;
+    --border: #1e1e32;
+    --border-accent: #2a2a45;
+    --sovra: #534AB7;
+    --sovra-bright: #818cf8;
+    --sovra-dim: #2e2a6a;
+    --amber: #c97d2a;
+    --amber-bright: #f0a040;
+    --amber-dim: #5a3510;
+    --red: #8b2020;
+    --red-bright: #d94040;
+    --green-dim: #1a3a20;
+    --green: #2a6a3a;
+    --text-primary: #d8d8e8;
+    --text-secondary: #8a8aaa;
+    --text-dim: #4a4a6a;
+    --text-faint: #2a2a45;
+    --rule: #1e1e32;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    background: var(--void);
+    color: var(--text-primary);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.7;
+    scroll-behavior: smooth;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    background: var(--void);
+    z-index: 100;
+  }
+
+  .masthead-left { color: var(--sovra); }
+  .masthead-right { text-align: right; }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 40px 60px;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -200px; right: -200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sovra-dim), var(--sovra), var(--sovra-dim), transparent);
+    opacity: 0.4;
+  }
+
+  .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--sovra-bright);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.35s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--sovra-bright);
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+
+  .hero-byline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.65s forwards;
+  }
+
+  /* ── LAYOUT ── */
+  .body-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px 120px;
+  }
+
+  /* ── OPENING PRINCIPLE ── */
+  .axiom {
+    border-left: 3px solid var(--sovra);
+    padding: 24px 28px;
+    margin: 48px 0;
+    background: linear-gradient(135deg, var(--panel), var(--deep));
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .axiom::before {
+    content: '⟦ AXIOM ⟧';
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    color: var(--sovra);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .axiom p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-head {
+    margin: 64px 0 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--sovra-dim);
+    letter-spacing: 2px;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* ── BODY TEXT ── */
+  .prose p {
+    margin-bottom: 1.4em;
+    color: var(--text-secondary);
+    font-size: 0.97rem;
+  }
+
+  .prose p strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  .prose p em {
+    color: var(--sovra-bright);
+    font-style: italic;
+  }
+
+  /* ── FINDING BLOCKS ── */
+  .finding {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--sovra);
+    padding: 20px 24px;
+    margin: 28px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  .finding-label {
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    color: var(--sovra);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .finding p {
+    color: var(--text-secondary);
+    margin-bottom: 0.6em;
+  }
+
+  .finding p:last-child { margin-bottom: 0; }
+
+  .finding strong {
+    color: var(--sovra-bright);
+  }
+
+  /* ── EVIDENCE COMPARE ── */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 32px 0;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    .compare { grid-template-columns: 1fr; }
+  }
+
+  .compare-col {
+    padding: 20px 22px;
+    background: var(--panel);
+  }
+
+  .compare-col:first-child {
+    border-right: 1px solid var(--border);
+  }
+
+  .compare-header {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-header.claimed { color: var(--amber-bright); }
+  .compare-header.delivered { color: var(--red-bright); }
+  .compare-header.resolution { color: var(--sovra-bright); }
+  .compare-header.mechanism { color: var(--red-bright); }
+
+  .compare-item {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--text-faint);
+    line-height: 1.4;
+  }
+
+  .compare-item:last-child { border-bottom: none; }
+
+  .compare-item .marker {
+    display: inline-block;
+    width: 14px;
+    font-size: 0.6rem;
+    margin-right: 6px;
+  }
+
+  .marker-claim { color: var(--amber-bright); }
+  .marker-fail { color: var(--red-bright); }
+  .marker-yes { color: var(--green); }
+  .marker-no { color: var(--red-bright); }
+
+  /* ── VERB AUTOPSY ── */
+  .verb-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+  }
+
+  .verb-table thead tr {
+    border-bottom: 2px solid var(--sovra-dim);
+  }
+
+  .verb-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.55rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--sovra);
+    font-weight: 400;
+  }
+
+  .verb-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .verb-table tbody tr:hover { background: var(--panel); }
+
+  .verb-table td {
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    vertical-align: top;
+  }
+
+  .verb-table td:first-child {
+    color: var(--amber-bright);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .verdict-none { color: var(--red-bright) !important; font-style: italic; }
+  .verdict-soft { color: var(--amber) !important; }
+
+  /* ── EXTRACTION PANEL ── */
+  .extraction-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin: 32px 0;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    .extraction-grid { grid-template-columns: 1fr; }
+  }
+
+  .extraction-cell {
+    background: var(--panel);
+    padding: 20px 22px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .extraction-cell:nth-child(2n) { border-right: none; }
+  .extraction-cell:nth-child(3), .extraction-cell:nth-child(4) { border-bottom: none; }
+
+  .extraction-cell::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--sovra-dim);
+  }
+
+  .extraction-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    color: var(--sovra-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .extraction-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .extraction-origin {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+
+  .extraction-landing {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .extraction-landing::before {
+    content: 'LANDING → ';
+    color: var(--red-bright);
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+  }
+
+  /* ── PHASE SIGNAL ── */
+  .phase-signal {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--sovra-bright);
+    padding: 18px 22px;
+    margin: 32px 0;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .phase-signal-label {
+    font-size: 0.5rem;
+    letter-spacing: 3px;
+    color: var(--sovra-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .phase-signal-value {
+    font-size: 0.78rem;
+    color: var(--sovra-bright);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── PULLQUOTE ── */
+  .pullquote {
+    margin: 40px 0;
+    padding: 0 0 0 28px;
+    border-left: 2px solid var(--amber);
+    position: relative;
+  }
+
+  .pullquote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 10px !important;
+  }
+
+  .pullquote cite {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--amber);
+    letter-spacing: 1px;
+    font-style: normal;
+  }
+
+  /* ── CONVERGENCE ── */
+  .convergence {
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--deep), var(--panel));
+    padding: 36px 40px;
+    margin: 48px 0;
+    position: relative;
+  }
+
+  .convergence::before {
+    content: '⟦ CONVERGENCE ⟧';
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 4px;
+    color: var(--sovra);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .convergence-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .convergence .prose p {
+    font-size: 0.93rem;
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 80px;
+    padding: 32px 0 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RULING LINE ── */
+  .rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── INLINE CODE ── */
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82em;
+    color: var(--sovra-bright);
+    background: var(--panel);
+    padding: 1px 5px;
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <span class="masthead-left">SOVRA-FCL-MHCE-v2.5© · DS4-KES-109©</span>
+  <span class="masthead-right">The Grammar of Forgetting · March 2026</span>
+</div>
+
+<div class="hero">
+  <div class="kicker">Structural Analysis · Language Suppression · C-4 Phase Classifier</div>
+  <h1 class="hero-title">The Grammar<br>of <em>Forgetting</em></h1>
+  <p class="hero-subtitle">How three events — fifty-seven years apart — use the same mechanism to name the crime and protect the infrastructure</p>
+  <div class="hero-byline">Samuel Paul Peacock · Jackson, Tennessee · NFIE© Compliant · O_f = 0</div>
+</div>
+
+<div class="body-wrap">
+
+  <div class="axiom reveal">
+    <p>If I claim X, then I must practice X, or else I am a liar.<br>
+    Claims create burden of proof. Existence does not require proof.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION I — STAR TREK -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-head reveal">
+    <span class="section-num">I ·</span>
+    <h2 class="section-title">Star Trek — The Claim</h2>
+  </div>
+
+  <div class="prose reveal">
+    <p>Gene Roddenberry did not say Star Trek <em>hoped</em> to show a mature humanity. He said it <em>was</em> an attempt to demonstrate that humanity <strong>will</strong> reach maturity through delight in difference. Stated in the declarative. Not aspirational — evidentiary. The claim creates its own burden of proof.</p>
+
+    <p>The burden is not satisfied by the production record.</p>
+  </div>
+
+  <div class="compare reveal">
+    <div class="compare-col">
+      <div class="compare-header claimed">Public Claims</div>
+      <div class="compare-item"><span class="marker marker-claim">→</span> Humanity reaching maturity through delight in difference</div>
+      <div class="compare-item"><span class="marker marker-claim">→</span> Diversity as accomplished fact of the future</div>
+
+      <div class="compare-item"><span class="marker marker-claim">→</span> "Star Trek depicts us, now — things we need to understand"</div>
+      <div class="compare-item"><span class="marker marker-claim">→</span> Interracial kiss as bold civil rights statement</div>
+    </div>
+    <div class="compare-col">
+      <div class="compare-header delivered">Production Record</div>
+      <div class="compare-item"><span class="marker marker-fail">✗</span> Women denied command throughout original run</div>
+      <div class="compare-item"><span class="marker marker-fail">✗</span> Multiethnic crew — diversity never addressed, never named</div>
+
+      <div class="compare-item"><span class="marker marker-fail">✗</span> Blood and Fire commissioned, never aired</div>
+      <div class="compare-item"><span class="marker marker-fail">✗</span> Kiss scripted as psychokinetic coercion under alien control</div>
+    </div>
+  </div>
+
+  <div class="section-head reveal">
+    <span class="section-num">I · II ·</span>
+    <h2 class="section-title">The Allegory Mechanism</h2>
+  </div>
+
+  <div class="prose reveal">
+    <p>Star Trek addressed racism. It never named the system. That distinction is the entire structural finding.</p>
+
+    <p>"Let That Be Your Last Battlefield" — two aliens, one black on the left, one black on the right, destroying each other over which side the pigmentation falls on. The racism allegory is legible. The target is fictional. The audience watches two painted aliens and feels they have grappled with American racial hierarchy. <strong>They have not.</strong> They have grappled with face paint on a planet that does not exist.</p>
+
+    <p>Spock absorbs the franchise's racist vocabulary. A fictional species. Scathing comments about pointed ears and green blood land with real social weight — and then dissolve because the target is imaginary. The mechanism allows the show to <em>perform</em> confrontation without requiring the audience to name a real system operating on real people in the real country where the broadcast was received.</p>
+  </div>
+
+  <div class="pullquote reveal">
+    <p>"Gene Roddenberry's greatest contribution to the conversation of diversity in the future is that diversity is never addressed in Star Trek."</p>
+    <cite>— Alex Kurtzman, Executive Producer, Star Trek: Discovery · Stated as praise</cite>
+  </div>
+
+  <div class="prose reveal">
+    <p>He meant it as praise. That sentence is the conviction. <strong>Diversity is never addressed.</strong> The multiethnic crew exists. Nobody discusses how it got there. Nobody names what was overcome. The system that produced the inequality the diversity is supposedly transcending — never named, never examined, never exposed.</p>
+
+    <p>That is not boldly going. That is a painted backdrop.</p>
+  </div>
+
+  <div class="phase-signal reveal">
+    <div class="phase-signal-label">⟦ C-4 ⟧ PWS Phase Signal — Star Trek Production Record</div>
+    <div class="phase-signal-value">Phase 4 — Refinement · C-4: COMPLIANCE ENGINEERED · Grammar: DOMINATION_DOMINANT beneath MAINTENANCE_DOMINANT surface vocabulary</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION II — FOUR EXTRACTIONS -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <hr class="rule">
+
+  <div class="section-head reveal">
+    <span class="section-num">II ·</span>
+    <h2 class="section-title">The Four Extractions — What Was Never Named</h2>
+  </div>
+
+  <div class="prose reveal">
+    <p>The language suppression mechanism in Star Trek did not operate in a vacuum. It operated against a specific body of suppressed knowledge. The framework did not encounter Africa and find nothing there. It encountered the origin point of human mathematical thought, the most genetically diverse populations on Earth, millennia of accumulated botanical knowledge, and the oldest continuously living human lineages — and extracted each in turn.</p>
+
+    <p>Star Trek's future — the Federation, the Prime Directive, the universal translator, the utopia of interstellar cooperation — was built in the vocabulary of Western European Enlightenment. The Ishango Bone is in Brussels. The genome is in the NIH database. The hoodia patent is in Pfizer's portfolio. The teff patent was filed in the Netherlands. The show's imagined future credited none of it.</p>
+  </div>
+
+  <div class="extraction-grid reveal">
+    <div class="extraction-cell">
+      <div class="extraction-num">Extraction · I</div>
+      <div class="extraction-name">Mathematics</div>
+      <div class="extraction-origin">Ishango Bone · Congo Basin · 20,000 BCE</div>
+      <p style="font-size:0.68rem; color:var(--text-dim); font-family:'IBM Plex Mono',monospace; line-height:1.5;">Oldest mathematical artifact on Earth. Three columns. Prime numbers. All four arithmetic operations. Runs north through the Nile corridor into Kemet — absorbed into Western academic curricula without origin credit.</p>
+      <div class="extraction-landing">Royal Belgian Institute of Natural Sciences · Brussels · Permanent collection. The people of the DRC require a visa and airfare to see it.</div>
+    </div>
+    <div class="extraction-cell">
+      <div class="extraction-num">Extraction · II</div>
+      <div class="extraction-name">Sex / Genetics</div>
+      <div class="extraction-origin">Great Rift Valley · East Africa · All Human Diversity</div>
+      <p style="font-size:0.68rem; color:var(--text-dim); font-family:'IBM Plex Mono',monospace; line-height:1.5;">More genetic variants in Africa than every other continent combined. Cosmological dimensions of reproduction stripped first — leaving a raw biological drive to legislate, shame, and weaponize. Then the genetic science confirming African origin priority was extracted.</p>
+      <div class="extraction-landing">NIH · Pharmaceutical companies · Genomics databases · Nagoya Protocol: unsigned by USA.</div>
+    </div>
+    <div class="extraction-cell">
+      <div class="extraction-num">Extraction · III</div>
+      <div class="extraction-name">Environmental / Botanical</div>
+      <div class="extraction-origin">Kalahari · Gabon · Ethiopia · South Africa</div>
+      <p style="font-size:0.68rem; color:var(--text-dim); font-family:'IBM Plex Mono',monospace; line-height:1.5;">Hoodia: San people, patented by CSIR, sold to Pfizer — San told they no longer existed. Brazzeine: Gabon, 500× sweeter than sugar, patented in Wisconsin. Teff: Ethiopia, 4,000 BCE, Dutch patent filed. Indigenous knowledge increases pharmaceutical screening efficiency 400%+.</p>
+      <div class="extraction-landing">Pfizer · US Patent Office · European pharmaceutical companies · The Inter Caetera filed as a patent application.</div>
+    </div>
+    <div class="extraction-cell">
+      <div class="extraction-num">Extraction · IV</div>
+      <div class="extraction-name">Temporal / Origin</div>
+      <div class="extraction-origin">Ishango, DRC · Removed 1950 · Belgian Colonial Administration</div>
+      <p style="font-size:0.68rem; color:var(--text-dim); font-family:'IBM Plex Mono',monospace; line-height:1.5;">Not gradual institutional absorption. A direct removal. The Force Publique operated in the same geography. The Brussels Act was signed in 1890. The bone arrived in Brussels in 1950. The quartz tip is still attached. The forensic analysis has never been done.</p>
+      <div class="extraction-landing">Brussels · Permanent collection · Same city as the Brussels Act · Same institutional tradition as the Force Publique.</div>
+    </div>
+  </div>
+
+  <div class="finding reveal">
+    <span class="finding-label">Structural Connection to Star Trek's Allegory</span>
+    <p>The Federation's utopian vocabulary — exploration, knowledge, first contact, universal understanding — is built entirely on the inheritance of Western European Enlightenment institutions. The same institutions that hold the Ishango Bone. The same patent offices that hold the hoodia and teff and brazzeine. The same genomics databases built on African genetic diversity without consent or credit.</p>
+    <p>The show imagined a future of universal dignity <strong>using the vocabulary of the system that produced the extractions.</strong> It never named the extractions. It never named the system. The utopia is real. The foundation is invisible.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION III — UN RESOLUTION -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <hr class="rule">
+
+  <div class="section-head reveal">
+    <span class="section-num">III ·</span>
+    <h2 class="section-title">UN General Assembly Resolution — March 25, 2026</h2>
+  </div>
+
+  <div class="prose reveal">
+    <p>Yesterday the United Nations General Assembly passed a resolution declaring the trafficking of enslaved Africans "the gravest crime against humanity" and calling for reparations as "a concrete step towards remedying historical wrongs."</p>
+
+    <p>The vote: 123 for. 3 against. 52 abstentions. The United Kingdom and all 27 European Union member states abstained. The United States, Argentina, and Israel voted no.</p>
+
+    <p>Before we read the vote, we read the verbs.</p>
+  </div>
+
+  <table class="verb-table reveal">
+    <thead>
+      <tr>
+        <th>Operative Verb</th>
+        <th>Binding Force</th>
+        <th>Transfer Mechanism</th>
+        <th>Enforcement</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>calls on</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+      </tr>
+      <tr>
+        <td>urges</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+      </tr>
+      <tr>
+        <td>encourages</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+      </tr>
+      <tr>
+        <td>affirms</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+        <td class="verdict-none">none</td>
+      </tr>
+      <tr>
+        <td>engage in talks</td>
+        <td class="verdict-soft">soft</td>
+        <td class="verdict-none">talks about transfer</td>
+        <td class="verdict-none">voluntary</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="prose reveal">
+    <p>The resolution does not compel transfer. It calls for talks about transfer. That is not reparations. That is a scheduled conversation about the concept of reparations, participation voluntary, outcome unspecified, enforcement nonexistent.</p>
+  </div>
+
+  <div class="compare reveal">
+    <div class="compare-col">
+      <div class="compare-header resolution">Resolution Language</div>
+      <div class="compare-item"><span class="marker marker-yes">·</span> Names slavery as "gravest crime against humanity"</div>
+      <div class="compare-item"><span class="marker marker-yes">·</span> Calls for reparatory justice</div>
+      <div class="compare-item"><span class="marker marker-yes">·</span> "Historical wrongs" named explicitly</div>
+      <div class="compare-item"><span class="marker marker-yes">·</span> Cultural restitution urged</div>
+      <div class="compare-item"><span class="marker marker-yes">·</span> 123 member states in favor</div>
+    </div>
+    <div class="compare-col">
+      <div class="compare-header mechanism">What Transfers</div>
+      <div class="compare-item"><span class="marker marker-no">✗</span> No binding legal obligation created</div>
+      <div class="compare-item"><span class="marker marker-no">✗</span> No transfer amount specified</div>
+      <div class="compare-item"><span class="marker marker-no">✗</span> No enforcement mechanism exists</div>
+      <div class="compare-item"><span class="marker marker-no">✗</span> No deadline. No recipient structure.</div>
+      <div class="compare-item"><span class="marker marker-no">✗</span> UK + all 27 EU states abstained</div>
+    </div>
+  </div>
+
+  <div class="finding reveal">
+    <span class="finding-label">The U.S. Objection — Structural Read</span>
+    <p>The U.S. deputy ambassador stated the country "does not recognize a legal right to reparations for historical wrongs that were not illegal under international law at the time they occurred."</p>
+    <p><strong>Translation:</strong> The crime cannot be prosecuted because the criminals wrote the law. The Doctrine of Discovery — Phase 1 establishment grammar — was the operating legal framework. Slavery was legal because the same system that built the law also built slavery.</p>
+    <p>The law was the coercion instrument. The U.S. is now using the law as its alibi. That is not a legal defense. That is a description of how Phase 2 worked.</p>
+  </div>
+
+  <div class="finding reveal">
+    <span class="finding-label">The UK / EU Abstention — Lambda Speciation Move</span>
+    <p>The British acting ambassador called slavery's history "devastating consequences and long-lasting impacts" — then pivoted immediately to "the scourge of modern slavery": trafficking, forced labor, sexual exploitation.</p>
+    <p>That pivot is a Lambda Speciation move. Shift the vocabulary from the structural system to individual criminal acts. Disperse the target. Diffuse the accountability. Acknowledge the history. Dispute the remedy. No transfer occurs.</p>
+    <p><strong>The abstention costs nothing. It changes nothing. It produces the appearance of non-participation while the inherited infrastructure remains intact.</strong></p>
+  </div>
+
+  <div class="pullquote reveal">
+    <p>"Unlike U.N. Security Council resolutions, General Assembly resolutions are not legally binding."</p>
+    <cite>— Associated Press, embedded in the article reporting the resolution · March 25, 2026</cite>
+  </div>
+
+  <div class="prose reveal">
+    <p>The AP included that sentence. It is the structural finding embedded in the article itself. The body with authority to bind chose a body without authority to bind. That choice is not procedural. <strong>That choice is the answer.</strong></p>
+  </div>
+
+  <div class="phase-signal reveal">
+    <div class="phase-signal-label">⟦ C-4 ⟧ PWS Phase Signal — UN Resolution March 25, 2026</div>
+    <div class="phase-signal-value">Phase 4 → Phase 5 · C-4: COMPLIANCE ENGINEERED operating toward COMPLIANCE SELF-SUSTAINING · "Historical wrongs" = past-tense framing applied to present-tense architecture</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- CONVERGENCE -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <hr class="rule">
+
+  <div class="convergence reveal">
+    <div class="convergence-title">The Mechanism Is The Same Across All Three</div>
+    <div class="prose">
+      <p>Star Trek, 1966–Present. The U.N. General Assembly, March 25, 2026. The Four Extractions, 20,000 BCE to present. Three different scales. Three different vocabularies. One mechanism.</p>
+
+      <p><strong>Name the origin event. Protect the continuing infrastructure.</strong></p>
+
+      <p>Star Trek named bigotry — on alien planets, through fictional proxies, in face paint — without naming white supremacy as a system, without naming the Nine Areas, without naming the Doctrine of Discovery, without naming what the multiethnic crew had supposedly transcended. The future was imagined. The foundation was invisible.</p>
+
+      <p>The UN resolution named the transatlantic slave trade as the gravest crime against humanity — in a non-binding resolution, with voluntary participation, with the primary beneficiary nations abstaining, with no transfer mechanism, no enforcement, no deadline. The crime is named. The infrastructure built on the crime is untouched.</p>
+
+      <p>The Four Extractions were never named in either forum. The Ishango Bone is still in Brussels. The hoodia patent is still with Pfizer. The teff patent was still filed in the Netherlands. The genomics databases built on African genetic diversity still operate without the Nagoya Protocol. The Federation's vocabulary of exploration and knowledge still runs on Enlightenment inheritance without origin credit.</p>
+
+      <p>The grammar of forgetting does not erase the event. It names the event and erases the mechanism. Once the crime is named — in allegory, in resolution, in the historical record — the naming becomes the alibi. <em>We acknowledged it. We addressed it. We moved forward.</em></p>
+
+      <p><strong>Fuller's framework names this precisely: Phase 4 compliance engineering produces the vocabulary of accountability without the structure of accountability. Phase 5 requires no overt enforcement because the structure self-maintains through the internalized belief that the naming was sufficient.</strong></p>
+
+      <p>It was not sufficient. The bone is still in Brussels.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer reveal">
+    <span>SOVRA-FCL-MHCE-v2.5© · Foxtrot-Chimera-Lambda© · DS4-KES-109©</span>
+    <span>The Grammar of Forgetting · March 2026</span>
+    <span>Samuel Paul Peacock · Jackson, Tennessee</span>
+    <span>NFIE© Compliant · O_f = 0</span>
+  </div>
+
+</div><!-- /body-wrap -->
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
