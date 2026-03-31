@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOVRA · Phenotype Classification Decoder · Institutional Corroboration × Fitzpatrick Prosecution</title>
+<style>
+:root {
+  --bg: #ffffff; --bg2: #f5f4f0; --text: #1a1a18; --text2: #5a5850;
+  --border: rgba(0,0,0,0.10);
+  --purple: #534AB7; --purple-l: #EEEDFE;
+  --coral: #993C1D; --coral-l: #FAECE7;
+  --teal: #0F6E56; --teal-l: #E1F5EE;
+  --amber: #BA7517; --amber-l: #FAEEDA;
+  --gray: #5F5E5A; --gray-l: #F1EFE8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a18; --bg2: #222220; --text: #e8e6df; --text2: #888778;
+    --border: rgba(255,255,255,0.09);
+    --purple-l: #1e1d40; --coral-l: #2a100a;
+    --teal-l: #0a2018; --amber-l: #2a1e06; --gray-l: #242422;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'IBM Plex Mono','Courier New',monospace; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.6; }
+.wrap { max-width: 1000px; margin: 0 auto; padding: 36px 24px 72px; }
+
+.hdr { border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 32px; }
+.hdr-sys { font-size: 10px; letter-spacing: 3px; color: var(--text2); text-transform: uppercase; margin-bottom: 4px; }
+.hdr-title { font-size: 16px; font-weight: 500; color: var(--text); line-height: 1.4; }
+.hdr-sub { font-size: 11px; color: var(--text2); margin-top: 4px; font-style: italic; }
+
+.sec-label { font-size: 10px; letter-spacing: 3px; color: var(--text2); text-transform: uppercase; margin-bottom: 16px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); margin-top: 40px; }
+.sec-label:first-of-type { margin-top: 0; }
+
+/* TIER CARDS */
+.tier { border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+.tier-head { display: flex; align-items: stretch; }
+.tier-number { width: 56px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 500; flex-shrink: 0; }
+.tier-meta { padding: 12px 14px; flex: 1; border-left: 0.5px solid var(--border); background: var(--bg2); }
+.tier-name { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.tier-range { font-size: 10px; color: var(--text2); margin-bottom: 6px; }
+.tier-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; font-weight: 500; }
+.tag-gen { background: var(--teal-l); color: var(--teal); }
+.tag-mut { background: var(--amber-l); color: var(--amber); }
+.tag-anc { background: var(--teal-l); color: var(--teal); }
+.tag-der { background: var(--coral-l); color: var(--coral); }
+.tier-body { padding: 12px 14px; background: var(--bg2); border-top: 0.5px solid var(--border); }
+.tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tier-col .tc-label { font-size: 9px; letter-spacing: 2px; color: var(--text2); text-transform: uppercase; margin-bottom: 5px; }
+.tier-col .tc-body { font-size: 11px; color: var(--text2); line-height: 1.65; }
+.tier-col .tc-body strong { color: var(--text); }
+
+/* Tier color bands */
+.t1 .tier-number { background: #1a1208; color: #e8c87a; }
+.t2 .tier-number { background: #3d2010; color: #e8a070; }
+.t3 .tier-number { background: #7a5030; color: #f0d0a0; }
+.t4 .tier-number { background: #c8a070; color: #3a2010; }
+.t5 .tier-number { background: #f5e8d8; color: #8a5030; }
+@media (prefers-color-scheme: dark) {
+  .t1 .tier-number { background: #0a0804; color: #c8a050; }
+  .t2 .tier-number { background: #2a1408; color: #d09060; }
+  .t3 .tier-number { background: #5a3820; color: #e0c080; }
+  .t4 .tier-number { background: #a07848; color: #2a1808; }
+  .t5 .tier-number { background: #c8b098; color: #6a3818; }
+}
+
+/* CORROBORATION CARDS */
+.corr-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.corr-head { padding: 14px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: baseline; gap: 12px; }
+.corr-title { font-size: 13px; font-weight: 500; color: var(--text); }
+.corr-badge { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; font-weight: 500; }
+.badge-teal { background: var(--teal-l); color: var(--teal); }
+.badge-purple { background: var(--purple-l); color: var(--purple); }
+.corr-body { padding: 14px 16px; font-size: 11px; color: var(--text2); line-height: 1.75; }
+.corr-body strong { color: var(--text); }
+.corr-body em { color: var(--teal); font-style: normal; }
+.corr-cite { background: var(--bg); border-left: 3px solid var(--teal); border-radius: 0 4px 4px 0; padding: 10px 14px; margin: 10px 0; font-size: 11px; color: var(--text2); line-height: 1.65; font-style: italic; }
+.corr-cite strong { color: var(--text); font-style: normal; }
+.conv-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.conv-item { background: var(--teal-l); border: 0.5px solid var(--teal); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--teal); line-height: 1.5; flex: 1; min-width: 140px; }
+
+/* PROSECUTION */
+.prosecution { background: var(--bg2); border: 0.5px solid var(--border); border-top: 3px solid var(--coral); border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.pros-head { padding: 14px 16px; border-bottom: 0.5px solid var(--border); }
+.pros-title { font-size: 13px; font-weight: 500; color: var(--coral); }
+.pros-sub { font-size: 11px; color: var(--text2); margin-top: 3px; }
+.pros-body { padding: 14px 16px; }
+.confession { background: var(--bg); border: 0.5px solid var(--border); border-left: 3px solid var(--coral); border-radius: 0 6px 6px 0; padding: 12px 14px; margin-bottom: 10px; }
+.confession .c-num { font-size: 9px; letter-spacing: 2px; color: var(--coral); text-transform: uppercase; margin-bottom: 6px; }
+.confession .c-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+.confession .c-body { font-size: 11px; color: var(--text2); line-height: 1.7; }
+.confession .c-body strong { color: var(--text); }
+.confession .c-quote { background: var(--coral-l); border-radius: 4px; padding: 8px 12px; margin: 8px 0; font-size: 11px; color: var(--coral); font-style: italic; line-height: 1.65; }
+.confession .c-analysis { font-size: 11px; color: var(--text2); line-height: 1.65; margin-top: 6px; }
+.confession .c-analysis strong { color: var(--text); }
+
+/* STRUCTURAL FINDING */
+.finding { background: var(--bg2); border: 0.5px solid var(--border); border-left: 3px solid var(--purple); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+.finding .f-num { font-size: 9px; letter-spacing: 2px; color: var(--purple); text-transform: uppercase; margin-bottom: 6px; }
+.finding .f-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+.finding .f-body { font-size: 11px; color: var(--text2); line-height: 1.75; }
+.finding .f-body strong { color: var(--text); }
+.finding .f-body em { color: var(--purple); font-style: normal; }
+
+/* COMPARISON TABLE */
+.comp-wrap { overflow-x: auto; margin-bottom: 12px; }
+.comp-table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 640px; }
+.comp-table th { padding: 9px 12px; border: 0.5px solid var(--border); background: var(--bg2); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; color: var(--text2); text-align: left; }
+.comp-table td { padding: 9px 12px; border: 0.5px solid var(--border); font-size: 11px; color: var(--text); background: var(--bg2); vertical-align: top; line-height: 1.55; }
+.comp-table td.row-head { font-weight: 500; color: var(--text2); width: 160px; }
+.cell-good { color: var(--teal); }
+.cell-bad { color: var(--coral); }
+.cell-mid { color: var(--amber); }
+
+/* REGISTRY */
+.registry { background: var(--bg2); border: 0.5px solid var(--border); border-top: 3px solid var(--purple); border-radius: 10px; padding: 16px; margin-top: 10px; }
+.registry .r-head { font-size: 10px; letter-spacing: 2px; color: var(--purple); text-transform: uppercase; margin-bottom: 10px; }
+.registry .r-body { font-size: 11px; color: var(--text2); line-height: 1.75; }
+.registry .r-body strong { color: var(--text); }
+
+.footer { font-size: 10px; color: var(--text2); font-style: italic; padding-top: 14px; border-top: 0.5px solid var(--border); text-align: center; line-height: 1.7; margin-top: 32px; }
+
+@media (max-width: 580px) {
+  .tier-grid { grid-template-columns: 1fr; }
+  .conv-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="hdr-sys">SOVRA-FCL-MHCE-v2.5 · Phenotype Classification Decoder · DS4-KES-109</div>
+    <div class="hdr-title">The Peacock Phenotype Classification Decoder — Institutional Corroboration × Fitzpatrick Prosecution</div>
+    <div class="hdr-sub">Five-tier eumelanin-anchored scale · Ancestral baseline at Tier 1 · Most derived mutation at Tier 5 · Pharmaceutical support load mapped · Three institutional records cross-referenced · NFIE compliant · March 2026</div>
+  </div>
+
+  <!-- SECTION 1: THE DECODER -->
+  <div class="sec-label">Section 1 — The Peacock Phenotype Classification Decoder (PPCS)</div>
+
+  <!-- Tier 1 -->
+  <div class="tier t1">
+    <div class="tier-head">
+      <div class="tier-number">1</div>
+      <div class="tier-meta">
+        <div class="tier-name">Ancestral Baseline — Maximum Eumelanin</div>
+        <div class="tier-range">Blue-black through deep brown skin · dark brown eyes · tightly coiled hair</div>
+        <div class="tier-tags">
+          <span class="tag tag-anc">Ancestral</span>
+          <span class="tag tag-gen">Eumelanin maximum</span>
+          <span class="tag">MC1R locked</span>
+          <span class="tag">~285,000+ years dominant</span>
+        </div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <div class="tier-grid">
+        <div class="tier-col">
+          <div class="tc-label">Genetic status</div>
+          <div class="tc-body">Default human state. No derived depigmentation alleles. Maximum eumelanin production. MC1R ancestral allele. Strongest UV protection built in. Folate preservation system intact. <strong>This phenotype ran the species for the overwhelming majority of human existence.</strong></div>
+        </div>
+        <div class="tier-col">
+          <div class="tc-label">Pharmaceutical support profile</div>
+          <div class="tc-body">Lowest intrinsic biological support need. Primary medication load is <strong>displacement-driven</strong> — vitamin D3, antihypertensives (thiazide diuretics, CCBs), antidiabetics, cardiovascular agents. Root cause: geographic displacement from native UV environment, not phenotype vulnerability. Body is biologically self-sustaining in native conditions.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier 2 -->
+  <div class="tier t2">
+    <div class="tier-head">
+      <div class="tier-number">2</div>
+      <div class="tier-meta">
+        <div class="tier-name">First Divergence — High Eumelanin</div>
+        <div class="tier-range">Medium to dark brown skin · dark brown eyes · varied hair texture</div>
+        <div class="tier-tags">
+          <span class="tag tag-anc">Near-ancestral</span>
+          <span class="tag tag-gen">Eumelanin high</span>
+          <span class="tag">Minimal derived alleles</span>
+        </div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <div class="tier-grid">
+        <div class="tier-col">
+          <div class="tc-label">Genetic status</div>
+          <div class="tc-body">Still eumelanin dominant. Beginning of population-level variation. Egyptian Book of Gates places Levantine and Canaanite peoples in this range — depicted as pale relative to Egyptian artists, who were themselves mid-range. SLC24A5 and SLC45A2 variants beginning to appear at low frequency.</div>
+        </div>
+        <div class="tier-col">
+          <div class="tc-label">Pharmaceutical support profile</div>
+          <div class="tc-body">Similar displacement profile to Tier 1. Vitamin D deficiency risk elevated on migration to low-UV environments. Hypertension, diabetes, cardiovascular disease burden. Medication access gaps documented — <strong>10–40% fewer prescriptions than white patients with equivalent conditions.</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier 3 -->
+  <div class="tier t3">
+    <div class="tier-head">
+      <div class="tier-number">3</div>
+      <div class="tier-meta">
+        <div class="tier-name">Intermediate — Mixed Melanin Expression</div>
+        <div class="tier-range">Olive through tan skin · brown to hazel eyes · straight to wavy hair</div>
+        <div class="tier-tags">
+          <span class="tag tag-mut">Transitional</span>
+          <span class="tag tag-gen">Eumelanin moderate</span>
+          <span class="tag">SLC24A5 / SLC45A2 partial</span>
+        </div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <div class="tier-grid">
+        <div class="tier-col">
+          <div class="tc-label">Genetic status</div>
+          <div class="tc-body">Mediterranean, South Asian, Middle Eastern, East Asian phenotype cluster. Eumelanin still dominant but depigmentation variants expressing. Distinct molecular pathways in East Asian and Indigenous American populations — same phenotypic tier, different genetic route. Melanesian blonde hair variant (TYRP1) sits here for skin, with independent hair mutation.</div>
+        </div>
+        <div class="tier-col">
+          <div class="tc-label">Pharmaceutical support profile</div>
+          <div class="tc-body">Transitional medication profile. Vitamin D deficiency risk in low-UV environments. UV damage profile beginning. Higher rates of post-inflammatory hyperpigmentation. Underrepresented in clinical trials. Some conditions (carbamazepine risk in certain Asian populations) show pharmacogenomic differences not captured in trial data calibrated to Tier 4–5.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier 4 -->
+  <div class="tier t4">
+    <div class="tier-head">
+      <div class="tier-number">4</div>
+      <div class="tier-meta">
+        <div class="tier-name">Derived Mutations Active — Low Eumelanin</div>
+        <div class="tier-range">Light brown through pale skin · hazel to light brown eyes · dark to light brown hair</div>
+        <div class="tier-tags">
+          <span class="tag tag-mut">Derived</span>
+          <span class="tag tag-gen">Eumelanin low</span>
+          <span class="tag">Steppe dispersal cluster</span>
+          <span class="tag">SLC24A5 + SLC45A2 expressing</span>
+        </div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <div class="tier-grid">
+        <div class="tier-col">
+          <div class="tc-label">Genetic status</div>
+          <div class="tc-body">Bronze Age lightening event cluster. SLC24A5 and SLC45A2 depigmentation mutations expressing strongly. Yamnaya steppe dispersal population (~2,500–2,000 BCE) primary carrier. Vitamin D synthesis efficient in low-UV environments — the evolutionary trade the mutation stack was selected for. UV tolerance significantly reduced relative to Tiers 1–3.</div>
+        </div>
+        <div class="tier-col">
+          <div class="tc-label">Pharmaceutical support profile</div>
+          <div class="tc-body">UV damage management profile activating. Topical retinoids for photoaging. Sunscreen as medical necessity. Actinic keratosis treatment beginning (topical fluorouracil, imiquimod). Early-stage photodynamic therapy. <strong>Clinical trial representation climbing — pharmaceutical pipeline beginning to calibrate to this phenotype's biology.</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier 5 -->
+  <div class="tier t5">
+    <div class="tier-head">
+      <div class="tier-number">5</div>
+      <div class="tier-meta">
+        <div class="tier-name">Full Mutation Stack — Minimum Eumelanin / Maximum Pheomelanin</div>
+        <div class="tier-range">White to pink skin · blue / grey / green eyes · blonde to red hair</div>
+        <div class="tier-tags">
+          <span class="tag tag-der">Most derived</span>
+          <span class="tag tag-gen">Eumelanin minimum</span>
+          <span class="tag">OCA2 / HERC2 / MC1R loss-of-function</span>
+          <span class="tag">Pheomelanin dominant</span>
+        </div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <div class="tier-grid">
+        <div class="tier-col">
+          <div class="tc-label">Genetic status</div>
+          <div class="tc-body">Maximum derived allele stack. SLC24A5 + SLC45A2 + OCA2/HERC2 all expressing. MC1R loss-of-function required for red hair / green eyes combination — most derived end of range. Red hair / green eyes is the terminal phenotype of the depigmentation mutation sequence. <strong>Cannot tolerate the planet's primary energy source without pharmaceutical intervention.</strong></div>
+        </div>
+        <div class="tier-col">
+          <div class="tc-label">Pharmaceutical support profile</div>
+          <div class="tc-body">Highest pharmaceutical dependency of any tier. Daily: high-SPF sunscreen (medical necessity). Ongoing: topical retinoids, fluorouracil, imiquimod, photodynamic therapy, immunotherapy (pembrolizumab, nivolumab), BRAF inhibitors (vemurafenib, dabrafenib), oral acitretin. Clinical trials 80–90% calibrated to this phenotype. <strong>The entire pharmaceutical infrastructure is oriented toward sustaining this tier.</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALBINISM NOTE -->
+  <div style="background:var(--bg2);border:0.5px solid var(--border);border-left:3px solid var(--gray);border-radius:8px;padding:12px 16px;margin-top:4px;font-size:11px;color:var(--text2);line-height:1.7;">
+    <strong style="color:var(--text);">Albinism — classified as orthogonal, not Tier 6:</strong> Albinism is a melanin pathway failure (tyrosinase enzyme breakdown), not a directional depigmentation mutation. It occurs across all ancestral populations. An albino person of African ancestry is not Tier 5 — their underlying genome remains Tier 1 with a synthesis interruption. The PPCS Decoder captures directional mutation gradient. Albinism sits perpendicular to that gradient and is correctly excluded from the tier sequence.
+  </div>
+
+  <!-- SECTION 2: INSTITUTIONAL CORROBORATION -->
+  <div class="sec-label">Section 2 — Institutional Corroboration</div>
+
+  <!-- EHSCS -->
+  <div class="corr-card">
+    <div class="corr-head">
+      <div class="corr-title">The Eumelanin Human Skin Colour Scale (EHSCS)</div>
+      <div class="corr-badge badge-teal">Corroborating record 1</div>
+    </div>
+    <div class="corr-body">
+      <strong>Source:</strong> British Journal of Dermatology · Proof-of-concept study · Dr. Dadzie et al. · Published by the British Association of Dermatologists<br><br>
+      <strong>What it is:</strong> A five-tier objective classification scale for human constitutive skin colour, anchored in melanin index (MI) measurement using skin reflectance instruments. Data sourced from indigenous human populations from Ghana to Ireland — the full geographic range of the human eumelanin gradient.
+      <div class="corr-cite">"The EHSCS is a new, objective scale for classifying and describing human constitutive skin colour. It is based on melanin index (MI), which reflects the amount of melanin — specifically eumelanin — in the skin. Up until now, the default terms and scales used in dermatology to describe human skin colour have been imprecise, subjective and not grounded in science. The Fitzpatrick Skin Classification System is currently widely misused in clinical practice as a de facto classification of human constitutive skin colour — it was not created for this purpose."</div>
+      <strong>Convergence with PPCS:</strong>
+      <div class="conv-row">
+        <div class="conv-item">Five tiers — identical tier count to PPCS</div>
+        <div class="conv-item">Eumelanin-anchored — same biological anchor as PPCS</div>
+        <div class="conv-item">Ghana to Ireland range — same phenotypic span as PPCS Tier 1 to Tier 5</div>
+        <div class="conv-item">Explicitly challenges Fitzpatrick — same structural critique as PPCS</div>
+      </div>
+      <br><strong>Where PPCS extends beyond EHSCS:</strong> The EHSCS is a measurement and classification tool. It correctly identifies the gradient and challenges Fitzpatrick's misuse — but stops there. The PPCS adds evolutionary directionality (ancestral to derived), pharmaceutical support load differential, medical infrastructure inversion analysis, and the structural finding that the most derived tier requires the most pharmaceutical support to sustain itself.
+    </div>
+  </div>
+
+  <!-- HELMY -->
+  <div class="corr-card">
+    <div class="corr-head">
+      <div class="corr-title">The Helmy Genetic Classification for Skin Types</div>
+      <div class="corr-badge badge-purple">Corroborating record 2</div>
+    </div>
+    <div class="corr-body">
+      <strong>Source:</strong> PMC (PubMed Central) · Published in Plastic and Reconstructive Surgery Global Open · Open access under Creative Commons Attribution License 4.0
+      <br><br>
+      <strong>What it is:</strong> A genetic classification for skin types proposed as a complement to Fitzpatrick, explicitly based on genome studies confirming dark skin as the default human colour and white skin as a derived mutation stack.
+      <div class="corr-cite">"The author proposes a new classification for skin types, opposite to Fitzpatrick's. This classification is based on recent genome studies which prove that dark skin is the default human colour. Human origins, according to anthropology research, were found in the sunny east of the globe, followed by migration toward the less sunny west. Genetic mutations have happened in the human genome of the west habitant, more than 4,000 years ago, to accommodate with the cloudy climate. This accommodation was described as genetic selection when three genes were mutated for white skin and one gene has mutated for blue eyes."</div>
+      <strong>Convergence with PPCS:</strong>
+      <div class="conv-row">
+        <div class="conv-item">Dark skin = default human state — PPCS Tier 1 as ancestral baseline</div>
+        <div class="conv-item">White skin = three-gene mutation stack — PPCS Tier 5 as most derived</div>
+        <div class="conv-item">Blue eyes = fourth independent mutation — PPCS Tier 5 full stack</div>
+        <div class="conv-item">Explicitly opposite to Fitzpatrick — same structural inversion critique as PPCS</div>
+      </div>
+      <br><strong>Where PPCS extends beyond Helmy:</strong> Helmy establishes the genetic directionality correctly. The PPCS adds five-tier granularity across the intermediate range, pharmaceutical support load mapping at each tier, the medical infrastructure inversion finding, and cross-references the EHSCS measurement framework.
+    </div>
+  </div>
+
+  <!-- SECTION 3: FITZPATRICK PROSECUTION -->
+  <div class="sec-label">Section 3 — The Fitzpatrick Prosecution · Primary source testifies against itself</div>
+
+  <div class="prosecution">
+    <div class="pros-head">
+      <div class="pros-title">Defendant: The Fitzpatrick Skin Type Classification System (1975)</div>
+      <div class="pros-sub">Thomas B. Fitzpatrick · Harvard Medical School · Currently the most widely used skin classification system in clinical dermatology worldwide · The evidence presented below is drawn entirely from Fitzpatrick's own documentation and its professional body's published review</div>
+    </div>
+    <div class="pros-body">
+
+      <div class="confession">
+        <div class="c-num">Confession 1 — Built for white skin</div>
+        <div class="c-title">The system was designed for one phenotype tier and retrofitted to the rest of the species</div>
+        <div class="c-quote">"The scale was originally developed for classifying 'white skin' in response to solar radiation, and initially included only four categories focused on white skin, with 'brown' and 'black' skin types added as an afterthought." — Wikipedia / Fitzpatrick scale documentation</div>
+        <div class="c-analysis">The most ancestral human phenotype — present for 285,000+ years, carried by the majority of humans alive today — was added to the scale as an afterthought. The most derived mutation tier was the primary design subject. The scale was built around the exception and appended the rule.</div>
+      </div>
+
+      <div class="confession">
+        <div class="c-num">Confession 2 — Numbered backwards</div>
+        <div class="c-title">The numbering system encodes the derived mutation as the origin point</div>
+        <div class="c-analysis">Fitzpatrick Type I = palest, most UV-vulnerable, most derived mutation phenotype. Fitzpatrick Type VI = darkest, most UV-protected, most ancestral phenotype. The scale assigns Type I to the end of the evolutionary sequence and Type VI to its beginning. <strong>The numbering system performs the same agent-victim inversion as the Brussels Act word "infected" — the derived variant is positioned as the baseline, the ancestral form as the outlier.</strong> Every clinical tool built on top of Fitzpatrick inherits this inversion structurally.</div>
+      </div>
+
+      <div class="confession">
+        <div class="c-num">Confession 3 — Narrowest range as reference standard</div>
+        <div class="c-title">The phenotype with the least genetic diversity became the measuring stick for the entire species</div>
+        <div class="c-quote">"Studies demonstrate that European populations have the narrowest skin color variation, whereas groups categorized as 'brown' or 'black' exhibit a much wider range." — Fitzpatrick scale documentation</div>
+        <div class="c-analysis">The PPCS Tier 5 phenotype cluster — the narrowest phenotypic range in the human species — was selected as the calibration standard for all human skin. The broadest phenotypic diversity, residing in African populations (Tier 1–2), was compressed into two categories (V and VI) added after the primary design was complete. The instrument measures the narrow end of the range and attempts to extend that measurement to the wide end. It cannot do so accurately — which is why 17 alternative classification systems now exist.</div>
+      </div>
+
+      <div class="confession">
+        <div class="c-num">Confession 4 — Its own professional body confirms the failure</div>
+        <div class="c-title">The American Academy of Dermatology's 2024 review is the prosecution's closing argument</div>
+        <div class="c-quote">"The Fitzpatrick skin type classification is most widely used and validated. However, it has numerous limitations including its conflation with race, ethnicity, and skin color." — Journal of the American Academy of Dermatology, 2024, identifying 17 alternative skin classification systems</div>
+        <div class="c-analysis">The system's own professional home — the body that publishes guidelines Fitzpatrick practitioners follow — has formally identified its limitations on the record, in a peer-reviewed journal, in 2024. The AAD's review found 17 alternatives, demonstrating that the clinical community already knows the Fitzpatrick scale is inadequate. It remains the default not because it is correct but because it is entrenched. <strong>This is DSCP persistence behavior operating in clinical infrastructure. The system that caused the misclassification writes the guidelines that perpetuate it.</strong></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 4: STRUCTURAL FINDING -->
+  <div class="sec-label">Section 4 — Structural findings</div>
+
+  <!-- Comparison table -->
+  <div class="comp-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Fitzpatrick (1975)</th>
+          <th>EHSCS (2020s)</th>
+          <th>Helmy Genetic (2019)</th>
+          <th>PPCS (Peacock, 2026)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-head">Tier count</td>
+          <td>6 (I–VI)</td>
+          <td class="cell-good">5</td>
+          <td>Genetic types</td>
+          <td class="cell-good">5</td>
+        </tr>
+        <tr>
+          <td class="row-head">Anchored in</td>
+          <td class="cell-bad">Sun reactivity (subjective)</td>
+          <td class="cell-good">Melanin index (objective)</td>
+          <td class="cell-good">Genetic mutation sequence</td>
+          <td class="cell-good">Eumelanin gradient + evolutionary directionality</td>
+        </tr>
+        <tr>
+          <td class="row-head">Ancestral baseline</td>
+          <td class="cell-bad">Type VI — last, afterthought</td>
+          <td class="cell-good">Maximum MI — correctly placed</td>
+          <td class="cell-good">Dark skin = default</td>
+          <td class="cell-good">Tier 1 — first, explicitly ancestral</td>
+        </tr>
+        <tr>
+          <td class="row-head">Most derived phenotype</td>
+          <td class="cell-bad">Type I — first, numbered as origin</td>
+          <td class="cell-good">Minimum MI — correctly placed</td>
+          <td class="cell-good">White skin = 3-gene mutation</td>
+          <td class="cell-good">Tier 5 — last, explicitly most derived</td>
+        </tr>
+        <tr>
+          <td class="row-head">Pharmaceutical load mapped</td>
+          <td class="cell-bad">No</td>
+          <td class="cell-bad">No</td>
+          <td class="cell-bad">No</td>
+          <td class="cell-good">Yes — all five tiers</td>
+        </tr>
+        <tr>
+          <td class="row-head">Medical infrastructure inversion</td>
+          <td class="cell-bad">Not addressed — causes it</td>
+          <td class="cell-mid">Implied by Fitzpatrick critique</td>
+          <td class="cell-mid">Implied by genetic framing</td>
+          <td class="cell-good">Explicitly documented</td>
+        </tr>
+        <tr>
+          <td class="row-head">Who requires most support</td>
+          <td class="cell-bad">Not addressed</td>
+          <td class="cell-bad">Not addressed</td>
+          <td class="cell-bad">Not addressed</td>
+          <td class="cell-good">Tier 5 — documented from pharmaceutical record</td>
+        </tr>
+        <tr>
+          <td class="row-head">Professional body status</td>
+          <td class="cell-bad">AAD confirms limitations (2024)</td>
+          <td class="cell-good">BAD peer-reviewed</td>
+          <td class="cell-good">PMC peer-reviewed</td>
+          <td class="cell-good">SOVRA registry · independently derived</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="finding">
+    <div class="f-num">Finding SF-1 — The inversion is systematic</div>
+    <div class="f-title">The Fitzpatrick scale performs the same structural inversion at every level simultaneously</div>
+    <div class="f-body">The most ancestral phenotype (Tier 1 / PPCS) is numbered last (Type VI / Fitzpatrick). The most derived phenotype (Tier 5 / PPCS) is numbered first (Type I / Fitzpatrick). The narrowest phenotypic range becomes the reference standard. The broadest phenotypic diversity is compressed into two afterthought categories. The pharmaceutical infrastructure follows the numbering — it calibrates to Type I-III and treats Type V-VI as edge cases. <strong>The Fitzpatrick scale does not merely misclassify. It encodes the misclassification into clinical infrastructure, drug trial design, and prescribing guidelines. Every institution that adopts Fitzpatrick inherits the inversion.</strong></div>
+  </div>
+
+  <div class="finding">
+    <div class="f-num">Finding SF-2 — The pharmaceutical dependency finding</div>
+    <div class="f-title">The phenotype that requires the most help to sustain itself is Tier 5</div>
+    <div class="f-body">By prescribed medication load, clinical intervention frequency, and pharmaceutical dependency — the full depigmentation mutation stack (Tier 5) requires the most pharmaceutical support to function on the planet it inhabits. Daily sunscreen is a medical necessity. Ongoing retinoid, fluorouracil, immunotherapy, and BRAF inhibitor treatment is required for UV damage management. <strong>Clinical trials are 80–90% calibrated to this phenotype's biology.</strong> The Tier 1 ancestral phenotype — the most biologically self-sustaining phenotype in human history — carries high disease burden that is primarily displacement-driven, not intrinsic. The body that needed the least pharmaceutical support to exist receives the least pharmaceutical research. The body that needs the most support to function on this planet has the entire system built around it. <em>The sun is not a disease. The phenotype that cannot tolerate it without pharmaceutical intervention is the one that requires the most help to sustain itself.</em></div>
+  </div>
+
+  <div class="finding">
+    <div class="f-num">Finding SF-3 — DSCP substrate in clinical medicine confirmed</div>
+    <div class="f-title">The Fitzpatrick scale is the Lambda Speciation event in medical taxonomy</div>
+    <div class="f-body">The Brussels Act (1890) recast the perpetrators of the slave trade as the cure for the condition they created — using the word "infected" to relocate the source of contamination onto the landscape they contaminated. The Fitzpatrick scale performs the same operation in clinical medicine — recasting the most derived, most UV-vulnerable, most pharmaceutically dependent phenotype as the default biological standard, and positioning the most ancestral, most biologically robust, most self-sustaining phenotype as the edge case numbered last. <strong>Same structural role. New substrate. Lambda Speciation confirmed in medical taxonomy.</strong> The EHSCS and Helmy classifications are the institutional records that show the structure as it actually is. The PPCS is the frame that connects all three.</div>
+  </div>
+
+  <!-- SECTION 5: REGISTRY STATEMENT -->
+  <div class="sec-label">Section 5 — Registry statement</div>
+
+  <div class="registry">
+    <div class="r-head">SOVRA Registry Entry — PPCS v1.0 · Pending formal equation integration</div>
+    <div class="r-body">
+      <strong>Classification name:</strong> Peacock Phenotype Classification Decoder (PPCS) v1.0<br>
+      <strong>Author:</strong> Samuel Paul Peacock · Jackson TN · DS4-KES-109<br>
+      <strong>Date:</strong> March 2026<br>
+      <strong>NFIE compliance:</strong> This document introduces no external operator, no prescriptive intervention, no optimization recommendation. It is descriptive. It places structure from the empirical record and lets cognition decide.<br>
+      <strong>Falsifiability:</strong> The pharmaceutical load differential by tier is falsifiable — tier-by-tier prescription data and clinical trial demographic data are publicly available. The evolutionary directionality claim is falsifiable — the genetic mutation sequence is documented in peer-reviewed literature. The Fitzpatrick inversion claim is falsifiable — the scale's own documentation and professional body's review are primary sources.<br>
+      <strong>Institutional corroboration:</strong> EHSCS (British Journal of Dermatology) · Helmy Genetic Classification (PMC, Plastic and Reconstructive Surgery Global Open) · Fitzpatrick scale documentation (self-corroborating via confession) · American Academy of Dermatology 2024 review<br>
+      <strong>Status:</strong> P — stable corridor · All five tier definitions archivally grounded · Pharmaceutical load differential P-classified · Albinism orthogonal classification P-classified · No findings in Wobble or Wall<br>
+      <strong>Open extensions:</strong> Formal equation integration with PCE-4a corridor integrity framework pending · Cross-reference to Maritime Drift Core and Chimera DSCP substrate analysis pending
+    </div>
+  </div>
+
+  <div class="footer">
+    SOVRA-FCL-MHCE-v2.5 · DS4-KES-109 · NFIE Compliant · Peacock Phenotype Classification Decoder v1.0 · March 2026<br>
+    Sources: EHSCS (British Association of Dermatologists / British Journal of Dermatology) · Helmy Genetic Classification (PMC / PRSGO 2019) · Fitzpatrick Scale documentation (Wikipedia / original 1975 publication) · AAD 2024 review (JAAD Vol.91 Issue 6) · Günther et al. 2018 (PLoS Biology) · Helmy 2019 (PMC4554169) · Barbujani & Ghirotto 2025 · StatPearls melanin biochemistry · NCBI clinical trial diversity data<br>
+    Nothing in this document persuades. It places structure and lets cognition decide.
+  </div>
+
+</div>
+</body>
+</html>
